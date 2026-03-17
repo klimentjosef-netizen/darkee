@@ -125,7 +125,7 @@ export function Navbar() {
                 Pro e-shopy
               </Link>
               <Link
-                href="/merchant/login"
+                href="/ucet/gems"
                 style={{
                   fontSize: '13px',
                   color: '#9A8870',

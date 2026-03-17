@@ -3,57 +3,7 @@
 import Link from 'next/link'
 import { Navbar } from '@/components/landing/Navbar'
 import { Footer } from '@/components/landing/Footer'
-
-const articles = [
-  {
-    slug: 'originalni-darky-narozeniny',
-    category: 'NAROZENINY',
-    title: '10 originálních dárků k narozeninám do 1 000 Kč',
-    perex: 'Připravili jsme průvodce který vám ušetří hodiny hledání.',
-    date: '12. března 2026',
-    readTime: '6 min',
-  },
-  {
-    slug: 'co-koupit-partnerovi-valentyn',
-    category: 'VALENTÝN',
-    title: 'Co koupit partnerovi — průvodce dle osobnosti',
-    perex: 'Valentýnský dárek by měl být osobní a promyšlený.',
-    date: '1. února 2026',
-    readTime: '8 min',
-  },
-  {
-    slug: 'vanocni-darky-2026',
-    category: 'VÁNOCE',
-    title: 'Vánoční dárky 2026 — nejlepší nápady pro každého',
-    perex: 'Průvodce který pokryje celou rodinu.',
-    date: '15. ledna 2026',
-    readTime: '10 min',
-  },
-  {
-    slug: 'hezke-darky-do-500',
-    category: 'TIPY',
-    title: '15 hezkých dárků do 500 Kč které nejsou klišé',
-    perex: 'Levný dárek neznamená špatný dárek.',
-    date: '20. ledna 2026',
-    readTime: '5 min',
-  },
-  {
-    slug: 'darky-pro-muze',
-    category: 'PRO MUŽE',
-    title: 'Dárky pro muže — co opravdu ocení',
-    perex: 'Přehled dárků které muži skutečně chtějí.',
-    date: '5. února 2026',
-    readTime: '7 min',
-  },
-  {
-    slug: 'darky-pro-zeny',
-    category: 'PRO ŽENY',
-    title: 'Dárky pro ženy — od romantických po praktické',
-    perex: 'Od parfémů po zážitky — průvodce pro každý budget.',
-    date: '28. února 2026',
-    readTime: '6 min',
-  },
-]
+import { BLOG_ARTICLES } from '@/lib/blog-data'
 
 export default function BlogPage() {
   return (
@@ -83,7 +33,7 @@ export default function BlogPage() {
           gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))',
           gap: '16px',
         }}>
-          {articles.map(article => (
+          {BLOG_ARTICLES.map(article => (
             <Link
               key={article.slug}
               href={`/blog/${article.slug}`}

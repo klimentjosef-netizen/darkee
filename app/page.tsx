@@ -155,7 +155,7 @@ export default function Home() {
             <button style={s.navCta} onMouseEnter={on('nav-cta')} onMouseLeave={off('nav-cta')} onClick={() => setQuizOpen(true)}>Najít dárek →</button>
             <div style={s.navDivider} className="hidden md:block" />
             <Link href="/pro-eshopy" style={s.navMerchantLink('nl-merchant')} onMouseEnter={on('nl-merchant')} onMouseLeave={off('nl-merchant')} className="hidden md:inline">Pro e-shopy</Link>
-            <Link href="/merchant/login" style={s.navLink('nl-login')} onMouseEnter={on('nl-login')} onMouseLeave={off('nl-login')} className="hidden md:inline">Přihlásit se</Link>
+            <Link href="/ucet/gems" style={s.navLink('nl-login')} onMouseEnter={on('nl-login')} onMouseLeave={off('nl-login')} className="hidden md:inline">Přihlásit se</Link>
           </div>
         </div>
       </div>

@@ -1,397 +1,197 @@
 export interface BlogArticle {
   slug: string
+  category: string
   title: string
   perex: string
-  content: string
-  category: string
-  categorySlug: string
   date: string
   readTime: string
-  author: {
-    name: string
-    avatar: string // gradient placeholder
-  }
   gradient: string
-  featured?: boolean
+  author: { name: string; avatar: string }
+  content: string
 }
-
-export const BLOG_CATEGORIES = [
-  { slug: 'all', label: 'Vše' },
-  { slug: 'vanoce', label: 'Vánoce' },
-  { slug: 'valentyn', label: 'Valentýn' },
-  { slug: 'narozeniny', label: 'Narozeniny' },
-  { slug: 'pro-muze', label: 'Pro muže' },
-  { slug: 'pro-zeny', label: 'Pro ženy' },
-  { slug: 'do-500', label: 'Do 500 Kč' },
-  { slug: 'luxusni', label: 'Luxusní' },
-]
 
 export const BLOG_ARTICLES: BlogArticle[] = [
   {
-    slug: '10-vanocnich-darku-pro-maminku',
-    title: '10 originálních vánočních dárků pro maminku do 1 000 Kč',
-    perex:
-      'Zapomeňte na ponožky a hrníčky. Vybrali jsme dárky, které potěší každou maminku — od zážitků přes beauty až po knihy, které ji chytnou za srdce.',
-    category: 'VÁNOCE',
-    categorySlug: 'vanoce',
-    date: '12. prosince 2025',
-    readTime: '8 min čtení',
-    author: { name: 'Tereza N.', avatar: 'linear-gradient(135deg, #C9A84C, #8A6B2A)' },
-    gradient: 'linear-gradient(135deg, #12141c 0%, #1a1e2e 40%, #151720 100%)',
-    featured: true,
-    content: `## Proč je výběr dárku pro maminku tak těžký?
+    slug: 'originalni-darky-narozeniny',
+    category: 'NAROZENINY',
+    title: 'Dárky k narozeninám do 1 000 Kč: 10 originálních tipů které skutečně potěší',
+    perex: 'Nevíte co koupit k narozeninám? Vybrali jsme 10 originálních dárků do 1 000 Kč které skutečně potěší. Ušetřete hodiny hledání a darujte s jistotou.',
+    date: '12. března 2026',
+    readTime: '6 min',
+    gradient: 'linear-gradient(135deg, #1E1510 0%, #2A1E10 100%)',
+    author: { name: 'Tým Dárkee', avatar: '#C9A84C' },
+    content: `
+## Proč je těžké vybrat originální dárek k narozeninám
 
-Maminka je člověk, který vám dal všechno. A právě proto chcete, aby její dárek byl **opravdu výjimečný**. Jenže co koupit ženě, která říká "nic nepotřebuju"?
+Vybrat dárek k narozeninám je těžké ze dvou důvodů. Za prvé, chcete aby byl originální a ne jako všechno ostatní co dotyčný dostal za posledních deset let. Za druhé, nechcete přestřelit rozpočet a zároveň nechcete působit lakomě.
 
-Sestavili jsme seznam 10 dárků, které jsou originální, osobní a vejdou se do rozpočtu 1 000 Kč.
+**Dobrá zpráva je, že do 1 000 Kč se vejdou skutečně skvělé dárky.** Klíč není v ceně ale ve výběru. Dárek který sedí na osobnost a zájmy obdarovaného bude vždy lepší než drahý ale generický předmět.
 
-## 1. Prémiová čajová kolekce
+> Nejlepší dárek není ten nejdražší. Je to ten, u kterého obdarovaný řekne: tohle jsem opravdu chtěl.
 
-Pokud vaše maminka miluje čaj, darujte jí **kolekci prémiových sypaných čajů** z malých českých pražíren. Nejde o supermarketové sáčky — jde o zážitek.
+## 1. Dárky pro milovníky zážitků
 
-> "Nejlepší dárek je ten, který by si člověk sám nekoupil."
+Někteří lidé prostě nepotřebují další věci. Mají jich dost. Pro tyto lidi je nejlepší dárek zážitek který si sami nikdy nekoupí.
 
-**Cena:** 350–650 Kč
-**Kde koupit:** Čajové boudy, Tea Mountain
+### Degustační večer nebo kurz vaření
 
-## 2. Aromaterapeutická sada
+Degustační večery vína, whisky nebo craft piv jsou skvělou volbou pro lidi kteří rádi objevují nové chutě. Kurzy vaření nebo pečení zase ocení ti, kteří rádi tráví čas v kuchyni.
 
-Kvalitní esenciální oleje v krásném balení. Levandule na spaní, citrus na energii, eukalyptus na uvolnění. Maminka si zaslouží *rituál péče o sebe*.
+**Cena:** 500 až 900 Kč
+**Pro koho:** Gurmáni, zvědaví lidé, ti kteří rádi zkouší nové věci
 
-**Cena:** 490–890 Kč
-**Kde koupit:** Manufaktura, Havlíkova Apotéka
+### Vstupenka na kulturní akci
 
-## 3. Personalizovaný šálek
+Divadelní představení, koncert oblíbeného interpreta nebo komediantský večer. Pokud víte co má obdarovaný rád, vstupenka je vždy originální a osobní volba.
 
-Ne obyčejný hrníček s nápisem "Nejlepší maminka". Myslíme kvalitní keramiku od českého řemeslníka s **jemným monogramem nebo vlastní kresbou**.
+**Cena:** 300 až 1 000 Kč
+**Pro koho:** Kulturní fajnšmekři, milovníci hudby, divadla nebo filmu
 
-**Cena:** 400–700 Kč
+## 2. Dárky pro pohodáře a wellness nadšence
 
-## 4. Kniha, která mění perspektivu
+Wellness dárky zažívají obrovský boom. A není divu. V dnešní uspěchané době každý ocení chvíli klidu a péče o sebe.
 
-Vyberte knihu, o které budete moct společně mluvit. Doporučujeme *Umění pomalého života* nebo *Atlas krásných pocitů*.
+### Prémiová aromaterapeutická sada
 
-**Cena:** 300–450 Kč
+Sada esenciálních olejů, difuzér nebo prémiové vonné svíčky. Toto je dárek který potěší téměř každého. Klíč je v kvalitě. Nekupujte levné sady z supermarketu. Vsaďte na prémiové značky.
 
-## 5. Zážitkový poukaz na masáž
+**Cena:** 600 až 900 Kč
+**Pro koho:** Ženy i muži kteří ocení relaxaci, milovníci domácí pohody
 
-Hodina relaxační masáže v salonu blízko domova. Není to jen dárek — je to **čas jenom pro ni**.
+### Prémiová čajová kolekce
 
-**Cena:** 600–900 Kč
+Výběrové čaje z celého světa zabalené v krásné dárkové krabičce. Tento dárek funguje perfektně pro lidi kteří nepijí alkohol nebo hledají alternativu k vínu.
 
-## Hledáte konkrétní doporučení?
+| Typ čaje | Chuťový profil | Vhodný pro |
+|----------|---------------|------------|
+| Matcha premium | Zemitý, bylinkový | Zdravý životní styl |
+| Oolong výběrový | Jemný, květinový | Začátečníky |
+| Pu-erh aged | Intenzivní, komplexní | Znalce čaje |
+| White peony | Lehký, sladký | Každodenní pití |
 
-Pokud nechcete hledat sami, [spusťte náš kvíz](/pruvodce) a za 60 sekund dostanete 5 dárků přesně na míru.
+**Cena:** 400 až 800 Kč
+**Pro koho:** Milovníci čaje, lidé dbající na zdravý životní styl
 
-## 6. Domácí bylinkový zahradní set
+## 3. Dárky pro gurmány a milovníky jídla
 
-Mini zahrada na parapet. Bazalka, máta, rozmarýn — vše v designovém květináči. Pro maminky, které rády vaří.
+Jídlo jako dárek je podceňovaná kategorie. Správně vybraný gastronomický dárek může být jedním z nejpersonalizovanějších dárků vůbec.
 
-**Cena:** 450–800 Kč
+### Prémiový olivový olej nebo balzamikový ocet
 
-## 7. Luxusní ručně dělaný svíce
+Lahev extra panenského olivového oleje z konkrétní oblasti nebo prémiový balzamikový ocet z Modeny. Toto je dárek který potěší každého kdo rád vaří.
 
-Ne voskový válec z drogerie. Sójová svíce s **dřevěným knotem** a jemnou vůní. Hoří 50+ hodin.
+**Cena:** 400 až 700 Kč
+**Pro koho:** Vášniví kuchaři, lidé kteří oceňují kvalitní potraviny
 
-**Cena:** 350–600 Kč
+### Dárková krabice s lokálními pochutinami
 
-## 8. Hedvábná maska na spaní
+Výběr lokálních sýrů, uzenin, džemů nebo čokolád zabalený v krásné dárkové krabici. Tento dárek podporuje české výrobce a zároveň je originální a chutný.
 
-Malý luxus na každou noc. 100% hedvábí, které je šetrné k pleti a vlasům.
+**Cena:** 500 až 900 Kč
+**Pro koho:** Patrioti, gurmáni, lidé kteří ocení lokální produkty
 
-**Cena:** 500–800 Kč
+### Prémiová káva z malých pražíren
 
-## 9. Sada na domácí spa
+Výběrová káva z místní pražírny je dárek který potěší každého kávomilce. Na rozdíl od supermarketové kávy má příběh, původ a specifickou chuť.
 
-Koupelová sůl, tělový olej a peeling v dárkovém balení. Kompletní večer péče.
+**Cena:** 300 až 600 Kč
+**Pro koho:** Kávomilci, lidé pracující z domova, ranní ptáčata
 
-**Cena:** 400–750 Kč
+## 4. Dárky pro čtenáře a kreativní typy
 
-## 10. Předplatné květin
+Kreativní lidé a čtenáři jsou vděčná skupina. Mají jasné zájmy a rádi dostávají věci které obohacují jejich koníčky.
 
-Každý měsíc čerstvá kytice domů. Dárek, který připomíná vaši lásku **celé tři měsíce**.
+### Knižní předplatné nebo výběrová kniha
 
-**Cena:** od 900 Kč / 3 měsíce
+Pokud víte co obdarovaný čte, knižní předplatné na jeden nebo dva měsíce je originální volba. Alternativně, výběrová kniha z oblasti jeho zájmů s osobním věnováním.
 
-## Závěr
+**Cena:** 300 až 700 Kč
+**Pro koho:** Čtenáři, lidé kteří se rádi vzdělávají, milovníci beletrie
 
-Nejlepší dárek není ten nejdražší. Je to ten, který ukazuje, že **znáte člověka, kterému ho dáváte**. A pokud si nejste jistí? [Nechte si poradit od našeho kvízu](/pruvodce).`,
-  },
-  {
-    slug: 'co-koupit-priteli',
-    title: 'Co koupit příteli — průvodce dle osobnosti',
-    perex:
-      'Praktik, dobrodruh, nebo pohodář? Každý typ osobnosti ocení jiný dárek. Přečtěte si náš průvodce a trefíte se na první pokus.',
-    category: 'VALENTÝN',
-    categorySlug: 'valentyn',
-    date: '28. ledna 2026',
-    readTime: '6 min čtení',
-    author: { name: 'Marek D.', avatar: 'linear-gradient(135deg, #E8C97A, #C9A84C)' },
-    gradient: 'linear-gradient(135deg, #1a1a1f 0%, #252018 40%, #1a1a1f 100%)',
-    content: `## Proč selhávají obecné seznamy dárků
+### Kreativní workshop nebo online kurz
 
-Každý seznam "Top dárky pro muže" ignoruje základní fakt: **lidé jsou různí**. Co potěší sportovce, naštve čtenáře. Co miluje techno-nadšenec, nechá praktika chladným.
+Kurz malování, keramiky, kaligrafie nebo fotografování. Kreativní workshopy jsou skvělé pro lidi kteří rádi zkouší nové věci nebo chtějí rozvíjet svůj talent.
 
-Proto jsme vytvořili průvodce podle osobnosti.
+**Cena:** 500 až 1 000 Kč
+**Pro koho:** Kreativní typy, lidé kteří hledají nové koníčky
 
-## Praktik — "K čemu je to dobré?"
+## 5. Dárky pro sportovce a aktivní lidi
 
-Praktik ocení věci, které **řeší problém**. Nedávejte mu dekorace — dejte mu nástroj.
+Sportovci jsou specifická skupina. Většinou vědí přesně co chtějí a mají jasné preference. Ale i pro ně existují univerzálně skvělé dárky.
 
-- Kvalitní multitool (Leatherman, Victorinox)
-- Chytrá peněženka s AirTag
-- Organizér na kabely na cesty
+### Prémiové sportovní ponožky nebo rukavice
 
-> Praktik nechce překvapení. Chce něco, co skutečně využije.
+Zní to prozaicky ale sportovci vědí že kvalitní ponožky nebo rukavice jsou základ. Značky jako Stance, Smartwool nebo Inov-8 nabízí prémiové produkty které skutečně ocení.
 
-**Budget tip:** Kvalitní multitool pořídíte od 800 Kč.
+**Cena:** 400 až 800 Kč
+**Pro koho:** Běžci, cyklisté, hikeři, fitnesáci
 
-## Dobrodruh — "Kdy jedeme?"
+### Sportovní masážní míč nebo foam roller
 
-Dobrodruh žije pro nové zážitky. Fyzický dárek ho potěší, ale **zážitek ho nadchne**.
+Regenerace je pro sportovce stejně důležitá jako trénink. Kvalitní masážní pomůcky jsou dárek který bude obdarovaný používat každý den.
 
-- Poukaz na via ferratu nebo paraglidingový let
-- Outdoorová láhev HydroFlask
-- Předplatné na AllTrails Pro
+**Cena:** 500 až 900 Kč
+**Pro koho:** Všichni aktivní sportovci, lidé kteří trpí svalovým napětím
 
-**Budget tip:** Via ferrata s instruktorem od 1 200 Kč.
+## Jak vybrat dárek k narozeninám za méně než 60 sekund
 
-## Pohodář — "Mám se dobře"
+Vybrat originální dárek k narozeninám nemusí trvat hodiny. Existuje jednoduchý systém který vám pomůže najít správný dárek rychle a bez stresu.
 
-Pohodář si užívá komfort. Je to ten typ, co sedí v kavárně s knihou hodinu a nikomu to nevadí.
+**Tři otázky které si položte před výběrem dárku:**
 
-- Prémiová káva z lokální pražírny
-- Měkká deka z merina vlny
-- Vinylová deska jeho oblíbené kapely
+1. **Jaké jsou zájmy obdarovaného?** Sport, vaření, čtení, hudba, cestování?
+2. **Jaká je jeho osobnost?** Praktik který ocení užitečné věci, nebo dobrodruž který preferuje zážitky?
+3. **Jaká je příležitost?** Narozeniny kamaráda jsou jiné než narozeniny šéfa nebo babičky.
 
-**Budget tip:** Specialty káva v krásném balení od 450 Kč.
+Pokud si na tyto otázky odpovíte, výběr dárku se zúží z tisíců možností na desítky. Ještě jednodušší způsob je použít [dárkového průvodce na Dárkee](/pruvodce). Odpovíte na 8 krátkých otázek a dostanete 5 personalizovaných doporučení přesně pro vašeho obdarovaného. Celé to trvá méně než 60 sekund.
 
-## Intelektuál — "To je zajímavé"
+## Shrnutí: 10 nejlepších dárků k narozeninám do 1 000 Kč
 
-Intelektuál miluje nové informace a perspektivy. Kniha je bezpečná volba — ale **vyberte správnou**.
+| Dárek | Cena | Nejlepší pro |
+|-------|------|-------------|
+| Degustační večer | 500 až 900 Kč | Milovníky zážitků |
+| Vstupenka na akci | 300 až 1 000 Kč | Kulturní fajnšmekry |
+| Aromaterapeutická sada | 600 až 900 Kč | Pohodáře |
+| Prémiová čajová kolekce | 400 až 800 Kč | Milovníky čaje |
+| Prémiový olivový olej | 400 až 700 Kč | Vášnivé kuchaře |
+| Lokální pochutiny | 500 až 900 Kč | Gurmány |
+| Výběrová káva | 300 až 600 Kč | Kávomilce |
+| Kniha nebo předplatné | 300 až 700 Kč | Čtenáře |
+| Kreativní workshop | 500 až 1 000 Kč | Kreativní typy |
+| Sportovní pomůcky | 400 až 900 Kč | Sportovce |
 
-- Biografie významné osobnosti
-- Online kurz na platformě Skillshare nebo Coursera
-- Prémiový zápisník Leuchtturm1917
+## FAQ: Nejčastější otázky o dárcích k narozeninám
 
-**Budget tip:** Roční předplatné Audible od 2 000 Kč.
+**Jaký je nejlepší dárek k narozeninám do 1 000 Kč?**
+Nejlepší dárek je ten který sedí na osobnost a zájmy obdarovaného. Universálně fungují zážitky, prémiové potraviny a wellness produkty. Vyhněte se generickým dárkům jako jsou vonné svíčky nebo čajové sady z supermarketu.
 
-## Estét — "Jak to vypadá"
+**Co koupit k narozeninám kamarádovi?**
+Kamarádovi dejte dárek který reflektuje jeho zájmy. Pokud rád vaří, vsaďte na prémiové ingredience nebo kurz vaření. Pokud je sportovec, kvalitní sportovní doplňky jsou vždy vítány. Pokud si nejste jisti, zážitek jako degustační večer nebo vstupenka na akci je bezpečná volba.
 
-Estét si všímá detailů. Záleží mu na designu, materiálech a estetice.
+**Co koupit k narozeninám kolegyni?**
+Pro kolegyni jsou vhodné dárky které jsou příjemné ale ne příliš osobní. Prémiová čajová kolekce, aromaterapeutická sada nebo kvalitní káva jsou perfektní volby. Vyhněte se oblečení, parfémům nebo příliš osobním dárkům.
 
-- Minimalistické hodinky (Daniel Wellington, Nordgreen)
-- Designový držák na telefon
-- Grafický print od českého ilustrátora
+**Jak vybrat originální dárek k narozeninám?**
+Originální dárek nemusí být drahý. Klíč je v personalizaci. Dárek který reflektuje konkrétní zájem nebo zážitek z vašeho vztahu bude vždy originálnější než drahý ale generický předmět. Pomůže vám také náš [dárkový průvodce](/pruvodce) který za 60 sekund najde dárky přesně pro vašeho obdarovaného.
 
-**Budget tip:** Autorský print od 500 Kč.
+**Kdy je správný čas koupit dárek k narozeninám?**
+Ideálně 1 až 2 týdny před narozeninami. Dáte si dostatek času na rozmyšlení a případné doručení. Pokud nakupujete online, počítejte s 2 až 5 pracovními dny na doručení.
 
-## Stále si nejste jistí?
-
-[Spusťte náš kvíz](/pruvodce) — za 8 otázek a 60 sekund dostanete personalizovaná doporučení.`,
-  },
-  {
-    slug: 'jak-vybrat-darek-kdyz-nevite',
-    title: 'Jak vybrat dárek když opravdu nevíte — 5 zaručených strategií',
-    perex:
-      'Nestresujte se. Existuje 5 univerzálních přístupů, které fungují vždy — bez ohledu na to, jak dobře toho člověka znáte.',
-    category: 'TIPY',
-    categorySlug: 'narozeniny',
-    date: '3. března 2026',
-    readTime: '5 min čtení',
-    author: { name: 'Tereza N.', avatar: 'linear-gradient(135deg, #8A6B2A, #C9A84C)' },
-    gradient: 'linear-gradient(135deg, #141a18 0%, #182420 40%, #141a18 100%)',
-    content: `## Panika? Nenechte se jí ovládnout
-
-Všichni jsme to zažili. Do narozenin zbývá týden, nemáte tušení co koupit a Google vám nabízí "50 tipů na dárek", kde první tři jsou ponožky.
-
-Klid. Máme 5 strategií, které **vždy fungují**.
-
-## Strategie 1: Spotřební luxus
-
-Pravidlo je jednoduché: darujte něco, co by si člověk **sám nekoupil**, ale co spotřebuje.
-
-- Prémiová čokoláda (Lindt Excellence, Čokoládovna Janek)
-- Specialty káva nebo čaj
-- Balíček craft piv z českých pivovarů
-
-> Spotřební luxus funguje proto, že je to beztlakový dárek — nemusí se nikam dávat, nemusí se na nic hodit.
-
-**Proč to funguje:** Žádný risk. Nesedí to = sní to někdo jiný.
-
-## Strategie 2: Zážitek místo věci
-
-Studie ukazují, že zážitky přinášejí **dlouhodobější štěstí** než fyzické předměty. A nemusí to být skok padákem.
-
-- Degustace vín pro dva
-- Escape room s přáteli
-- Kurz vaření thajské kuchyně
-
-**Proč to funguje:** Vytváří vzpomínku, ne nepořádek.
-
-## Strategie 3: Problém, který vyřešíte
-
-Všimli jste si, že si ten člověk na něco stěžuje? **To je váš tip**.
-
-- Stěžuje si na bolest zad → ergonomický polštář
-- Nemůže najít klíče → AirTag
-- Nemá kde nabíjet telefon → designová nabíječka
-
-**Proč to funguje:** Ukazuje, že posloucháte.
-
-## Strategie 4: Sdílený čas
-
-Někdy nejlepší dárek nejsou peníze utracené za věc, ale **čas strávený společně**.
-
-- Lístky do kina / divadla
-- Společná večeře v restauraci
-- Výlet na víkend
-
-**Proč to funguje:** Vztahy posiluje čas, ne věci.
-
-## Strategie 5: Nechte to na algoritmech
-
-Pokud nic z výše uvedeného nefunguje, [spusťte kvíz na Dárkee](/pruvodce). 8 otázek, 60 sekund, 5 personalizovaných doporučení z českých e-shopů.
-
-**Proč to funguje:** Protože data nelžou. Náš algoritmus porovná profil obdarovaného s tisíci produkty a najde ty s nejvyšší shodou.
-
-## Bonus: Co NIKDY nekupovat
-
-- Věci "do domácnosti" (pokud to partner výslovně nechce)
-- Parfémy, pokud neznáte oblíbenou značku
-- Oblečení, pokud si nejste 100% jistí velikostí
-- Zvíře (prosím, ne)
-
-## Závěr
-
-Výběr dárku nemusí být stresující. Stačí přemýšlet o **člověku, ne o věci**. A pokud nemáte čas přemýšlet? [Na to tu jsme my](/pruvodce).`,
-  },
-  {
-    slug: 'darky-pro-muze-kteri-nic-nechteji',
-    title: 'Dárky pro muže, kteří "nic nechtějí"',
-    perex:
-      'Říká, že nic nepotřebuje. Ale my víme, že to není pravda. 8 nápadů, které překvapí i toho nejskeptičtějšího muže.',
-    category: 'PRO MUŽE',
-    categorySlug: 'pro-muze',
-    date: '15. února 2026',
-    readTime: '5 min čtení',
-    author: { name: 'Marek D.', avatar: 'linear-gradient(135deg, #E8C97A, #C9A84C)' },
-    gradient: 'linear-gradient(135deg, #1a1a1f 0%, #1f1a20 40%, #1a1a1f 100%)',
-    content: `## "Nic nechci" znamená "nevím co chci"
-
-Když muž řekne, že nic nechce, většinou myslí: "Nenapadá mě nic konkrétního." To je **vaše příležitost**.
-
-## 1. Prémiové steaky
-
-Box s dry-aged steaky dodaný domů. Včetně koření a návodu na přípravu. To není dárek — to je zážitek.
-
-## 2. Leatherman multitool
-
-Klasika, která nikdy nezklame. Kvalitní multitool je něco, co muž **používá každý den** a myslí přitom na vás.
-
-## 3. Předplatné na streaming
-
-Rok Apple TV+, Disney+ nebo HBO Max. Dárek, který dává celý rok.
-
-## 4. Whisky degustační set
-
-5 vzorků single malt whisky s průvodcem. Pro muže, který tvrdí, že nic nechce, ale rád ochutnává.
-
-## 5. Výlet na brewery tour
-
-Prohlídka craft pivovaru s degustací. Společný zážitek, který si oba užijete.
-
-## Nevíte si rady?
-
-[Spusťte náš kvíz](/pruvodce) a za minutu máte 5 tipů na míru.`,
-  },
-  {
-    slug: 'darky-do-500-kc-ktere-nevypadaji-lacine',
-    title: 'Dárky do 500 Kč, které nevypadají lacině',
-    perex:
-      'Rozpočet neznamená kompromis na kvalitě. Vybrali jsme dárky, které vypadají za dvojnásobek — a přitom se vejdou do 500 Kč.',
-    category: 'DO 500 KČ',
-    categorySlug: 'do-500',
-    date: '20. února 2026',
-    readTime: '4 min čtení',
-    author: { name: 'Tereza N.', avatar: 'linear-gradient(135deg, #C9A84C, #8A6B2A)' },
-    gradient: 'linear-gradient(135deg, #1a1a1f 0%, #1a2018 40%, #1a1a1f 100%)',
-    content: `## Malý rozpočet, velký dojem
-
-Nejdražší dárek v místnosti nemusí být ten nejlepší. Často je to naopak — **promyšlený dárek do 500 Kč** potěší víc než bezmyšlenkovitý za dva tisíce.
-
-## Specialty káva (250–450 Kč)
-
-Čerstvě pražená single origin káva z české pražírny. Krásné balení, skvělá chuť.
-
-## Autorská svíčka (300–500 Kč)
-
-Sójová svíčka s dřevěným knotem od českého výrobce. Hoří 40+ hodin.
-
-## Kvalitní zápisník (350–500 Kč)
-
-Leuchtturm1917 nebo Moleskine — pro lidi, kteří si rádi zapisují.
-
-## Čokoládový box (200–450 Kč)
-
-Ručně vyráběné pralinky od Čokoládovny Janek nebo Pražské čokolády.
-
-## Rostlina v designovém květináči (300–500 Kč)
-
-Sukulent nebo mini monstera. Dárek, který **roste spolu se vztahem**.
-
-## Chcete přesné doporučení?
-
-[Zadejte rozpočet do kvízu](/pruvodce) a dostanete 5 tipů přesně v cenové hladině.`,
-  },
-  {
-    slug: 'luxusni-darky-nad-5000',
-    title: 'Průvodce luxusními dárky nad 5 000 Kč — kdy se vyplatí investovat',
-    perex:
-      'Luxusní dárek není o ceně — je o kvalitě a příběhu. Kdy má smysl investovat více a jaké dárky to opravdu stojí.',
-    category: 'LUXUSNÍ',
-    categorySlug: 'luxusni',
-    date: '5. března 2026',
-    readTime: '7 min čtení',
-    author: { name: 'Marek D.', avatar: 'linear-gradient(135deg, #E8C97A, #C9A84C)' },
-    gradient: 'linear-gradient(135deg, #1a1a1f 0%, #201a1a 40%, #1a1a1f 100%)',
-    content: `## Kdy má smysl utrácet více
-
-Luxusní dárek má smysl ve třech případech: **milník** (kulaté narozeniny, zásnuby), **investice do kvality** (věc na celý život), nebo **zážitek, na který se nezapomíná**.
-
-## Hodinky
-
-Kvalitní hodinky jsou definicí "koupíte jednou, nosíte celý život". Tissot, Seiko Presage, Orient Bambino — to jsou značky, které nabízejí švýcarskou nebo japonskou kvalitu za rozumnou cenu.
-
-**Rozpočet:** 5 000–15 000 Kč
-
-## Kožená taška
-
-Česká kožená galanterie zažívá renesanci. Značky jako BULAR nebo ELEGA vyrábějí tašky, které vydrží **desítky let**.
-
-**Rozpočet:** 5 000–12 000 Kč
-
-## Zážitek na celý život
-
-Let balonem, helikoptéra nad Prahou, privátní degustace v Burgundsku. Něco, na co budete vzpomínat.
-
-**Rozpočet:** 5 000–25 000 Kč
-
-## Hledáte konkrétní tip?
-
-[Náš kvíz](/pruvodce) najde luxusní dárky podle zájmů obdarovaného.`,
-  },
+**Jak zabalit dárek k narozeninám originálně?**
+Originální balení dárek povýší na další úroveň. Zkuste kraft papír s přírodní provázkem, personalizovanou kartičkou nebo sušenými květinami. Mnoho e-shopů nabízí dárkové balení přímo při objednávce.
+    `
+  }
 ]
 
 export function getArticleBySlug(slug: string): BlogArticle | undefined {
-  return BLOG_ARTICLES.find((a) => a.slug === slug)
+  return BLOG_ARTICLES.find(a => a.slug === slug)
 }
 
-export function getRelatedArticles(currentSlug: string, count = 3): BlogArticle[] {
-  return BLOG_ARTICLES.filter((a) => a.slug !== currentSlug).slice(0, count)
+export function getRelatedArticles(slug: string, count = 3): BlogArticle[] {
+  return BLOG_ARTICLES.filter(a => a.slug !== slug).slice(0, count)
 }
 
-export function getArticlesByCategory(categorySlug: string): BlogArticle[] {
-  if (categorySlug === 'all') return BLOG_ARTICLES
-  return BLOG_ARTICLES.filter((a) => a.categorySlug === categorySlug)
+export function getArticlesByCategory(category: string): BlogArticle[] {
+  if (category === 'all') return BLOG_ARTICLES
+  return BLOG_ARTICLES.filter(a => a.category === category)
 }
