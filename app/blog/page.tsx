@@ -7,7 +7,7 @@ import { BLOG_ARTICLES } from '@/lib/blog-data'
 
 export default function BlogPage() {
   return (
-    <div style={{ background: '#0D0B08', color: '#F0E8DC', fontFamily: "'DM Sans', sans-serif", minHeight: '100vh' }}>
+    <div style={{ background: '#FAFAF8', color: '#1A1714', fontFamily: "'DM Sans', sans-serif", minHeight: '100vh' }}>
       <Navbar />
 
       {/* Hero */}
@@ -16,12 +16,12 @@ export default function BlogPage() {
           fontFamily: "'Cormorant Garamond', serif",
           fontSize: 'clamp(42px, 8vw, 64px)',
           fontWeight: 300,
-          color: '#F0E8DC',
+          color: '#1A1714',
           marginBottom: '16px',
         }}>
           Dárkový průvodce
         </h1>
-        <p style={{ fontSize: '18px', color: '#9A8870', lineHeight: 1.6 }}>
+        <p style={{ fontSize: '18px', color: '#6B6358', lineHeight: 1.6 }}>
           Tipy a nápady pro každou příležitost.
         </p>
       </section>
@@ -40,19 +40,26 @@ export default function BlogPage() {
               style={{
                 display: 'block',
                 textDecoration: 'none',
-                background: '#131009',
+                background: '#FFFFFF',
                 borderRadius: '16px',
-                border: '1px solid rgba(201,168,76,0.12)',
+                border: '1px solid rgba(0,0,0,0.06)',
                 overflow: 'hidden',
                 transition: 'all 0.3s',
+                boxShadow: '0 1px 3px rgba(0,0,0,0.02)',
               }}
-              onMouseOver={(e) => (e.currentTarget.style.borderColor = 'rgba(201,168,76,0.4)')}
-              onMouseOut={(e) => (e.currentTarget.style.borderColor = 'rgba(201,168,76,0.12)')}
+              onMouseOver={(e) => {
+                e.currentTarget.style.borderColor = 'rgba(201,168,76,0.4)'
+                e.currentTarget.style.boxShadow = '0 4px 12px rgba(0,0,0,0.06)'
+              }}
+              onMouseOut={(e) => {
+                e.currentTarget.style.borderColor = 'rgba(0,0,0,0.06)'
+                e.currentTarget.style.boxShadow = '0 1px 3px rgba(0,0,0,0.02)'
+              }}
             >
               {/* Placeholder image */}
               <div style={{
                 height: '180px',
-                background: 'linear-gradient(135deg, #1A1510 0%, #131009 100%)',
+                background: article.gradient,
               }} />
 
               <div style={{ padding: '24px' }}>
@@ -76,7 +83,7 @@ export default function BlogPage() {
                   fontFamily: "'Cormorant Garamond', serif",
                   fontSize: '22px',
                   fontWeight: 400,
-                  color: '#F0E8DC',
+                  color: '#1A1714',
                   lineHeight: 1.3,
                   marginBottom: '12px',
                 }}>
@@ -86,7 +93,7 @@ export default function BlogPage() {
                 {/* Perex */}
                 <p style={{
                   fontSize: '14px',
-                  color: '#9A8870',
+                  color: '#6B6358',
                   lineHeight: 1.6,
                   marginBottom: '20px',
                 }}>
@@ -95,10 +102,10 @@ export default function BlogPage() {
 
                 {/* Meta */}
                 <div style={{
-                  borderTop: '1px solid rgba(201,168,76,0.08)',
+                  borderTop: '1px solid rgba(0,0,0,0.06)',
                   paddingTop: '16px',
                   fontSize: '12px',
-                  color: '#6B6358',
+                  color: '#A09888',
                   display: 'flex',
                   gap: '16px',
                 }}>
@@ -121,7 +128,7 @@ export default function BlogPage() {
             gap: '8px',
             padding: '14px 32px',
             background: '#C9A84C',
-            color: '#0D0B08',
+            color: '#FFFFFF',
             fontSize: '15px',
             fontWeight: 500,
             borderRadius: '100px',
