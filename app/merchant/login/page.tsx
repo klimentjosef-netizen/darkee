@@ -32,64 +32,64 @@ export default function MerchantLoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-bg-deep flex items-center justify-center px-6">
+    <div className="min-h-screen bg-[var(--bg-primary)] flex items-center justify-center px-6">
       <div className="w-full max-w-md">
         {/* Logo */}
         <div className="text-center mb-10">
           <Link href="/" className="inline-flex items-center gap-2.5 no-underline">
-            <div className="w-9 h-9 rounded-[10px] bg-gradient-to-br from-coral to-coral-light flex items-center justify-center text-[17px]">
+            <div className="w-9 h-9 rounded-sm bg-[var(--gold-primary)] flex items-center justify-center text-[17px]">
               🎁
             </div>
-            <span className="font-heading text-[19px] font-bold text-rose-gold-light tracking-tight">
+            <span className="font-[family-name:var(--font-display)] text-[19px] font-bold text-[var(--text-primary)] tracking-tight">
               Dárkee
             </span>
           </Link>
-          <p className="text-text-muted text-sm mt-3">Merchant přihlášení</p>
+          <p className="text-[var(--text-muted)] text-sm mt-3 font-[family-name:var(--font-body)]">Merchant přihlášení</p>
         </div>
 
         <form
           onSubmit={handleSubmit}
-          className="bg-[rgba(255,255,255,0.04)] border border-border-default rounded-2xl p-8 space-y-5"
+          className="bg-[var(--bg-secondary)] border border-[var(--border-subtle)] rounded-sm p-8 space-y-5"
         >
           <div>
-            <label className="block text-text-secondary text-sm mb-1.5">E-mail</label>
+            <label className="block text-[var(--text-secondary)] text-sm mb-1.5 font-[family-name:var(--font-body)]">E-mail</label>
             <input
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="w-full px-4 py-3 rounded-xl bg-[rgba(255,255,255,0.04)] border border-border-default text-text-primary text-sm focus:border-coral focus:outline-none transition-colors"
+              className="w-full px-4 py-3 rounded-sm bg-[var(--bg-tertiary)] border border-[var(--border-subtle)] text-[var(--text-primary)] text-sm focus:border-[var(--gold-primary)] focus:outline-none transition-colors font-[family-name:var(--font-body)]"
               placeholder="vas@eshop.cz"
             />
           </div>
 
           <div>
-            <label className="block text-text-secondary text-sm mb-1.5">Heslo</label>
+            <label className="block text-[var(--text-secondary)] text-sm mb-1.5 font-[family-name:var(--font-body)]">Heslo</label>
             <input
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              className="w-full px-4 py-3 rounded-xl bg-[rgba(255,255,255,0.04)] border border-border-default text-text-primary text-sm focus:border-coral focus:outline-none transition-colors"
+              className="w-full px-4 py-3 rounded-sm bg-[var(--bg-tertiary)] border border-[var(--border-subtle)] text-[var(--text-primary)] text-sm focus:border-[var(--gold-primary)] focus:outline-none transition-colors font-[family-name:var(--font-body)]"
               placeholder="••••••••"
             />
           </div>
 
           {error && (
-            <p className="text-sm text-red-400">{error}</p>
+            <p className="text-sm text-[var(--error)] font-[family-name:var(--font-body)]">{error}</p>
           )}
 
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-3 bg-gradient-to-br from-coral to-coral-light text-text-on-coral font-semibold rounded-xl text-sm cursor-pointer disabled:opacity-50 transition-opacity"
+            className="w-full py-3 bg-[var(--gold-primary)] text-[var(--bg-primary)] font-semibold rounded-sm text-sm cursor-pointer disabled:opacity-50 transition-opacity font-[family-name:var(--font-body)] hover:bg-[var(--gold-light)]"
           >
             {loading ? 'Přihlašuji...' : 'Přihlásit se'}
           </button>
 
-          <p className="text-center text-text-muted text-xs">
+          <p className="text-center text-[var(--text-muted)] text-xs font-[family-name:var(--font-body)]">
             Nemáte účet?{' '}
-            <Link href="/merchant/register" className="text-coral no-underline hover:underline">
+            <Link href="/merchant/register" className="text-[var(--gold-dark)] no-underline hover:underline">
               Zaregistrujte se
             </Link>
           </p>

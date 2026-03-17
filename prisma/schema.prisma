@@ -10,38 +10,48 @@ datasource db {
 model Product {
   id               String    @id @default(cuid())
   name             String
+  description      String?
   price            Float
-  url              String    @unique
+  originalUrl      String    @unique
   affiliateUrl     String?
   imageUrl         String
   sourceShop       String
   merchantId       String?
   merchant         Merchant? @relation(fields: [merchantId], references: [id])
+
   categories       String[]
   ageRange         String[]
   genderFit        String[]
   occasionFit      String[]
   interestTags     String[]
   styleFit         String[]
-  giftType         String
+  giftType         String    @default("physical")
   isPersonalizable Boolean   @default(false)
   isLocal          Boolean   @default(false)
-  rating           Float     @default(0)
+
+  rating           Float     @default(4.0)
   popularityScore  Float     @default(50)
   inStock          Boolean   @default(true)
   isPremium        Boolean   @default(false)
+  isApproved       Boolean   @default(true)
   lastSynced       DateTime  @default(now())
   createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+
   clicks           Click[]
+
+  @@index([merchantId])
+  @@index([giftType, inStock])
 }
 
 model QuizResult {
-  id        String   @id @default(cuid())
-  answers   Json
-  products  String[]
-  scores    Json
-  createdAt DateTime @default(now())
-  clicks    Click[]
+  id         String   @id @default(cuid())
+  answers    Json
+  productIds String[]
+  scores     Json
+  sessionId  String?
+  createdAt  DateTime @default(now())
+  clicks     Click[]
 }
 
 model Click {
@@ -52,28 +62,117 @@ model Click {
   quizResult   QuizResult? @relation(fields: [quizResultId], references: [id])
   merchantId   String?
   merchant     Merchant?   @relation(fields: [merchantId], references: [id])
-  source       String?
+  source       String      @default("darkee")
   converted    Boolean     @default(false)
   revenue      Float?
-  createdAt    DateTime    @default(now())
   userAgent    String?
   ipHash       String?
+  createdAt    DateTime    @default(now())
+
+  @@index([merchantId, createdAt])
+  @@index([productId, createdAt])
 }
 
 model Merchant {
+  id             String    @id @default(cuid())
+  email          String    @unique
+  shopName       String
+  shopUrl        String
+  logoUrl        String?
+  feedUrl        String?
+  affiliateTag   String    @unique
+  commissionPct  Float     @default(5)
+  isPremium      Boolean   @default(false)
+  isApproved     Boolean   @default(false)
+  widgetEnabled  Boolean   @default(false)
+  apiKey         String    @unique @default(cuid())
+  widgetColor    String    @default("#C9A84C")
+  widgetPosition String    @default("bottom-right")
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  products       Product[]
+  clicks         Click[]
+  sessions       MerchantSession[]
+}
+
+model MerchantSession {
+  id         String   @id @default(cuid())
+  merchantId String
+  merchant   Merchant @relation(fields: [merchantId], references: [id])
+  token      String   @unique
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+}
+
+// ─── User accounts ──────────────────────────────────
+
+model User {
   id            String    @id @default(cuid())
   email         String    @unique
-  shopName      String
-  shopUrl       String
-  logoUrl       String?
-  feedUrl       String?
-  affiliateTag  String    @unique
-  commissionPct Float     @default(5)
-  isPremium     Boolean   @default(false)
-  isApproved    Boolean   @default(false)
-  widgetEnabled Boolean   @default(false)
-  apiKey        String    @unique @default(cuid())
-  products      Product[]
-  clicks        Click[]
+  name          String?
+  tier          String    @default("darce")  // darce | pruvodce | mistr
+  gems          Int       @default(0)
+  emailVerified DateTime?
   createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  magicLinks     MagicLink[]
+  giftProfiles   GiftProfile[]
+  wishlistItems  WishlistItem[]
+  gemTransactions GemTransaction[]
+}
+
+model MagicLink {
+  id        String   @id @default(cuid())
+  token     String   @unique
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  expiresAt DateTime
+  used      Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@index([token])
+}
+
+model GiftProfile {
+  id           String   @id @default(cuid())
+  userId       String
+  user         User     @relation(fields: [userId], references: [id])
+  name         String
+  relationship String
+  ageGroup     String
+  gender       String
+  interests    String[]
+  style        String?
+  birthday     DateTime?
+  occasions    String[]
+  giftCount    Int      @default(0)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@index([userId])
+}
+
+model WishlistItem {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  productId String
+  note      String?
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+}
+
+model GemTransaction {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+  amount      Int
+  type        String   // earned | redeemed
+  description String
+  createdAt   DateTime @default(now())
+
+  @@index([userId, createdAt])
 }

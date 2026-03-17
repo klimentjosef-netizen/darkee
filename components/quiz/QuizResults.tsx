@@ -1,80 +1,64 @@
 'use client'
 
 import { useState } from 'react'
-import ProductCard from '@/components/products/ProductCard'
-import Button from '@/components/ui/Button'
-import Link from 'next/link'
+import { RotateCcw } from 'lucide-react'
+import { ScoredProduct } from '@/types'
+import { ProductGrid } from '@/components/products/ProductGrid'
+import { Button } from '@/components/ui/Button'
+import { GoldDivider } from '@/components/ui/GoldDivider'
 
-type ResultProduct = {
-  id: string
-  name: string
-  price: number
-  sourceShop: string
-  interestTags: string[]
-  rating: number
-  score: number
-  reasons: string[]
+interface QuizResultsProps {
+  products: ScoredProduct[]
+  onRestart?: () => void
 }
 
-export default function QuizResults({
-  products,
-}: {
-  products: ResultProduct[]
-}) {
+export function QuizResults({ products, onRestart }: QuizResultsProps) {
   const [rated, setRated] = useState<number | null>(null)
 
   return (
-    <div className="min-h-screen bg-[radial-gradient(ellipse_at_50%_0%,#0F1923_0%,#0B1117_60%)] font-body relative overflow-hidden">
-      {/* Ambient glows */}
-      <div className="absolute -top-[30%] -left-[15%] w-[60%] h-[80%] bg-[radial-gradient(ellipse,rgba(224,122,95,0.07)_0%,transparent_70%)] pointer-events-none" />
-      <div className="absolute -bottom-[20%] -right-[15%] w-[50%] h-[60%] bg-[radial-gradient(ellipse,rgba(78,205,196,0.04)_0%,transparent_70%)] pointer-events-none" />
-
+    <div className="min-h-screen bg-[var(--bg-primary)]">
       {/* Header */}
-      <div className="pt-7 px-6 text-center relative z-10">
-        <div className="text-[11px] uppercase tracking-[0.25em] text-teal mb-3 font-medium">
+      <div className="pt-12 pb-8 px-6 text-center max-w-3xl mx-auto">
+        <p className="text-xs tracking-[0.3em] uppercase text-[var(--gold-primary)] mb-4 font-[family-name:var(--font-body)]">
           Vaše doporučení
-        </div>
-        <h1 className="font-heading text-[clamp(26px,5vw,36px)] font-bold text-text-primary mb-2">
-          Trefili jsme se! Dárky z{' '}
-          <span className="bg-gradient-to-r from-coral via-rose-gold-light to-teal bg-clip-text text-transparent">
-            českých e-shopů
-          </span>
+        </p>
+        <h1 className="font-[family-name:var(--font-display)] text-[clamp(28px,5vw,44px)] font-light text-[var(--text-primary)] mb-3 tracking-wide">
+          Vybrali jsme pro vás
         </h1>
-        <p className="text-sm text-text-muted mb-9">
+        <p className="text-sm text-[var(--text-muted)] font-[family-name:var(--font-body)]">
           Seřazeno podle shody s vaším profilem
         </p>
       </div>
 
+      <GoldDivider className="max-w-xl mx-auto mb-10" />
+
       {/* Products */}
-      <div className="flex flex-col gap-3.5 px-6 pb-10 max-w-[560px] mx-auto relative z-10">
-        {products.map((p, i) => (
-          <ProductCard key={p.id} product={p} rank={i} />
-        ))}
+      <div className="px-6 pb-12 max-w-5xl mx-auto">
+        <ProductGrid products={products} />
       </div>
 
       {/* Restart */}
-      <div className="text-center px-6 pb-8 relative z-10">
-        <Link href="/pruvodce">
-          <Button variant="secondary" className="px-8 py-3 text-sm">
-            Zkusit znovu s jinými odpověďmi
-          </Button>
-        </Link>
+      <div className="text-center px-6 pb-8">
+        <Button variant="secondary" onClick={onRestart}>
+          <RotateCcw size={14} className="mr-2" />
+          Zkusit znovu s jinými odpověďmi
+        </Button>
       </div>
 
       {/* Rating */}
-      <div className="text-center px-6 pb-16 relative z-10">
-        <p className="text-[13px] text-text-muted mb-3">
+      <div className="text-center px-6 pb-16">
+        <p className="text-xs text-[var(--text-muted)] mb-4 font-[family-name:var(--font-body)] tracking-wide uppercase">
           Jak se vám líbí naše doporučení?
         </p>
-        <div className="flex gap-1.5 justify-center">
+        <div className="flex gap-2 justify-center">
           {[1, 2, 3, 4, 5].map((n) => (
             <button
               key={n}
               onClick={() => setRated(n)}
-              className={`w-10 h-10 rounded-full text-sm font-semibold cursor-pointer transition-all duration-200 ${
+              className={`w-9 h-9 text-sm font-[family-name:var(--font-body)] font-medium cursor-pointer transition-all duration-200 rounded-sm ${
                 rated && n <= rated
-                  ? 'bg-gradient-to-br from-coral to-coral-light text-text-on-coral border-none'
-                  : 'border border-[rgba(255,245,238,0.08)] bg-[rgba(255,255,255,0.04)] text-text-muted'
+                  ? 'bg-[var(--bg-secondary)] text-[var(--text-primary)] border-none'
+                  : 'border border-[var(--border-subtle)] bg-[var(--bg-secondary)] text-[var(--text-muted)] hover:border-[var(--border-mid)]'
               }`}
             >
               {n}
@@ -82,8 +66,8 @@ export default function QuizResults({
           ))}
         </div>
         {rated && (
-          <p className="text-xs text-teal mt-2.5" style={{ animation: 'fadeUp 0.3s ease' }}>
-            Děkujeme za hodnocení!
+          <p className="text-xs text-[var(--gold-primary)] mt-3" style={{ animation: 'fadeUp 0.3s ease' }}>
+            Děkujeme za hodnocení
           </p>
         )}
       </div>

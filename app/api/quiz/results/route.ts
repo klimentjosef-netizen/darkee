@@ -1,94 +1,51 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { QuizAnswers } from '@/types'
-import { scoreProducts } from '@/lib/scoring'
 import { prisma } from '@/lib/prisma'
+import { scoreProducts } from '@/lib/scoring'
+import { QuizAnswers } from '@/types'
+import { z } from 'zod'
+
+const schema = z.object({
+  relationship: z.string(),
+  ageGroup: z.string(),
+  gender: z.enum(['female', 'male', 'neutral']),
+  occasion: z.string(),
+  interests: z.array(z.string()),
+  giftType: z.enum(['physical', 'experience', 'both']),
+  style: z.string(),
+  budget: z.string(),
+  personalized: z.string().optional(),
+  origin: z.string().optional(),
+})
 
 export async function POST(request: NextRequest) {
   try {
-    const answers: QuizAnswers = await request.json()
+    const answers = schema.parse(await request.json())
 
-    // Načti všechny produkty z DB
     const products = await prisma.product.findMany({
-      where: { inStock: true },
-    })
-
-    // Scoring
-    const scored = scoreProducts(answers, products)
-
-    // Ulož výsledek do DB
-    const quizResult = await prisma.quizResult.create({
-      data: {
-        answers: JSON.parse(JSON.stringify(answers)),
-        products: scored.map((p) => p.id),
-        scores: JSON.parse(JSON.stringify(scored.map((p) => ({ id: p.id, score: p.score, reasons: p.reasons })))),
+      where: { inStock: true, isApproved: true },
+      select: {
+        id: true, name: true, price: true, imageUrl: true,
+        originalUrl: true, affiliateUrl: true, sourceShop: true,
+        giftType: true, isPersonalizable: true, isLocal: true, categories: true,
+        ageRange: true, genderFit: true, occasionFit: true,
+        interestTags: true, styleFit: true, rating: true,
+        popularityScore: true, inStock: true, isPremium: true,
       },
     })
 
-    return NextResponse.json({
-      id: quizResult.id,
-      products: scored.map((p) => ({
-        id: p.id,
-        name: p.name,
-        price: p.price,
-        sourceShop: p.sourceShop,
-        interestTags: p.interestTags,
-        rating: p.rating,
-        score: p.score,
-        reasons: p.reasons,
-      })),
+    const scored = scoreProducts(answers as unknown as QuizAnswers, products)
+
+    const quizResult = await prisma.quizResult.create({
+      data: {
+        answers: JSON.parse(JSON.stringify(answers)),
+        productIds: scored.map(p => p.id),
+        scores: JSON.parse(JSON.stringify(scored.reduce((acc, p) => ({ ...acc, [p.id]: p.score }), {}))),
+      },
     })
+
+    return NextResponse.json({ quizResultId: quizResult.id, products: scored })
   } catch (error) {
     console.error('Quiz results error:', error)
-    return NextResponse.json(
-      { error: 'Nepodařilo se zpracovat kvíz' },
-      { status: 500 }
-    )
-  }
-}
-
-export async function GET(request: NextRequest) {
-  try {
-    const url = new URL(request.url)
-    const id = url.searchParams.get('id')
-
-    if (!id) {
-      return NextResponse.json({ error: 'Missing id' }, { status: 400 })
-    }
-
-    const result = await prisma.quizResult.findUnique({
-      where: { id },
-    })
-
-    if (!result) {
-      return NextResponse.json({ error: 'Not found' }, { status: 404 })
-    }
-
-    // Načti produkty
-    const products = await prisma.product.findMany({
-      where: { id: { in: result.products } },
-    })
-
-    // Spoj se skóre
-    const scores = result.scores as Array<{ id: string; score: number; reasons: string[] }>
-    const scored = products
-      .map((p) => {
-        const s = scores.find((s) => s.id === p.id)
-        return {
-          id: p.id,
-          name: p.name,
-          price: p.price,
-          sourceShop: p.sourceShop,
-          interestTags: p.interestTags,
-          rating: p.rating,
-          score: s?.score || 0,
-          reasons: s?.reasons || [],
-        }
-      })
-      .sort((a, b) => b.score - a.score)
-
-    return NextResponse.json({ id: result.id, products: scored })
-  } catch (error) {
-    console.error('Quiz results GET error:', error)
-    return NextResponse.json({ error: 'Server error' }, { status: 500 })
+    return NextResponse.json({ error: 'Nepodařilo se zpracovat kvíz' }, { status: 500 })
   }
 }

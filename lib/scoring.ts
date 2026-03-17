@@ -1,123 +1,118 @@
-import { QuizAnswers, BUDGET_MAP } from '@/types'
+import { QuizAnswers, ScoredProduct, BUDGET_MAP } from '@/types'
 
-type ProductForScoring = {
+type RawProduct = {
   id: string
   name: string
   price: number
-  url: string
   imageUrl: string
+  originalUrl: string
+  affiliateUrl?: string | null
   sourceShop: string
-  genderFit: string[]
-  ageRange: string[]
-  interestTags: string[]
-  styleFit: string[]
-  occasionFit: string[]
   giftType: string
   isPersonalizable: boolean
-  isLocal: boolean
+  isLocal?: boolean
+  categories: string[]
+  ageRange: string[]
+  genderFit: string[]
+  occasionFit: string[]
+  interestTags: string[]
+  styleFit: string[]
   rating: number
   popularityScore: number
-  isPremium: boolean
   inStock: boolean
-  categories: string[]
+  isPremium: boolean
 }
 
-export type ScoredProduct = ProductForScoring & {
-  score: number
-  reasons: string[]
-}
-
-export function scoreProducts(answers: QuizAnswers, products: ProductForScoring[]): ScoredProduct[] {
+export function scoreProducts(answers: QuizAnswers, products: RawProduct[]): ScoredProduct[] {
   const budgetCap = BUDGET_MAP[answers.budget]
+  const month = new Date().getMonth() + 1
 
-  // 1. Hard filtry
   const eligible = products.filter(p => {
-    if (budgetCap && p.price > budgetCap) return false
+    if (!p.inStock) return false
+    if (budgetCap !== null && p.price > budgetCap) return false
     if (answers.gender !== 'neutral' && !p.genderFit.includes(answers.gender) && !p.genderFit.includes('neutral')) return false
     if (!p.ageRange.includes(answers.ageGroup)) return false
-    if (!p.inStock) return false
     if (answers.giftType !== 'both' && p.giftType !== answers.giftType) return false
     return true
   })
 
-  // 2. Scoring (0–100)
   const scored = eligible.map(p => {
     let score = 0
     const reasons: string[] = []
 
-    // Zájmy (max 30 bodů) — multi-match bonus
-    const interestMatches = answers.interests.filter(i => p.interestTags.includes(i))
-    const interestScore = Math.min(30, interestMatches.length * 15)
-    score += interestScore
-    if (interestMatches.length > 0) {
-      reasons.push(`Sedí na zájem: ${interestMatches.join(', ')}`)
+    const matchedInterests = answers.interests.filter(i => p.interestTags.includes(i))
+    score += Math.min(30, matchedInterests.length * 12 + (matchedInterests.length > 1 ? 6 : 0))
+    if (matchedInterests.length > 0) {
+      const labels: Record<string, string> = {
+        tech: 'technologie', sport: 'sport', fashion: 'módu', home: 'domácnost',
+        food: 'jídlo a pití', books: 'vzdělávání', games: 'hry', experiences: 'zážitky',
+        crafts: 'tvoření', wellness: 'wellness', pets: 'zvířata',
+      }
+      reasons.push(`Sedí na ${matchedInterests.map(i => labels[i] || i).join(' a ')}`)
     }
 
-    // Styl (max 20 bodů)
-    if (p.styleFit.includes(answers.style) || answers.style === 'any_style') {
+    if (answers.style === 'any_style' || p.styleFit.includes(answers.style)) {
       score += 20
-      reasons.push('Odpovídá osobnosti obdarovaného')
+      if (answers.style !== 'any_style') reasons.push('Odpovídá osobnosti obdarovaného')
     }
 
-    // Příležitost (max 20 bodů)
-    if (p.occasionFit.includes(answers.occasion) || p.occasionFit.includes('any')) {
-      score += 20
-      reasons.push(`Skvělé pro: ${answers.occasion}`)
-    }
+    if (p.occasionFit.includes(answers.occasion) || p.occasionFit.includes('any')) score += 20
+    if (answers.occasion === 'christmas' && (month === 11 || month === 12)) score += 5
+    if (answers.occasion === 'valentine' && (month === 1 || month === 2)) score += 5
 
-    // Vztah (max 10 bodů)
-    const relationshipMap: Record<string, string[]> = {
-      partner: ['valentine', 'personal', 'premium'],
-      parent: ['sentimental', 'practical', 'premium'],
-      friend: ['fun', 'original'],
-      colleague: ['neutral', 'universal'],
-      child: ['kids', 'educational'],
+    const relMap: Record<string, string[]> = {
+      partner: ['valentine', 'personal', 'premium', 'aesthetic'],
+      parent: ['sentimental', 'practical', 'comfort', 'home'],
+      friend: ['fun', 'games', 'experiences', 'food'],
+      sibling: ['games', 'tech', 'fashion', 'experiences'],
+      colleague: ['neutral', 'home', 'food', 'books'],
+      child: ['games', 'crafts', 'sport', 'books'],
+      self: ['tech', 'fashion', 'wellness', 'experiences'],
     }
-    const relTags = relationshipMap[answers.relationship] || []
-    if (p.interestTags.some(t => relTags.includes(t))) {
+    const relTags = relMap[answers.relationship] || []
+    if (p.interestTags.some(t => relTags.includes(t)) || p.styleFit.some(t => relTags.includes(t))) {
       score += 10
     }
 
-    // Popularita (max 10 bodů)
     score += (p.popularityScore / 100) * 10
-
-    // Premium boost (max +3, nikdy nesmí porazit organicky lepší produkt o >10)
+    if (p.rating >= 4.5) score += 5
+    else if (p.rating >= 4.0) score += 3
     if (p.isPremium) score += 3
+    if (p.isPersonalizable) reasons.push('Lze personalizovat')
 
-    // Bonus tagy
-    if (p.isLocal) reasons.push('Český výrobek')
-    if (p.isPersonalizable) reasons.push('Možnost personalizace')
-    if (p.rating >= 4.8) reasons.push('Výborné hodnocení zákazníků')
+    if (reasons.length === 0) reasons.push('Dobře hodnocený produkt v dané kategorii')
 
-    // Sezónní boost
-    const month = new Date().getMonth() + 1
-    if (answers.occasion === 'christmas' && month >= 11) score += 5
-    if (answers.occasion === 'valentine' && month <= 2) score += 5
+    const maxPossible = 103
+    const matchPct = Math.round(Math.min(99, (score / maxPossible) * 100))
 
-    return { ...p, score: Math.round(score), reasons }
+    return {
+      id: p.id,
+      name: p.name,
+      price: p.price,
+      imageUrl: p.imageUrl,
+      originalUrl: p.originalUrl,
+      affiliateUrl: p.affiliateUrl,
+      sourceShop: p.sourceShop,
+      giftType: p.giftType,
+      isPersonalizable: p.isPersonalizable,
+      isLocal: p.isLocal || false,
+      score,
+      matchPct,
+      reasons,
+    }
   })
 
-  // 3. Sort + diverzifikace (max 2 ze stejné kategorie)
   const sorted = scored.sort((a, b) => b.score - a.score)
   const result: ScoredProduct[] = []
-  const categoryCounts: Record<string, number> = {}
+  const categoryCount: Record<string, number> = {}
 
-  for (const product of sorted) {
-    const primaryCategory = product.categories[0] || 'other'
-    if ((categoryCounts[primaryCategory] || 0) >= 2) continue
-    categoryCounts[primaryCategory] = (categoryCounts[primaryCategory] || 0) + 1
-    result.push(product)
+  for (const p of sorted) {
+    const rawProduct = products.find(rp => rp.id === p.id)
+    const category = rawProduct?.categories[0] || 'other'
+    if ((categoryCount[category] || 0) >= 2) continue
+    categoryCount[category] = (categoryCount[category] || 0) + 1
+    result.push(p)
     if (result.length >= 5) break
-  }
-
-  // Fallback pokud máme méně než 3 výsledky
-  if (result.length < 3) {
-    for (const product of sorted) {
-      if (!result.find(r => r.id === product.id)) {
-        result.push(product)
-        if (result.length >= 5) break
-      }
-    }
   }
 
   return result

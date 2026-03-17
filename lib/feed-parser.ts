@@ -43,11 +43,11 @@ export async function importFeed(
       const tags = await tagProduct({ name, description, category, price })
 
       await prisma.product.upsert({
-        where: { url },
+        where: { originalUrl: url },
         create: {
           name,
           price,
-          url,
+          originalUrl: url,
           imageUrl,
           sourceShop: merchantId,
           merchantId,

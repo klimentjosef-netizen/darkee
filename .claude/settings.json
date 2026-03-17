@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(ls -la /c/Users/klime/projects/darkee/app/blog/[slug]/)",
+      "Bash(grep -r blog /c/Users/klime/projects/darkee --include=*.ts --include=*.tsx --include=*.js --include=*.jsx ! -path */node_modules/*)",
+      "Bash(grep -r \"BlogPreview\\\\|10-vanocnich\\\\|co-koupit-priteli\" /c/Users/klime/projects/darkee --include=\"*.ts\" --include=\"*.tsx\" --include=\"*.js\" --include=\"*.jsx\" ! -path \"*/node_modules/*\")"
+    ]
+  }
+}

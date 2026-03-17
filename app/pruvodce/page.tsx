@@ -1,4 +1,4 @@
-import QuizContainer from '@/components/quiz/QuizContainer'
+import { QuizContainer } from '@/components/quiz/QuizContainer'
 
 export const metadata = {
   title: 'Dárkový průvodce | Dárkee',
