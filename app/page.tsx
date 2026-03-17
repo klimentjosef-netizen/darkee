@@ -1,21 +1,23 @@
 'use client'
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 
 const PRODUCTS = [
-  { name: 'Prémiová aromaterapeutická sada', shop: 'Notino.cz', price: '1 290 Kč', match: '96', reason: 'Sedí na zájem o wellness', gradient: 'linear-gradient(135deg,#1E1510 0%,#2A1E10 100%)' },
-  { name: 'Umění pomalého života', shop: 'Knihy Dobrovský', price: '420 Kč', match: '91', reason: 'Zájem o knihy, narozeniny', gradient: 'linear-gradient(135deg,#101418 0%,#0E1820 100%)' },
-  { name: 'Prémiová čajová kolekce', shop: 'Darek.cz', price: '890 Kč', match: '88', reason: 'Jídlo a pití, praktický styl', gradient: 'linear-gradient(135deg,#101A12 0%,#0C1810 100%)' },
+  { name: 'Prémiová aromaterapeutická sada', shop: 'Notino.cz', price: '1 290 Kč', match: '96', reason: 'Sedí na zájem o wellness', gradient: 'linear-gradient(135deg,#F5F0E8 0%,#EDE5D8 100%)' },
+  { name: 'Umění pomalého života', shop: 'Knihy Dobrovský', price: '420 Kč', match: '91', reason: 'Zájem o knihy, narozeniny', gradient: 'linear-gradient(135deg,#EEF0F5 0%,#E4E8F0 100%)' },
+  { name: 'Prémiová čajová kolekce', shop: 'Darek.cz', price: '890 Kč', match: '88', reason: 'Jídlo a pití, praktický styl', gradient: 'linear-gradient(135deg,#EEF5F0 0%,#E2EDE6 100%)' },
 ]
 
-const PARTICLES = Array.from({ length: 12 }, (_, i) => ({
+const GIFTS = Array.from({ length: 14 }, (_, i) => ({
   id: i,
-  left: 5 + Math.random() * 90,
-  bottom: 5 + Math.random() * 50,
-  size: 2 + Math.random() * 3,
-  duration: 8 + Math.random() * 8,
-  delay: Math.random() * 6,
-  opacity: 0.1 + Math.random() * 0.15,
+  left: 3 + Math.random() * 94,
+  startBottom: -5 - Math.random() * 10,
+  size: 16 + Math.random() * 14,
+  duration: 10 + Math.random() * 10,
+  delay: Math.random() * 8,
+  opacity: 0.12 + Math.random() * 0.18,
+  swayAmount: 15 + Math.random() * 30,
+  rotation: Math.random() * 360,
 }))
 
 export default function Home() {
@@ -31,93 +33,101 @@ export default function Home() {
   }, [])
 
   const s = {
-    page: { background: '#0D0B08', color: '#F0E8DC', fontFamily: "'DM Sans', sans-serif", minHeight: '100vh' } as React.CSSProperties,
+    page: { background: '#FAFAF8', color: '#1A1714', fontFamily: "'DM Sans', sans-serif", minHeight: '100vh' } as React.CSSProperties,
 
     // NAVBAR
     navWrap: { padding: '14px 24px', position: 'sticky', top: 0, zIndex: 100 } as React.CSSProperties,
     navInner: {
-      background: scrolled ? 'rgba(15,12,7,0.92)' : 'rgba(20,17,12,0.7)',
+      background: scrolled ? 'rgba(250,250,248,0.92)' : 'rgba(255,255,255,0.6)',
       backdropFilter: 'blur(20px)',
       WebkitBackdropFilter: 'blur(20px)',
-      border: '1px solid rgba(201,168,76,0.18)',
+      border: '1px solid rgba(0,0,0,0.06)',
       borderRadius: '100px',
       padding: '10px 12px 10px 24px',
       display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '24px',
       transition: 'all 0.3s',
+      boxShadow: scrolled ? '0 2px 20px rgba(0,0,0,0.04)' : 'none',
     } as React.CSSProperties,
     logo: { fontFamily: "'Cormorant Garamond', serif", fontSize: '22px', color: '#C9A84C', fontWeight: 500, letterSpacing: '0.04em', textDecoration: 'none' } as React.CSSProperties,
     navLinks: { display: 'flex', gap: '24px', alignItems: 'center' } as React.CSSProperties,
-    navLink: (k: string) => ({ fontSize: '13px', color: hov[k] ? '#F0E8DC' : '#9A8870', cursor: 'pointer', transition: 'color 0.2s', textDecoration: 'none' }) as React.CSSProperties,
-    navCta: { padding: '9px 22px', background: hov['nav-cta'] ? '#E8C97A' : '#C9A84C', color: '#0D0B08', fontSize: '13px', fontWeight: 500, border: 'none', borderRadius: '100px', cursor: 'pointer', fontFamily: "'DM Sans', sans-serif", transition: 'all 0.2s' } as React.CSSProperties,
+    navLink: (k: string) => ({ fontSize: '13px', color: hov[k] ? '#1A1714' : '#6B6358', cursor: 'pointer', transition: 'color 0.2s', textDecoration: 'none' }) as React.CSSProperties,
+    navCta: { padding: '9px 22px', background: hov['nav-cta'] ? '#B89840' : '#C9A84C', color: '#FFFFFF', fontSize: '13px', fontWeight: 500, border: 'none', borderRadius: '100px', cursor: 'pointer', fontFamily: "'DM Sans', sans-serif", transition: 'all 0.2s' } as React.CSSProperties,
 
     // HERO
-    hero: { padding: '72px 24px 64px', textAlign: 'center', position: 'relative', overflow: 'hidden' } as React.CSSProperties,
-    heroGlow: { position: 'absolute', inset: 0, background: 'radial-gradient(ellipse 80% 60% at 50% 30%, rgba(201,168,76,0.1) 0%, transparent 65%)', pointerEvents: 'none' } as React.CSSProperties,
+    hero: { padding: '72px 24px 64px', textAlign: 'center', position: 'relative', overflow: 'hidden', background: '#FAFAF8' } as React.CSSProperties,
+    heroGlow: { position: 'absolute', inset: 0, background: 'radial-gradient(ellipse 80% 60% at 50% 30%, rgba(201,168,76,0.06) 0%, transparent 65%)', pointerEvents: 'none' } as React.CSSProperties,
     heroContent: { position: 'relative', zIndex: 1, maxWidth: '660px', margin: '0 auto' } as React.CSSProperties,
-    badge: { display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '8px 20px', background: 'rgba(201,168,76,0.1)', border: '1px solid rgba(201,168,76,0.25)', borderRadius: '100px', fontSize: '12px', color: '#C9A84C', letterSpacing: '0.06em', marginBottom: '36px' } as React.CSSProperties,
-    h1: { fontFamily: "'Cormorant Garamond', serif", fontSize: 'clamp(48px, 8vw, 68px)', fontWeight: 300, lineHeight: 1.05, color: '#F0E8DC', marginBottom: '20px' } as React.CSSProperties,
-    heroSub: { fontSize: '17px', color: '#9A8870', lineHeight: 1.8, marginBottom: '40px', maxWidth: '480px', marginLeft: 'auto', marginRight: 'auto' } as React.CSSProperties,
+    badge: { display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '8px 20px', background: 'rgba(201,168,76,0.08)', border: '1px solid rgba(201,168,76,0.2)', borderRadius: '100px', fontSize: '12px', color: '#C9A84C', letterSpacing: '0.06em', marginBottom: '36px' } as React.CSSProperties,
+    h1: { fontFamily: "'Cormorant Garamond', serif", fontSize: 'clamp(48px, 8vw, 68px)', fontWeight: 300, lineHeight: 1.05, color: '#1A1714', marginBottom: '20px' } as React.CSSProperties,
+    heroSub: { fontSize: '17px', color: '#6B6358', lineHeight: 1.8, marginBottom: '40px', maxWidth: '480px', marginLeft: 'auto', marginRight: 'auto' } as React.CSSProperties,
     heroBtns: { display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px', marginBottom: '16px', flexWrap: 'wrap' } as React.CSSProperties,
-    btnPrimary: (k: string) => ({ padding: '14px 36px', background: hov[k] ? '#E8C97A' : '#C9A84C', color: '#0D0B08', fontSize: '15px', fontWeight: 500, border: 'none', borderRadius: '100px', cursor: 'pointer', fontFamily: "'DM Sans', sans-serif", transition: 'all 0.25s', transform: hov[k] ? 'translateY(-1px)' : 'none' }) as React.CSSProperties,
-    btnSecondary: (k: string) => ({ padding: '14px 36px', background: hov[k] ? 'rgba(201,168,76,0.14)' : 'rgba(201,168,76,0.08)', color: '#C9A84C', fontSize: '15px', fontWeight: 400, border: '1px solid rgba(201,168,76,0.3)', borderRadius: '100px', cursor: 'pointer', fontFamily: "'DM Sans', sans-serif", transition: 'all 0.25s' }) as React.CSSProperties,
-    hint: { fontSize: '12px', color: '#5A5040', display: 'block', marginBottom: '48px' } as React.CSSProperties,
+    btnPrimary: (k: string) => ({ padding: '14px 36px', background: hov[k] ? '#B89840' : '#C9A84C', color: '#FFFFFF', fontSize: '15px', fontWeight: 500, border: 'none', borderRadius: '100px', cursor: 'pointer', fontFamily: "'DM Sans', sans-serif", transition: 'all 0.25s', transform: hov[k] ? 'translateY(-1px)' : 'none', boxShadow: hov[k] ? '0 4px 16px rgba(201,168,76,0.3)' : '0 2px 8px rgba(201,168,76,0.15)' }) as React.CSSProperties,
+    btnSecondary: (k: string) => ({ padding: '14px 36px', background: hov[k] ? 'rgba(0,0,0,0.04)' : 'transparent', color: '#6B6358', fontSize: '15px', fontWeight: 400, border: '1px solid rgba(0,0,0,0.12)', borderRadius: '100px', cursor: 'pointer', fontFamily: "'DM Sans', sans-serif", transition: 'all 0.25s' }) as React.CSSProperties,
+    hint: { fontSize: '12px', color: '#A09888', display: 'block', marginBottom: '48px' } as React.CSSProperties,
     social: { display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px' } as React.CSSProperties,
 
     // SECTION
     section: (pt = '80px') => ({ padding: `${pt} 24px 80px` }) as React.CSSProperties,
-    sectionInner: { background: '#131009', borderRadius: '24px', padding: '56px 48px', border: '1px solid rgba(201,168,76,0.08)' } as React.CSSProperties,
-    sectionLabel: { fontSize: '11px', letterSpacing: '0.14em', color: '#6B5E40', textTransform: 'uppercase', marginBottom: '14px' } as React.CSSProperties,
-    sectionTitle: { fontFamily: "'Cormorant Garamond', serif", fontSize: 'clamp(32px,5vw,44px)', fontWeight: 300, color: '#F0E8DC', lineHeight: 1.15, marginBottom: '48px' } as React.CSSProperties,
+    sectionInner: { background: '#FFFFFF', borderRadius: '24px', padding: '56px 48px', border: '1px solid rgba(0,0,0,0.06)', boxShadow: '0 1px 3px rgba(0,0,0,0.02)' } as React.CSSProperties,
+    sectionLabel: { fontSize: '11px', letterSpacing: '0.14em', color: '#A09888', textTransform: 'uppercase', marginBottom: '14px' } as React.CSSProperties,
+    sectionTitle: { fontFamily: "'Cormorant Garamond', serif", fontSize: 'clamp(32px,5vw,44px)', fontWeight: 300, color: '#1A1714', lineHeight: 1.15, marginBottom: '48px' } as React.CSSProperties,
 
     // STEPS
     stepsGrid: { display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '16px' } as React.CSSProperties,
-    step: { background: '#0D0B08', borderRadius: '16px', padding: '36px 28px', position: 'relative', border: '1px solid rgba(201,168,76,0.08)', overflow: 'hidden' } as React.CSSProperties,
-    stepNum: { fontFamily: "'Cormorant Garamond', serif", fontSize: '72px', fontWeight: 300, color: 'rgba(201,168,76,0.06)', position: 'absolute', top: '12px', right: '16px', lineHeight: 1 } as React.CSSProperties,
+    step: { background: '#FAFAF8', borderRadius: '16px', padding: '36px 28px', position: 'relative', border: '1px solid rgba(0,0,0,0.06)', overflow: 'hidden' } as React.CSSProperties,
+    stepNum: { fontFamily: "'Cormorant Garamond', serif", fontSize: '72px', fontWeight: 300, color: 'rgba(201,168,76,0.1)', position: 'absolute', top: '12px', right: '16px', lineHeight: 1 } as React.CSSProperties,
     stepDot: { width: '36px', height: '36px', borderRadius: '50%', background: 'rgba(201,168,76,0.12)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '18px' } as React.CSSProperties,
-    stepTitle: { fontFamily: "'Cormorant Garamond', serif", fontSize: '22px', fontWeight: 400, color: '#F0E8DC', marginBottom: '10px' } as React.CSSProperties,
-    stepDesc: { fontSize: '13px', color: '#7A6E5A', lineHeight: 1.7 } as React.CSSProperties,
+    stepTitle: { fontFamily: "'Cormorant Garamond', serif", fontSize: '22px', fontWeight: 400, color: '#1A1714', marginBottom: '10px' } as React.CSSProperties,
+    stepDesc: { fontSize: '13px', color: '#6B6358', lineHeight: 1.7 } as React.CSSProperties,
 
     // STATS
     statsGrid: { display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: '16px' } as React.CSSProperties,
-    statCard: { background: '#0D0B08', borderRadius: '16px', padding: '32px 24px', textAlign: 'center', border: '1px solid rgba(201,168,76,0.08)' } as React.CSSProperties,
+    statCard: { background: '#FAFAF8', borderRadius: '16px', padding: '32px 24px', textAlign: 'center', border: '1px solid rgba(0,0,0,0.06)' } as React.CSSProperties,
     statNum: { fontFamily: "'Cormorant Garamond', serif", fontSize: '48px', fontWeight: 300, color: '#C9A84C', lineHeight: 1 } as React.CSSProperties,
-    statLabel: { fontSize: '12px', color: '#5A5040', marginTop: '8px' } as React.CSSProperties,
+    statLabel: { fontSize: '12px', color: '#A09888', marginTop: '8px' } as React.CSSProperties,
 
     // PRODUCTS
     productsGrid: { display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '16px', marginTop: '48px' } as React.CSSProperties,
-    pCard: (k: string) => ({ background: '#0D0B08', borderRadius: '20px', overflow: 'hidden', border: hov[k] ? '1px solid rgba(201,168,76,0.3)' : '1px solid rgba(201,168,76,0.1)', transition: 'all 0.2s', transform: hov[k] ? 'translateY(-2px)' : 'none', cursor: 'pointer' }) as React.CSSProperties,
+    pCard: (k: string) => ({ background: '#FAFAF8', borderRadius: '20px', overflow: 'hidden', border: hov[k] ? '1px solid rgba(201,168,76,0.4)' : '1px solid rgba(0,0,0,0.06)', transition: 'all 0.2s', transform: hov[k] ? 'translateY(-2px)' : 'none', cursor: 'pointer', boxShadow: hov[k] ? '0 8px 24px rgba(0,0,0,0.06)' : 'none' }) as React.CSSProperties,
     pImg: (gradient: string) => ({ height: '160px', background: gradient, position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center' }) as React.CSSProperties,
-    matchBadge: { position: 'absolute', top: '12px', right: '12px', background: 'rgba(201,168,76,0.9)', color: '#0D0B08', fontSize: '11px', fontWeight: 600, padding: '4px 12px', borderRadius: '100px' } as React.CSSProperties,
+    matchBadge: { position: 'absolute', top: '12px', right: '12px', background: '#C9A84C', color: '#FFFFFF', fontSize: '11px', fontWeight: 600, padding: '4px 12px', borderRadius: '100px' } as React.CSSProperties,
     pBody: { padding: '20px' } as React.CSSProperties,
-    pShop: { fontSize: '10px', letterSpacing: '0.1em', color: '#5A5040', textTransform: 'uppercase', marginBottom: '6px' } as React.CSSProperties,
-    pName: { fontFamily: "'Cormorant Garamond', serif", fontSize: '18px', fontWeight: 400, color: '#F0E8DC', lineHeight: 1.3, marginBottom: '10px' } as React.CSSProperties,
-    pReason: { fontSize: '12px', color: '#7A6E5A', marginBottom: '14px', display: 'flex', gap: '5px' } as React.CSSProperties,
-    pFooter: { display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingTop: '14px', borderTop: '1px solid rgba(201,168,76,0.08)' } as React.CSSProperties,
+    pShop: { fontSize: '10px', letterSpacing: '0.1em', color: '#A09888', textTransform: 'uppercase', marginBottom: '6px' } as React.CSSProperties,
+    pName: { fontFamily: "'Cormorant Garamond', serif", fontSize: '18px', fontWeight: 400, color: '#1A1714', lineHeight: 1.3, marginBottom: '10px' } as React.CSSProperties,
+    pReason: { fontSize: '12px', color: '#6B6358', marginBottom: '14px', display: 'flex', gap: '5px' } as React.CSSProperties,
+    pFooter: { display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingTop: '14px', borderTop: '1px solid rgba(0,0,0,0.06)' } as React.CSSProperties,
     pPrice: { fontFamily: "'Cormorant Garamond', serif", fontSize: '20px', color: '#C9A84C' } as React.CSSProperties,
-    pBtn: (k: string) => ({ fontSize: '12px', color: '#C9A84C', cursor: 'pointer', fontFamily: "'DM Sans', sans-serif", background: hov[k] ? 'rgba(201,168,76,0.2)' : 'rgba(201,168,76,0.1)', padding: '6px 14px', borderRadius: '100px', border: '1px solid rgba(201,168,76,0.2)', transition: 'all 0.2s' }) as React.CSSProperties,
+    pBtn: (k: string) => ({ fontSize: '12px', color: '#C9A84C', cursor: 'pointer', fontFamily: "'DM Sans', sans-serif", background: hov[k] ? 'rgba(201,168,76,0.15)' : 'rgba(201,168,76,0.08)', padding: '6px 14px', borderRadius: '100px', border: '1px solid rgba(201,168,76,0.2)', transition: 'all 0.2s' }) as React.CSSProperties,
 
     // FINAL CTA
     finalWrap: { padding: '0 24px 80px' } as React.CSSProperties,
-    finalInner: { background: 'linear-gradient(135deg,#1A1508 0%,#130F06 50%,#1A1508 100%)', borderRadius: '32px', padding: '80px 48px', textAlign: 'center', border: '1px solid rgba(201,168,76,0.15)', position: 'relative', overflow: 'hidden' } as React.CSSProperties,
-    finalGlow: { position: 'absolute', inset: 0, background: 'radial-gradient(ellipse 60% 60% at 50% 50%, rgba(201,168,76,0.08) 0%, transparent 70%)', pointerEvents: 'none' } as React.CSSProperties,
-    finalH2: { fontFamily: "'Cormorant Garamond', serif", fontSize: 'clamp(36px,6vw,56px)', fontWeight: 300, color: '#F0E8DC', lineHeight: 1.1, marginBottom: '16px', position: 'relative' } as React.CSSProperties,
-    finalSub: { fontSize: '16px', color: '#7A6E5A', marginBottom: '36px', position: 'relative' } as React.CSSProperties,
+    finalInner: { background: 'linear-gradient(135deg,#F8F4EC 0%,#FAFAF8 50%,#F8F4EC 100%)', borderRadius: '32px', padding: '80px 48px', textAlign: 'center', border: '1px solid rgba(201,168,76,0.15)', position: 'relative', overflow: 'hidden' } as React.CSSProperties,
+    finalGlow: { position: 'absolute', inset: 0, background: 'radial-gradient(ellipse 60% 60% at 50% 50%, rgba(201,168,76,0.06) 0%, transparent 70%)', pointerEvents: 'none' } as React.CSSProperties,
+    finalH2: { fontFamily: "'Cormorant Garamond', serif", fontSize: 'clamp(36px,6vw,56px)', fontWeight: 300, color: '#1A1714', lineHeight: 1.1, marginBottom: '16px', position: 'relative' } as React.CSSProperties,
+    finalSub: { fontSize: '16px', color: '#6B6358', marginBottom: '36px', position: 'relative' } as React.CSSProperties,
 
     // FOOTER
     footerWrap: { padding: '0 24px 40px' } as React.CSSProperties,
-    footerInner: { background: '#131009', borderRadius: '24px', padding: '48px', border: '1px solid rgba(201,168,76,0.08)' } as React.CSSProperties,
+    footerInner: { background: '#F5F3EE', borderRadius: '24px', padding: '48px', border: '1px solid rgba(0,0,0,0.06)' } as React.CSSProperties,
     footerGrid: { display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: '40px', marginBottom: '40px' } as React.CSSProperties,
     footerLogo: { fontFamily: "'Cormorant Garamond', serif", fontSize: '20px', color: '#C9A84C', marginBottom: '10px' } as React.CSSProperties,
-    footerTag: { fontSize: '13px', color: '#5A5040', lineHeight: 1.6 } as React.CSSProperties,
-    footerColTitle: { fontSize: '10px', letterSpacing: '0.12em', color: '#5A5040', textTransform: 'uppercase', marginBottom: '14px' } as React.CSSProperties,
-    footerLink: (k: string) => ({ display: 'block', fontSize: '13px', color: hov[k] ? '#F0E8DC' : '#7A6E5A', marginBottom: '9px', cursor: 'pointer', transition: 'color 0.2s', textDecoration: 'none' }) as React.CSSProperties,
-    footerBottom: { borderTop: '1px solid rgba(201,168,76,0.08)', paddingTop: '20px', display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', gap: '8px', fontSize: '12px', color: '#4A4030' } as React.CSSProperties,
+    footerTag: { fontSize: '13px', color: '#A09888', lineHeight: 1.6 } as React.CSSProperties,
+    footerColTitle: { fontSize: '10px', letterSpacing: '0.12em', color: '#A09888', textTransform: 'uppercase', marginBottom: '14px' } as React.CSSProperties,
+    footerLink: (k: string) => ({ display: 'block', fontSize: '13px', color: hov[k] ? '#1A1714' : '#6B6358', marginBottom: '9px', cursor: 'pointer', transition: 'color 0.2s', textDecoration: 'none' }) as React.CSSProperties,
+    footerBottom: { borderTop: '1px solid rgba(0,0,0,0.06)', paddingTop: '20px', display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', gap: '8px', fontSize: '12px', color: '#A09888' } as React.CSSProperties,
   }
 
   return (
     <div style={s.page}>
-      {/* Particle keyframes */}
-      <style>{`@keyframes floatUp{0%{transform:translateY(0);opacity:0}20%{opacity:1}80%{opacity:1}100%{transform:translateY(-90px);opacity:0}}`}</style>
+      {/* Animations */}
+      <style>{`
+        @keyframes giftFloat {
+          0% { transform: translateY(0) translateX(0) rotate(0deg); opacity: 0; }
+          10% { opacity: 1; }
+          85% { opacity: 1; }
+          100% { transform: translateY(-100vh) translateX(var(--sway)) rotate(var(--rot)); opacity: 0; }
+        }
+      `}</style>
 
       {/* NAVBAR */}
       <div style={s.navWrap}>
@@ -140,16 +150,24 @@ export default function Home() {
       {/* HERO */}
       <section style={s.hero}>
         <div style={s.heroGlow} />
-        {/* Particles */}
-        {PARTICLES.map(p => (
-          <div key={p.id} style={{
-            position: 'absolute', borderRadius: '50%', background: '#C9A84C',
-            width: p.size, height: p.size,
-            left: `${p.left}%`, bottom: `${p.bottom}%`,
-            opacity: p.opacity,
-            animation: `floatUp ${p.duration}s linear ${p.delay}s infinite`,
-            pointerEvents: 'none',
-          }} />
+        {/* Floating gifts */}
+        {GIFTS.map(g => (
+          <div
+            key={g.id}
+            style={{
+              position: 'absolute',
+              left: `${g.left}%`,
+              bottom: `${g.startBottom}%`,
+              fontSize: `${g.size}px`,
+              opacity: g.opacity,
+              animation: `giftFloat ${g.duration}s ease-in-out ${g.delay}s infinite`,
+              pointerEvents: 'none',
+              ['--sway' as string]: `${g.swayAmount}px`,
+              ['--rot' as string]: `${g.rotation}deg`,
+            }}
+          >
+            🎁
+          </div>
         ))}
         <div style={s.heroContent}>
           <div style={s.badge}>✦ Dárkový asistent pro každou příležitost</div>
@@ -172,11 +190,11 @@ export default function Home() {
           <span style={s.hint}>Bez registrace • Zdarma • 60 sekund</span>
           <div style={s.social}>
             <div style={{ display: 'flex' }}>
-              {['#8A6B2A','#C9A84C','#E8C97A'].map((c,i) => (
-                <div key={i} style={{ width: 30, height: 30, borderRadius: '50%', background: c, border: '2px solid #0D0B08', marginLeft: i > 0 ? '-8px' : 0 }} />
+              {['#D4B87A','#C9A84C','#A08030'].map((c,i) => (
+                <div key={i} style={{ width: 30, height: 30, borderRadius: '50%', background: c, border: '2px solid #FAFAF8', marginLeft: i > 0 ? '-8px' : 0 }} />
               ))}
             </div>
-            <span style={{ fontSize: '13px', color: '#5A5040' }}>Pomohli jsme 12 847 lidem najít správný dárek</span>
+            <span style={{ fontSize: '13px', color: '#A09888' }}>Pomohli jsme 12 847 lidem najít správný dárek</span>
           </div>
         </div>
       </section>
@@ -285,7 +303,7 @@ export default function Home() {
             <div>
               <div style={s.footerColTitle}>Kontakt</div>
               <a href="mailto:info@darkee.cz" style={s.footerLink('fl-email')} onMouseEnter={on('fl-email')} onMouseLeave={off('fl-email')}>info@darkee.cz</a>
-              <Link href="/pro-eshopy" style={{ ...s.footerLink('fl-collab'), color: hov['fl-collab'] ? '#E8C97A' : '#C9A84C' }} onMouseEnter={on('fl-collab')} onMouseLeave={off('fl-collab')}>Spolupráce →</Link>
+              <Link href="/pro-eshopy" style={{ ...s.footerLink('fl-collab'), color: hov['fl-collab'] ? '#B89840' : '#C9A84C' }} onMouseEnter={on('fl-collab')} onMouseLeave={off('fl-collab')}>Spolupráce →</Link>
             </div>
           </div>
           <div style={s.footerBottom}>

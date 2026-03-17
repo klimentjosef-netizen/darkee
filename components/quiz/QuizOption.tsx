@@ -28,7 +28,7 @@ export function QuizOption({ option, selected, onSelect, index }: QuizOptionProp
       )}
       style={
         selected
-          ? { boxShadow: '0 0 16px rgba(201, 168, 76, 0.1)' }
+          ? { boxShadow: '0 0 16px rgba(166, 124, 82, 0.08)' }
           : undefined
       }
     >
@@ -60,7 +60,7 @@ export function QuizOption({ option, selected, onSelect, index }: QuizOptionProp
           transition={{ type: 'spring', stiffness: 500, damping: 25 }}
           className="absolute top-2.5 right-2.5 w-5 h-5 rounded-full bg-[var(--gold-primary)] flex items-center justify-center shrink-0"
         >
-          <Check size={12} className="text-[var(--bg-primary)]" />
+          <Check size={12} className="text-white" />
         </motion.div>
       )}
     </motion.button>

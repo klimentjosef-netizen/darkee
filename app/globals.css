@@ -5,14 +5,33 @@
 :root {
   --gold: #C9A84C;
   --gold-light: #E8C97A;
-  --gold-dim: rgba(201,168,76,0.12);
-  --bg: #0D0B08;
-  --bg-card: #131009;
-  --text: #F0E8DC;
-  --text-mid: #9A8870;
-  --text-muted: #5A5040;
+  --gold-dim: rgba(201,168,76,0.10);
+  --bg: #FAFAF8;
+  --bg-card: #FFFFFF;
+  --bg-warm: #F5F3EE;
+  --text: #1A1714;
+  --text-mid: #6B6358;
+  --text-muted: #A09888;
   --font-display: 'Cormorant Garamond', Georgia, serif;
   --font-body: 'DM Sans', system-ui, sans-serif;
+
+  /* kompletní aliasy pro všechny stránky */
+  --bg-primary: #FAFAF8;
+  --bg-secondary: #F5F3EE;
+  --bg-tertiary: #EDEAE4;
+  --bg-elevated: #FFFFFF;
+  --gold-primary: #C9A84C;
+  --gold-light: #E8C97A;
+  --gold-dark: #8A6B2A;
+  --gold-glow: rgba(201,168,76,0.10);
+  --text-primary: #1A1714;
+  --text-secondary: #6B6358;
+  --text-muted: #A09888;
+  --border-subtle: rgba(0,0,0,0.06);
+  --border-mid: rgba(0,0,0,0.12);
+  --border-strong: rgba(0,0,0,0.18);
+  --error: #C0392B;
+  --success: #27AE60;
 }
 
 html { scroll-behavior: smooth; }
@@ -25,7 +44,7 @@ body {
   min-height: 100vh;
 }
 
-::selection { background: var(--gold); color: var(--bg); }
+::selection { background: var(--gold); color: #FFFFFF; }
 ::-webkit-scrollbar { width: 4px; }
-::-webkit-scrollbar-track { background: var(--bg); }
-::-webkit-scrollbar-thumb { background: #3A3020; border-radius: 2px; }
+::-webkit-scrollbar-track { background: #F0EDE8; }
+::-webkit-scrollbar-thumb { background: #C9A84C; border-radius: 2px; }
