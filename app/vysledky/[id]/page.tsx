@@ -80,7 +80,7 @@ function SaveModal({ onClose }: { onClose: () => void }) {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm px-6"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/15 backdrop-blur-sm px-6"
       onClick={onClose}
     >
       <motion.div
@@ -106,7 +106,7 @@ function SaveModal({ onClose }: { onClose: () => void }) {
         <div className="flex flex-col gap-3">
           <Link
             href="/login"
-            className="w-full py-3 bg-[var(--gold-primary)] text-[var(--bg-primary)] text-sm font-[family-name:var(--font-body)] font-medium rounded-sm no-underline text-center hover:bg-[var(--gold-light)] transition-colors"
+            className="w-full py-3 bg-[var(--gold-primary)] text-white text-sm font-[family-name:var(--font-body)] font-medium rounded-sm no-underline text-center hover:bg-[var(--gold-light)] transition-colors"
           >
             Přihlásit se
           </Link>
@@ -272,12 +272,6 @@ export default function VysledkyPage() {
   if (loading) {
     return (
       <div className="min-h-screen bg-[var(--bg-primary)] flex flex-col items-center justify-center">
-        <div
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] pointer-events-none"
-          style={{
-            background: 'radial-gradient(ellipse, rgba(201, 168, 76, 0.06), transparent 70%)',
-          }}
-        />
         <div className="flex items-center justify-center gap-2 py-8">
           {[0, 1, 2].map((i) => (
             <span

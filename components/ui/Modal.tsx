@@ -43,7 +43,7 @@ export function Modal({ open, onClose, children, title, maxWidth = 'max-w-md' }:
           onClick={onClose}
         >
           {/* Backdrop */}
-          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
+          <div className="absolute inset-0 bg-black/15 backdrop-blur-sm" />
 
           {/* Content */}
           <motion.div

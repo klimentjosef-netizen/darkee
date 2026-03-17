@@ -25,7 +25,7 @@ export default function WidgetConfiguratorPage() {
 
   const embedCode = `<script src="https://darkee.cz/widget/darkee-widget.js"
   data-merchant="${merchantId}"
-  data-theme="dark"
+  data-theme="light"
   data-position="${position}"
   data-color="${color}"
   data-label="${buttonText}"
