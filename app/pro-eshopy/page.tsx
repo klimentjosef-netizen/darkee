@@ -3,52 +3,40 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
-import { ChevronDown, TrendingUp, Target, BarChart3, Code, Users, Zap } from 'lucide-react'
+import { ChevronDown } from 'lucide-react'
 import { Navbar } from '@/components/landing/Navbar'
 import { Footer } from '@/components/landing/Footer'
-import { GoldDivider } from '@/components/ui/GoldDivider'
 
 const ease = [0.25, 0.46, 0.45, 0.94] as const
 
 const benefits = [
   {
-    icon: TrendingUp,
-    title: 'Vysoká konverze',
-    value: '4–8%',
-    desc: 'Zákazníci přicházejí s jasným nákupním záměrem. Průměrný konverzní poměr je 4–8× vyšší než z běžné reklamy.',
+    icon: '📊',
+    title: 'Zákazníci s jasným záměrem',
+    desc: 'Uživatel přichází s konkrétním přáním koupit dárek. Konverze 4–8 % vs. 1–2 % z Google Ads.',
   },
   {
-    icon: Target,
-    title: 'Přesné cílení',
-    value: '100%',
-    desc: 'Vaše produkty se zobrazí přesně zákazníkům, kteří hledají dárek odpovídající vašemu sortimentu — podle věku, zájmů a budgetu.',
+    icon: '🎯',
+    title: 'Platíte jen za výsledky',
+    desc: 'Affiliate model — žádné měsíční poplatky za základní listing. Provize pouze z reálných nákupů.',
   },
   {
-    icon: BarChart3,
-    title: 'Reálná data',
-    value: '24/7',
-    desc: 'Dashboard s prokliknutím, konverzemi a zákaznickým profilem v reálném čase. Víte co zákazníci hledají.',
+    icon: '💻',
+    title: 'Widget na váš web',
+    desc: 'Přidejte dárkového asistenta na svůj e-shop. Zákazník neodchází googlit — nakoupí u vás.',
   },
-]
-
-const advantages = [
-  { icon: Zap, text: 'Platíte jen za skutečné nákupy — affiliate model bez rizika' },
-  { icon: Code, text: 'Widget na váš web za 5 minut — 1 řádek kódu' },
-  { icon: Users, text: 'Přístup k 12 000+ aktivním hledačům dárků měsíčně' },
 ]
 
 const plans = [
   {
-    name: 'Free',
-    price: '0 Kč',
-    period: 'navždy',
+    name: 'Základní',
+    price: 'ZDARMA',
+    period: '',
     featured: false,
     features: [
+      'Affiliate model',
       'Základní listing v doporučeních',
-      'Affiliate model (CPS)',
-      'Merchant dashboard',
-      'Statistiky prokliků',
-      'XML feed import',
+      'Dashboard s prokliky',
     ],
   },
   {
@@ -57,12 +45,9 @@ const plans = [
     period: '/měsíc',
     featured: true,
     features: [
-      'Vše z Free',
       'Premium badge na produktech',
-      'Scoring boost (+15% viditelnost)',
-      'Featured sekce na landing page',
-      'Prioritní podpora',
-      'Detailní analytika zákazníků',
+      'Boost ve výsledcích',
+      'Prioritní pozice v doporučeních',
     ],
   },
   {
@@ -71,23 +56,20 @@ const plans = [
     period: '/měsíc',
     featured: false,
     features: [
-      'Vše z Featured',
       'Dárkový asistent na vašem webu',
-      'Vlastní branding a barvy',
-      'Integrace s vaším katalogem',
-      'A/B testování widgetu',
-      'Dedikovaný account manager',
+      'Custom barvy a branding',
+      'Detailní statistiky',
     ],
   },
 ]
 
 const faqs = [
   {
-    q: 'Jak funguje affiliate model?',
-    a: 'Platíte pouze za skutečně dokončené nákupy. Standardní provize je 5% z hodnoty objednávky. Žádné poplatky za prokliky nebo zobrazení.',
+    q: 'Jak funguje affiliate provize?',
+    a: 'Platíte pouze za skutečně dokončené nákupy. Standardní provize je 5 % z hodnoty objednávky. Žádné poplatky za prokliky nebo zobrazení.',
   },
   {
-    q: 'Jak importuji produkty?',
+    q: 'Jak nahraji produkty?',
     a: 'Podporujeme standardní XML feedy — Heureka, Google Merchant, Zboží.cz nebo vlastní formát. Stačí zadat URL feedu a produkty se automaticky synchronizují.',
   },
   {
@@ -95,42 +77,53 @@ const faqs = [
     a: 'Registrace je okamžitá. Vaše produkty se zobrazí v doporučeních do 24 hodin po importu feedu.',
   },
   {
-    q: 'Můžu widget přizpůsobit svému webu?',
+    q: 'Mohu mít widget na svém webu?',
     a: 'Ano. Widget podporuje vlastní barvy, pozici, text tlačítka a jazyk. Vše nastavíte v konfigurátoru bez nutnosti programování.',
   },
   {
-    q: 'Jaká data z dashboard dostanu?',
+    q: 'Co jsou statistiky v dashboardu?',
     a: 'Prokliky, konverze, konverzní poměr, revenue, top produkty, demografické údaje zákazníků (věk, pohlaví, příležitost, budget) — vše v reálném čase.',
-  },
-  {
-    q: 'Můžu službu kdykoliv zrušit?',
-    a: 'Ano. Free plán je navždy zdarma. Placené plány jsou bez závazku — můžete zrušit kdykoliv na konci měsíce.',
   },
 ]
 
 function FAQItem({ q, a }: { q: string; a: string }) {
   const [open, setOpen] = useState(false)
   return (
-    <div className="border-b border-[var(--border-subtle)]">
+    <div style={{ borderBottom: '1px solid rgba(201,168,76,0.12)' }}>
       <button
         onClick={() => setOpen(!open)}
-        className="w-full flex items-center justify-between py-5 text-left bg-transparent border-none cursor-pointer"
+        style={{
+          width: '100%',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          padding: '20px 0',
+          textAlign: 'left',
+          background: 'transparent',
+          border: 'none',
+          cursor: 'pointer',
+        }}
       >
-        <span className="text-sm text-[var(--text-primary)] font-[family-name:var(--font-body)] font-medium pr-4">
+        <span style={{ fontSize: '15px', color: '#F0E8DC', fontFamily: "'DM Sans', sans-serif", fontWeight: 500, paddingRight: '16px' }}>
           {q}
         </span>
         <ChevronDown
           size={16}
-          className={`text-[var(--text-muted)] shrink-0 transition-transform duration-200 ${open ? 'rotate-180' : ''}`}
+          style={{
+            color: '#9A8870',
+            flexShrink: 0,
+            transition: 'transform 0.2s',
+            transform: open ? 'rotate(180deg)' : 'none',
+          }}
         />
       </button>
       <motion.div
         initial={false}
         animate={{ height: open ? 'auto' : 0, opacity: open ? 1 : 0 }}
         transition={{ duration: 0.2 }}
-        className="overflow-hidden"
+        style={{ overflow: 'hidden' }}
       >
-        <p className="text-sm text-[var(--text-secondary)] font-[family-name:var(--font-body)] leading-relaxed pb-5">
+        <p style={{ fontSize: '14px', color: '#9A8870', fontFamily: "'DM Sans', sans-serif", lineHeight: 1.7, paddingBottom: '20px' }}>
           {a}
         </p>
       </motion.div>
@@ -140,203 +133,257 @@ function FAQItem({ q, a }: { q: string; a: string }) {
 
 export default function ProEshopyPage() {
   return (
-    <div className="min-h-screen bg-[var(--bg-secondary)]">
+    <div style={{ background: '#0D0B08', color: '#F0E8DC', fontFamily: "'DM Sans', sans-serif", minHeight: '100vh' }}>
       <Navbar />
 
-      {/* Hero */}
-      <section className="relative pt-32 pb-24 px-6 text-center overflow-hidden">
-        <div className="relative z-10 max-w-3xl mx-auto">
-          <motion.p
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4 }}
-            className="text-[11px] tracking-[0.3em] uppercase text-[var(--text-muted)] mb-4 font-[family-name:var(--font-body)]"
+      {/* HERO */}
+      <section style={{ padding: '120px 24px 80px', textAlign: 'center' }}>
+        <motion.p
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4 }}
+          style={{ fontSize: '11px', letterSpacing: '0.3em', textTransform: 'uppercase', color: '#C9A84C', marginBottom: '20px' }}
+        >
+          PRO E-SHOPY
+        </motion.p>
+        <motion.h1
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, ease, delay: 0.1 }}
+          style={{
+            fontFamily: "'Cormorant Garamond', serif",
+            fontSize: 'clamp(36px, 6vw, 56px)',
+            fontWeight: 300,
+            color: '#F0E8DC',
+            lineHeight: 1.1,
+            marginBottom: '20px',
+            maxWidth: '700px',
+            marginLeft: 'auto',
+            marginRight: 'auto',
+          }}
+        >
+          Prodávejte těm, kteří hledají <em style={{ fontStyle: 'italic', color: '#C9A84C' }}>dárek</em>
+        </motion.h1>
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5, delay: 0.3 }}
+          style={{ fontSize: '18px', color: '#9A8870', marginBottom: '40px', maxWidth: '540px', marginLeft: 'auto', marginRight: 'auto', lineHeight: 1.6 }}
+        >
+          Zákazníci Dárkee nakupují s jasným záměrem. Průměrný konverzní poměr 4–8 %.
+        </motion.p>
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.4, ease, delay: 0.4 }}
+          style={{ display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap', marginBottom: '24px' }}
+        >
+          <Link
+            href="/merchant/register"
+            style={{
+              padding: '14px 32px',
+              background: '#C9A84C',
+              color: '#0D0B08',
+              fontSize: '15px',
+              fontWeight: 500,
+              borderRadius: '100px',
+              textDecoration: 'none',
+              fontFamily: "'DM Sans', sans-serif",
+              transition: 'all 0.2s',
+            }}
           >
-            PRO E-SHOPY
-          </motion.p>
-          <motion.h1
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, ease, delay: 0.1 }}
-            className="font-[family-name:var(--font-display)] text-[clamp(32px,6vw,64px)] font-light text-[var(--text-primary)] tracking-wide leading-[1.1] mb-6"
+            Registrovat e-shop zdarma →
+          </Link>
+          <a
+            href="#vyhody"
+            style={{
+              padding: '14px 32px',
+              background: 'transparent',
+              color: '#9A8870',
+              fontSize: '15px',
+              border: '1px solid rgba(201,168,76,0.2)',
+              borderRadius: '100px',
+              textDecoration: 'none',
+              fontFamily: "'DM Sans', sans-serif",
+              transition: 'all 0.2s',
+            }}
           >
-            Prodávejte těm, kteří
-            <br />
-            <span className="italic text-[var(--gold-primary)]">hledají dárek</span>
-          </motion.h1>
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.5, delay: 0.3 }}
-            className="text-lg text-[var(--text-secondary)] font-[family-name:var(--font-body)] mb-10 max-w-xl mx-auto"
-          >
-            Zákazníci Dárkee nakupují s jasným záměrem. Konverzní poměr 4–8%.
-          </motion.p>
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.4, ease, delay: 0.4 }}
-          >
-            <Link
-              href="/merchant/register"
-              className="group inline-flex items-center gap-3 px-10 py-4 bg-[var(--gold-primary)] text-white font-[family-name:var(--font-body)] text-base font-medium tracking-wide hover:bg-[var(--gold-light)] transition-all duration-300 no-underline rounded-sm"
-            >
-              Registrovat e-shop zdarma
-              <span className="inline-block transition-transform duration-300 group-hover:translate-x-1">→</span>
-            </Link>
-          </motion.div>
-        </div>
+            Jak to funguje
+          </a>
+        </motion.div>
+        <p style={{ fontSize: '13px', color: '#6B6358', letterSpacing: '0.02em' }}>
+          200+ partnerských e-shopů · Zdarma začít · Platíte jen za výsledky
+        </p>
       </section>
 
-      <GoldDivider />
-
-      {/* Benefits */}
-      <section className="px-6 py-[100px]">
-        <div className="max-w-5xl mx-auto">
-          <div className="grid md:grid-cols-3 gap-8">
-            {benefits.map(({ icon: Icon, title, value, desc }, i) => (
+      {/* VÝHODY */}
+      <section id="vyhody" style={{ padding: '0 24px 80px' }}>
+        <div style={{ background: '#131009', borderRadius: '24px', padding: '56px 48px', maxWidth: '1100px', marginLeft: 'auto', marginRight: 'auto' }}>
+          <p style={{ fontSize: '11px', letterSpacing: '0.14em', color: '#C9A84C', textTransform: 'uppercase', marginBottom: '14px' }}>
+            PROČ DÁRKEE
+          </p>
+          <h2 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 'clamp(32px, 5vw, 44px)', fontWeight: 300, color: '#F0E8DC', lineHeight: 1.15, marginBottom: '48px' }}>
+            Váš nový prodejní kanál
+          </h2>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '16px' }}>
+            {benefits.map((b, i) => (
               <motion.div
-                key={title}
+                key={b.title}
                 initial={{ opacity: 0, y: 24 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: '-60px' }}
                 transition={{ duration: 0.5, ease, delay: i * 0.15 }}
-                className="text-center p-8 bg-[var(--bg-primary)] border border-[var(--border-subtle)] rounded-sm"
+                style={{
+                  background: '#0D0B08',
+                  borderRadius: '16px',
+                  padding: '36px',
+                  border: '1px solid rgba(201,168,76,0.12)',
+                }}
               >
-                <Icon size={28} className="text-[var(--gold-primary)] mx-auto mb-4" />
-                <p className="font-[family-name:var(--font-display)] text-3xl font-light text-[var(--gold-primary)] mb-2">
-                  {value}
-                </p>
-                <h3 className="font-[family-name:var(--font-display)] text-lg font-normal text-[var(--text-primary)] mb-3">
-                  {title}
+                <div style={{ fontSize: '32px', marginBottom: '16px' }}>{b.icon}</div>
+                <h3 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: '22px', fontWeight: 400, color: '#F0E8DC', marginBottom: '12px' }}>
+                  {b.title}
                 </h3>
-                <p className="text-sm text-[var(--text-secondary)] font-[family-name:var(--font-body)] leading-relaxed">
-                  {desc}
+                <p style={{ fontSize: '14px', color: '#9A8870', lineHeight: 1.7 }}>
+                  {b.desc}
                 </p>
-              </motion.div>
-            ))}
-          </div>
-
-          <div className="mt-16 space-y-4 max-w-xl mx-auto">
-            {advantages.map(({ icon: Icon, text }, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, x: -12 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.4, delay: i * 0.1 }}
-                className="flex items-center gap-4 p-4 bg-[var(--bg-primary)] border border-[var(--border-subtle)] rounded-sm"
-              >
-                <Icon size={18} className="text-[var(--gold-primary)] shrink-0" />
-                <span className="text-sm text-[var(--text-secondary)] font-[family-name:var(--font-body)]">{text}</span>
               </motion.div>
             ))}
           </div>
         </div>
       </section>
 
-      <GoldDivider />
-
-      {/* Pricing */}
-      <section className="px-6 py-[100px]">
-        <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-16">
-            <p className="text-[11px] tracking-[0.3em] uppercase text-[var(--text-muted)] mb-4 font-[family-name:var(--font-body)]">
-              CENÍK
-            </p>
-            <h2 className="font-[family-name:var(--font-display)] text-[clamp(28px,4vw,44px)] font-light text-[var(--text-primary)] tracking-wide">
-              Jednoduchý a transparentní
-            </h2>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-6">
-            {plans.map((plan, i) => (
-              <motion.div
-                key={plan.name}
-                initial={{ opacity: 0, y: 24 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, ease, delay: i * 0.1 }}
-                className={`relative p-8 rounded-sm ${
-                  plan.featured
-                    ? 'bg-[var(--bg-primary)] border-2 border-[var(--gold-primary)]'
-                    : 'bg-[var(--bg-primary)] border border-[var(--border-subtle)]'
-                }`}
-              >
-                {plan.featured && (
-                  <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 bg-[var(--gold-primary)] text-white text-[10px] font-[family-name:var(--font-body)] font-semibold tracking-wider uppercase rounded-full">
-                    Nejoblíbenější
-                  </div>
-                )}
-                <h3 className="font-[family-name:var(--font-display)] text-xl font-normal text-[var(--text-primary)] mb-2">
-                  {plan.name}
-                </h3>
-                <div className="mb-6">
-                  <span className="font-[family-name:var(--font-display)] text-3xl font-light text-[var(--gold-primary)]">
-                    {plan.price}
-                  </span>
-                  <span className="text-sm text-[var(--text-muted)] font-[family-name:var(--font-body)]">
-                    {' '}{plan.period}
-                  </span>
+      {/* CENÍK */}
+      <section id="cenik" style={{ padding: '0 24px 80px' }}>
+        <div style={{ maxWidth: '1100px', marginLeft: 'auto', marginRight: 'auto', textAlign: 'center', marginBottom: '48px' }}>
+          <p style={{ fontSize: '11px', letterSpacing: '0.14em', color: '#C9A84C', textTransform: 'uppercase', marginBottom: '14px' }}>
+            CENÍK
+          </p>
+          <h2 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 'clamp(32px, 5vw, 44px)', fontWeight: 300, color: '#F0E8DC' }}>
+            Jednoduchý a transparentní
+          </h2>
+        </div>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '16px', maxWidth: '1100px', marginLeft: 'auto', marginRight: 'auto' }}>
+          {plans.map((plan, i) => (
+            <motion.div
+              key={plan.name}
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, ease, delay: i * 0.1 }}
+              style={{
+                position: 'relative',
+                padding: '36px',
+                borderRadius: '16px',
+                background: '#131009',
+                border: plan.featured ? '2px solid #C9A84C' : '1px solid rgba(201,168,76,0.12)',
+              }}
+            >
+              {plan.featured && (
+                <div style={{
+                  position: 'absolute',
+                  top: '-12px',
+                  left: '50%',
+                  transform: 'translateX(-50%)',
+                  padding: '4px 16px',
+                  background: '#C9A84C',
+                  color: '#0D0B08',
+                  fontSize: '10px',
+                  fontWeight: 600,
+                  letterSpacing: '0.1em',
+                  textTransform: 'uppercase',
+                  borderRadius: '100px',
+                  whiteSpace: 'nowrap',
+                }}>
+                  Nejoblíbenější
                 </div>
-                <ul className="space-y-3 mb-8">
-                  {plan.features.map((f) => (
-                    <li key={f} className="flex items-start gap-2 text-sm text-[var(--text-secondary)] font-[family-name:var(--font-body)]">
-                      <span className="text-[var(--gold-primary)] text-[10px] mt-1.5 shrink-0">✦</span>
-                      {f}
-                    </li>
-                  ))}
-                </ul>
-                <Link
-                  href="/merchant/register"
-                  className={`block text-center py-3 text-sm font-[family-name:var(--font-body)] font-medium rounded-sm no-underline transition-all duration-300 ${
-                    plan.featured
-                      ? 'bg-[var(--gold-primary)] text-white hover:bg-[var(--gold-light)]'
-                      : 'border border-[var(--border-mid)] text-[var(--text-secondary)] hover:border-[var(--gold-primary)] hover:text-[var(--gold-primary)]'
-                  }`}
-                >
-                  {plan.price === '0 Kč' ? 'Začít zdarma' : 'Vybrat plán'}
-                </Link>
-              </motion.div>
-            ))}
-          </div>
+              )}
+              <h3 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: '22px', fontWeight: 400, color: '#F0E8DC', marginBottom: '8px' }}>
+                {plan.name}
+              </h3>
+              <div style={{ marginBottom: '24px' }}>
+                <span style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: '36px', fontWeight: 300, color: '#C9A84C' }}>
+                  {plan.price}
+                </span>
+                {plan.period && (
+                  <span style={{ fontSize: '14px', color: '#9A8870' }}>{plan.period}</span>
+                )}
+              </div>
+              <ul style={{ listStyle: 'none', padding: 0, margin: '0 0 28px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                {plan.features.map((f) => (
+                  <li key={f} style={{ display: 'flex', alignItems: 'flex-start', gap: '8px', fontSize: '14px', color: '#9A8870' }}>
+                    <span style={{ color: '#C9A84C', fontSize: '10px', marginTop: '5px', flexShrink: 0 }}>✦</span>
+                    {f}
+                  </li>
+                ))}
+              </ul>
+              <Link
+                href="/merchant/register"
+                style={{
+                  display: 'block',
+                  textAlign: 'center',
+                  padding: '12px',
+                  fontSize: '14px',
+                  fontWeight: 500,
+                  borderRadius: '100px',
+                  textDecoration: 'none',
+                  transition: 'all 0.2s',
+                  ...(plan.featured
+                    ? { background: '#C9A84C', color: '#0D0B08' }
+                    : { background: 'transparent', border: '1px solid rgba(201,168,76,0.2)', color: '#C9A84C' }),
+                }}
+              >
+                {plan.price === 'ZDARMA' ? 'Začít zdarma' : 'Vybrat plán'}
+              </Link>
+            </motion.div>
+          ))}
         </div>
       </section>
-
-      <GoldDivider />
 
       {/* FAQ */}
-      <section className="px-6 py-[100px]">
-        <div className="max-w-2xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="font-[family-name:var(--font-display)] text-[clamp(28px,4vw,44px)] font-light text-[var(--text-primary)] tracking-wide">
+      <section style={{ padding: '0 24px 80px' }}>
+        <div style={{ maxWidth: '680px', marginLeft: 'auto', marginRight: 'auto' }}>
+          <div style={{ textAlign: 'center', marginBottom: '48px' }}>
+            <h2 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 'clamp(32px, 5vw, 44px)', fontWeight: 300, color: '#F0E8DC' }}>
               Časté dotazy
             </h2>
           </div>
-          <div>
-            {faqs.map((faq) => (
-              <FAQItem key={faq.q} {...faq} />
-            ))}
-          </div>
+          {faqs.map((faq) => (
+            <FAQItem key={faq.q} {...faq} />
+          ))}
         </div>
       </section>
 
-      {/* CTA Banner */}
-      <section className="px-6 py-[100px]">
-        <div className="max-w-3xl mx-auto text-center p-12 bg-[var(--bg-primary)] border border-[var(--border-subtle)] rounded-sm relative overflow-hidden">
-          <div className="relative z-10">
-            <h2 className="font-[family-name:var(--font-display)] text-[clamp(24px,4vw,36px)] font-light text-[var(--text-primary)] tracking-wide mb-4">
-              Začněte zdarma
-            </h2>
-            <p className="text-sm text-[var(--text-secondary)] font-[family-name:var(--font-body)] mb-8">
-              První měsíc bez poplatků. Žádné závazky, žádné riziko.
-            </p>
+      {/* ZÁVĚREČNÉ CTA */}
+      <section style={{ padding: '0 24px 80px' }}>
+        <div style={{
+          maxWidth: '800px',
+          marginLeft: 'auto',
+          marginRight: 'auto',
+          textAlign: 'center',
+          padding: '64px 48px',
+          background: '#131009',
+          borderRadius: '24px',
+          border: '1px solid rgba(201,168,76,0.12)',
+        }}>
+          <h2 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 'clamp(28px, 4vw, 40px)', fontWeight: 300, color: '#F0E8DC', marginBottom: '12px' }}>
+            Začněte zdarma — registrace za 2 minuty
+          </h2>
+          <div style={{ marginTop: '32px' }}>
             <Link
               href="/merchant/register"
-              className="group inline-flex items-center gap-3 px-10 py-4 bg-[var(--gold-primary)] text-white font-[family-name:var(--font-body)] text-base font-medium tracking-wide hover:bg-[var(--gold-light)] transition-all duration-300 no-underline rounded-sm"
+              style={{
+                padding: '14px 32px',
+                background: '#C9A84C',
+                color: '#0D0B08',
+                fontSize: '15px',
+                fontWeight: 500,
+                borderRadius: '100px',
+                textDecoration: 'none',
+                fontFamily: "'DM Sans', sans-serif",
+              }}
             >
-              Registrovat e-shop
-              <span className="inline-block transition-transform duration-300 group-hover:translate-x-1">→</span>
+              Registrovat e-shop →
             </Link>
           </div>
         </div>

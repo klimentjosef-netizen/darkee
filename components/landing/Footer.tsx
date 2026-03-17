@@ -1,75 +1,127 @@
+'use client'
+
 import Link from 'next/link'
-
-const userLinks = [
-  { label: 'Jak to funguje', href: '/#how' },
-  { label: 'Kvíz', href: '/pruvodce' },
-  { label: 'Blog', href: '/blog' },
-]
-
-const merchantLinks = [
-  { label: 'Registrace e-shopu', href: '/merchant/register' },
-  { label: 'Pro e-shopy', href: '/pro-eshopy' },
-  { label: 'Kontakt', href: 'mailto:info@darkee.cz' },
-]
-
-const legalLinks = [
-  { label: 'Ochrana osobních údajů', href: '/gdpr' },
-  { label: 'Cookies', href: '/cookies' },
-  { label: 'Obchodní podmínky', href: '/obchodni-podminky' },
-]
-
-function FooterColumn({ title, links }: { title: string; links: { label: string; href: string }[] }) {
-  return (
-    <div>
-      <h4 className="text-[11px] tracking-[0.15em] uppercase text-[var(--text-muted)] font-[family-name:var(--font-body)] mb-5">
-        {title}
-      </h4>
-      <ul className="space-y-3">
-        {links.map((link) => (
-          <li key={link.href}>
-            <Link
-              href={link.href}
-              className="text-sm text-[var(--text-secondary)] font-[family-name:var(--font-body)] hover:text-[var(--text-primary)] transition-colors duration-200 no-underline"
-            >
-              {link.label}
-            </Link>
-          </li>
-        ))}
-      </ul>
-    </div>
-  )
-}
+import { useState } from 'react'
 
 export function Footer() {
+  const [hov, setHov] = useState<Record<string, boolean>>({})
+  const on = (k: string) => () => setHov(p => ({ ...p, [k]: true }))
+  const off = (k: string) => () => setHov(p => ({ ...p, [k]: false }))
+
+  const linkStyle = (k: string, base = '#9A8870', hover = '#F0E8DC') => ({
+    display: 'block' as const,
+    fontSize: '13px',
+    color: hov[k] ? hover : base,
+    marginBottom: '9px',
+    cursor: 'pointer',
+    transition: 'color 0.2s',
+    textDecoration: 'none' as const,
+  })
+
   return (
-    <footer className="border-t border-[var(--border-subtle)]">
-      <div className="max-w-5xl mx-auto px-6 pt-16 pb-8">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8 mb-16">
-          {/* Brand */}
-          <div>
-            <Link href="/" className="no-underline">
-              <span className="font-[family-name:var(--font-display)] text-xl text-[var(--gold-primary)] tracking-wide">
-                Dárkee
-              </span>
-            </Link>
-            <p className="font-[family-name:var(--font-display)] text-sm italic text-[var(--text-muted)] mt-3">
-              Nevíte co darovat? My ano.
-            </p>
+    <footer style={{
+      background: '#131009',
+      borderRadius: '24px 24px 0 0',
+      padding: '56px 48px 32px',
+      borderTop: '1px solid rgba(201,168,76,0.12)',
+    }}>
+      <div style={{
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
+        gap: '40px',
+        marginBottom: '40px',
+        maxWidth: '1100px',
+        marginLeft: 'auto',
+        marginRight: 'auto',
+      }}>
+        {/* Brand */}
+        <div>
+          <Link href="/" style={{ textDecoration: 'none' }}>
+            <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: '22px', color: '#C9A84C', marginBottom: '8px' }}>
+              🎁 Dárkee
+            </div>
+          </Link>
+          <div style={{ fontSize: '13px', color: '#9A8870', fontStyle: 'italic', marginBottom: '10px' }}>
+            Daruj s jistotou.
           </div>
-
-          <FooterColumn title="Pro uživatele" links={userLinks} />
-          <FooterColumn title="Pro e-shopy" links={merchantLinks} />
-          <FooterColumn title="Právní" links={legalLinks} />
+          <div style={{ fontSize: '13px', color: '#6B6358', lineHeight: 1.6 }}>
+            Dárkový asistent pro každou příležitost. Rychle, přesně, s jistotou.
+          </div>
         </div>
 
-        <div className="border-t border-[var(--border-subtle)] pt-6 flex flex-col sm:flex-row items-center justify-between gap-3">
-          <span className="text-[var(--text-muted)] text-xs font-[family-name:var(--font-body)]">
-            © 2026 Dárkee.cz
-          </span>
-          <span className="text-[var(--text-muted)] text-xs font-[family-name:var(--font-body)]">
+        {/* Pro uživatele */}
+        <div>
+          <div style={{ fontSize: '10px', letterSpacing: '0.12em', color: '#6B6358', textTransform: 'uppercase', marginBottom: '14px' }}>
+            Pro uživatele
+          </div>
+          {[
+            ['/#how', 'Jak to funguje'],
+            ['/pruvodce', 'Spustit kvíz'],
+            ['/blog', 'Blog'],
+            ['/ucet/gems', 'Věrnostní program'],
+            ['/prilezitosti', 'Příležitosti'],
+          ].map(([href, label]) => (
+            <Link key={href} href={href} style={linkStyle(`fl-${href}`)} onMouseEnter={on(`fl-${href}`)} onMouseLeave={off(`fl-${href}`)}>
+              {label}
+            </Link>
+          ))}
+        </div>
+
+        {/* Pro e-shopy */}
+        <div>
+          <div style={{ fontSize: '10px', letterSpacing: '0.12em', color: '#378ADD', textTransform: 'uppercase', marginBottom: '14px' }}>
+            Pro e-shopy
+          </div>
+          {[
+            ['/pro-eshopy', 'Proč Dárkee'],
+            ['/merchant/register', 'Registrace e-shopu'],
+            ['/merchant/widget', 'B2B Widget'],
+            ['/pro-eshopy#cenik', 'Ceník'],
+            ['mailto:info@darkee.cz', 'Kontakt'],
+          ].map(([href, label]) => (
+            <Link key={href} href={href} style={linkStyle(`fl-${href}`)} onMouseEnter={on(`fl-${href}`)} onMouseLeave={off(`fl-${href}`)}>
+              {label}
+            </Link>
+          ))}
+        </div>
+
+        {/* Kontakt */}
+        <div>
+          <div style={{ fontSize: '10px', letterSpacing: '0.12em', color: '#6B6358', textTransform: 'uppercase', marginBottom: '14px' }}>
+            Kontakt
+          </div>
+          <a href="mailto:info@darkee.cz" style={linkStyle('fl-email')} onMouseEnter={on('fl-email')} onMouseLeave={off('fl-email')}>
             info@darkee.cz
-          </span>
+          </a>
+          <Link href="/pro-eshopy" style={linkStyle('fl-collab', '#C9A84C', '#B89840')} onMouseEnter={on('fl-collab')} onMouseLeave={off('fl-collab')}>
+            Spolupráce s e-shopy →
+          </Link>
+          <div style={{ display: 'flex', gap: '16px', marginTop: '12px' }}>
+            {['Instagram', 'Pinterest', 'Facebook'].map((name) => (
+              <span key={name} style={{ fontSize: '12px', color: '#6B6358', cursor: 'pointer' }}>
+                {name}
+              </span>
+            ))}
+          </div>
         </div>
+      </div>
+
+      {/* Copyright */}
+      <div style={{
+        borderTop: '1px solid rgba(201,168,76,0.08)',
+        paddingTop: '20px',
+        display: 'flex',
+        justifyContent: 'space-between',
+        flexWrap: 'wrap',
+        gap: '8px',
+        fontSize: '12px',
+        color: '#6B6358',
+        maxWidth: '1100px',
+        marginLeft: 'auto',
+        marginRight: 'auto',
+      }}>
+        <span>© 2026 Dárkee.cz — Všechna práva vyhrazena</span>
+        <span>Ochrana dat · Cookies · Obchodní podmínky</span>
       </div>
     </footer>
   )

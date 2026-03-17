@@ -5,9 +5,9 @@ import { AnimatePresence } from 'framer-motion'
 import { QuizContainer } from '@/components/quiz/QuizContainer'
 
 const PRODUCTS = [
-  { name: 'Prémiová aromaterapeutická sada', shop: 'Notino.cz', price: '1 290 Kč', match: '96', reason: 'Sedí na zájem o wellness', gradient: 'linear-gradient(135deg,#F5F0E8 0%,#EDE5D8 100%)' },
-  { name: 'Umění pomalého života', shop: 'Knihy Dobrovský', price: '420 Kč', match: '91', reason: 'Zájem o knihy, narozeniny', gradient: 'linear-gradient(135deg,#EEF0F5 0%,#E4E8F0 100%)' },
-  { name: 'Prémiová čajová kolekce', shop: 'Darek.cz', price: '890 Kč', match: '88', reason: 'Jídlo a pití, praktický styl', gradient: 'linear-gradient(135deg,#EEF5F0 0%,#E2EDE6 100%)' },
+  { name: 'Prémiová aromaterapeutická sada', shop: 'Notino.cz', price: '1 290 Kč', match: '96', reason: 'Sedí na zájem o wellness', gradient: 'linear-gradient(135deg,#1E1510 0%,#2A1E10 100%)' },
+  { name: 'Umění pomalého života', shop: 'Knihy Dobrovský', price: '420 Kč', match: '91', reason: 'Zájem o knihy, narozeniny', gradient: 'linear-gradient(135deg,#101418 0%,#0E1820 100%)' },
+  { name: 'Prémiová čajová kolekce', shop: 'Darek.cz', price: '890 Kč', match: '88', reason: 'Jídlo a pití, praktický styl', gradient: 'linear-gradient(135deg,#101A12 0%,#0C1810 100%)' },
 ]
 
 const GIFTS = Array.from({ length: 14 }, (_, i) => ({
@@ -41,20 +41,22 @@ export default function Home() {
     // NAVBAR
     navWrap: { padding: '14px 24px', position: 'sticky', top: 0, zIndex: 100 } as React.CSSProperties,
     navInner: {
-      background: scrolled ? 'rgba(250,250,248,0.92)' : 'rgba(255,255,255,0.6)',
+      background: 'rgba(15,12,7,0.85)',
       backdropFilter: 'blur(20px)',
       WebkitBackdropFilter: 'blur(20px)',
-      border: '1px solid rgba(0,0,0,0.06)',
+      border: '1px solid rgba(201,168,76,0.18)',
       borderRadius: '100px',
       padding: '10px 12px 10px 24px',
       display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '24px',
       transition: 'all 0.3s',
-      boxShadow: scrolled ? '0 2px 20px rgba(0,0,0,0.04)' : 'none',
+      boxShadow: scrolled ? '0 2px 20px rgba(0,0,0,0.15)' : 'none',
     } as React.CSSProperties,
     logo: { fontFamily: "'Cormorant Garamond', serif", fontSize: '22px', color: '#C9A84C', fontWeight: 500, letterSpacing: '0.04em', textDecoration: 'none' } as React.CSSProperties,
     navLinks: { display: 'flex', gap: '24px', alignItems: 'center' } as React.CSSProperties,
-    navLink: (k: string) => ({ fontSize: '13px', color: hov[k] ? '#1A1714' : '#6B6358', cursor: 'pointer', transition: 'color 0.2s', textDecoration: 'none' }) as React.CSSProperties,
-    navCta: { padding: '9px 22px', background: hov['nav-cta'] ? '#B89840' : '#C9A84C', color: '#FFFFFF', fontSize: '13px', fontWeight: 500, border: 'none', borderRadius: '100px', cursor: 'pointer', fontFamily: "'DM Sans', sans-serif", transition: 'all 0.2s' } as React.CSSProperties,
+    navLink: (k: string) => ({ fontSize: '13px', color: hov[k] ? '#F0E8DC' : '#9A8870', cursor: 'pointer', transition: 'color 0.2s', textDecoration: 'none' }) as React.CSSProperties,
+    navCta: { padding: '9px 22px', background: hov['nav-cta'] ? '#B89840' : '#C9A84C', color: '#0D0B08', fontSize: '13px', fontWeight: 500, border: 'none', borderRadius: '100px', cursor: 'pointer', fontFamily: "'DM Sans', sans-serif", transition: 'all 0.2s' } as React.CSSProperties,
+    navDivider: { width: '1px', height: '20px', background: 'rgba(201,168,76,0.2)' } as React.CSSProperties,
+    navMerchantLink: (k: string) => ({ fontSize: '13px', color: hov[k] ? '#5BA3EE' : '#378ADD', cursor: 'pointer', transition: 'color 0.2s', textDecoration: 'none' }) as React.CSSProperties,
 
     // HERO
     hero: { padding: '72px 24px 64px', textAlign: 'center', position: 'relative', overflow: 'hidden', background: '#FAFAF8' } as React.CSSProperties,
@@ -90,17 +92,19 @@ export default function Home() {
     statLabel: { fontSize: '12px', color: '#A09888', marginTop: '8px' } as React.CSSProperties,
 
     // PRODUCTS
-    productsGrid: { display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '16px', marginTop: '48px' } as React.CSSProperties,
-    pCard: (k: string) => ({ background: '#FAFAF8', borderRadius: '20px', overflow: 'hidden', border: hov[k] ? '1px solid rgba(201,168,76,0.4)' : '1px solid rgba(0,0,0,0.06)', transition: 'all 0.2s', transform: hov[k] ? 'translateY(-2px)' : 'none', cursor: 'pointer', boxShadow: hov[k] ? '0 8px 24px rgba(0,0,0,0.06)' : 'none' }) as React.CSSProperties,
+    productsSection: { background: '#131009', borderRadius: '24px', padding: '56px 48px', border: '1px solid rgba(201,168,76,0.08)' } as React.CSSProperties,
+    productsSub: { fontSize: '15px', color: '#9A8870', marginBottom: '48px', marginTop: '-36px', lineHeight: 1.6 } as React.CSSProperties,
+    productsGrid: { display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '16px' } as React.CSSProperties,
+    pCard: (k: string) => ({ background: '#0D0B08', borderRadius: '20px', overflow: 'hidden', border: hov[k] ? '1px solid rgba(201,168,76,0.4)' : '1px solid rgba(201,168,76,0.1)', transition: 'all 0.2s', transform: hov[k] ? 'translateY(-2px)' : 'none', cursor: 'pointer', boxShadow: hov[k] ? '0 8px 24px rgba(0,0,0,0.2)' : 'none' }) as React.CSSProperties,
     pImg: (gradient: string) => ({ height: '160px', background: gradient, position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center' }) as React.CSSProperties,
-    matchBadge: { position: 'absolute', top: '12px', right: '12px', background: '#C9A84C', color: '#FFFFFF', fontSize: '11px', fontWeight: 600, padding: '4px 12px', borderRadius: '100px' } as React.CSSProperties,
+    matchBadge: { position: 'absolute', top: '12px', right: '12px', background: 'rgba(201,168,76,0.9)', color: '#0D0B08', fontSize: '11px', fontWeight: 600, padding: '4px 12px', borderRadius: '100px' } as React.CSSProperties,
     pBody: { padding: '20px' } as React.CSSProperties,
-    pShop: { fontSize: '10px', letterSpacing: '0.1em', color: '#A09888', textTransform: 'uppercase', marginBottom: '6px' } as React.CSSProperties,
-    pName: { fontFamily: "'Cormorant Garamond', serif", fontSize: '18px', fontWeight: 400, color: '#1A1714', lineHeight: 1.3, marginBottom: '10px' } as React.CSSProperties,
-    pReason: { fontSize: '12px', color: '#6B6358', marginBottom: '14px', display: 'flex', gap: '5px' } as React.CSSProperties,
-    pFooter: { display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingTop: '14px', borderTop: '1px solid rgba(0,0,0,0.06)' } as React.CSSProperties,
+    pShop: { fontSize: '10px', letterSpacing: '0.1em', color: '#9A8870', textTransform: 'uppercase', marginBottom: '6px' } as React.CSSProperties,
+    pName: { fontFamily: "'Cormorant Garamond', serif", fontSize: '18px', fontWeight: 400, color: '#F0E8DC', lineHeight: 1.3, marginBottom: '10px' } as React.CSSProperties,
+    pReason: { fontSize: '12px', color: '#9A8870', marginBottom: '14px', display: 'flex', gap: '5px' } as React.CSSProperties,
+    pFooter: { display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingTop: '14px', borderTop: '1px solid rgba(201,168,76,0.08)' } as React.CSSProperties,
     pPrice: { fontFamily: "'Cormorant Garamond', serif", fontSize: '20px', color: '#C9A84C' } as React.CSSProperties,
-    pBtn: (k: string) => ({ fontSize: '12px', color: '#C9A84C', cursor: 'pointer', fontFamily: "'DM Sans', sans-serif", background: hov[k] ? 'rgba(201,168,76,0.15)' : 'rgba(201,168,76,0.08)', padding: '6px 14px', borderRadius: '100px', border: '1px solid rgba(201,168,76,0.2)', transition: 'all 0.2s' }) as React.CSSProperties,
+    pBtn: (k: string) => ({ fontSize: '12px', color: '#C9A84C', cursor: 'pointer', fontFamily: "'DM Sans', sans-serif", background: hov[k] ? 'rgba(201,168,76,0.15)' : 'transparent', padding: '6px 14px', borderRadius: '100px', border: '1px solid rgba(201,168,76,0.2)', transition: 'all 0.2s' }) as React.CSSProperties,
 
     // FINAL CTA
     finalWrap: { padding: '0 24px 80px' } as React.CSSProperties,
@@ -110,14 +114,16 @@ export default function Home() {
     finalSub: { fontSize: '16px', color: '#6B6358', marginBottom: '36px', position: 'relative' } as React.CSSProperties,
 
     // FOOTER
-    footerWrap: { padding: '0 24px 40px' } as React.CSSProperties,
-    footerInner: { background: '#F5F3EE', borderRadius: '24px', padding: '48px', border: '1px solid rgba(0,0,0,0.06)' } as React.CSSProperties,
-    footerGrid: { display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: '40px', marginBottom: '40px' } as React.CSSProperties,
-    footerLogo: { fontFamily: "'Cormorant Garamond', serif", fontSize: '20px', color: '#C9A84C', marginBottom: '10px' } as React.CSSProperties,
-    footerTag: { fontSize: '13px', color: '#A09888', lineHeight: 1.6 } as React.CSSProperties,
-    footerColTitle: { fontSize: '10px', letterSpacing: '0.12em', color: '#A09888', textTransform: 'uppercase', marginBottom: '14px' } as React.CSSProperties,
-    footerLink: (k: string) => ({ display: 'block', fontSize: '13px', color: hov[k] ? '#1A1714' : '#6B6358', marginBottom: '9px', cursor: 'pointer', transition: 'color 0.2s', textDecoration: 'none' }) as React.CSSProperties,
-    footerBottom: { borderTop: '1px solid rgba(0,0,0,0.06)', paddingTop: '20px', display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', gap: '8px', fontSize: '12px', color: '#A09888' } as React.CSSProperties,
+    footerWrap: { padding: '0 24px 0' } as React.CSSProperties,
+    footerInner: { background: '#131009', borderRadius: '24px 24px 0 0', padding: '56px 48px 32px', borderTop: '1px solid rgba(201,168,76,0.12)' } as React.CSSProperties,
+    footerGrid: { display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '40px', marginBottom: '40px' } as React.CSSProperties,
+    footerLogo: { fontFamily: "'Cormorant Garamond', serif", fontSize: '22px', color: '#C9A84C', marginBottom: '8px' } as React.CSSProperties,
+    footerTag: { fontSize: '13px', color: '#9A8870', fontStyle: 'italic', marginBottom: '10px' } as React.CSSProperties,
+    footerTagDesc: { fontSize: '13px', color: '#6B6358', lineHeight: 1.6 } as React.CSSProperties,
+    footerColTitle: { fontSize: '10px', letterSpacing: '0.12em', color: '#6B6358', textTransform: 'uppercase', marginBottom: '14px' } as React.CSSProperties,
+    footerColTitleBlue: { fontSize: '10px', letterSpacing: '0.12em', color: '#378ADD', textTransform: 'uppercase', marginBottom: '14px' } as React.CSSProperties,
+    footerLink: (k: string) => ({ display: 'block', fontSize: '13px', color: hov[k] ? '#F0E8DC' : '#9A8870', marginBottom: '9px', cursor: 'pointer', transition: 'color 0.2s', textDecoration: 'none' }) as React.CSSProperties,
+    footerBottom: { borderTop: '1px solid rgba(201,168,76,0.08)', paddingTop: '20px', display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', gap: '8px', fontSize: '12px', color: '#6B6358' } as React.CSSProperties,
   }
 
   return (
@@ -135,15 +141,21 @@ export default function Home() {
       {/* NAVBAR */}
       <div style={s.navWrap}>
         <div style={s.navInner}>
-          <Link href="/" style={s.logo}>🎁 Dárkee</Link>
-          <div style={s.navLinks}>
-            {[['/#how','Jak to funguje'],['/blog','Blog'],['/pro-eshopy','Pro e-shopy']].map(([href, label]) => (
-              <Link key={href} href={href} style={s.navLink(`nl-${href}`)} onMouseEnter={on(`nl-${href}`)} onMouseLeave={off(`nl-${href}`)}>{label}</Link>
-            ))}
+          {/* LEFT: Logo + user links */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '24px' }}>
+            <Link href="/" style={s.logo}>🎁 Dárkee</Link>
+            <div style={s.navLinks} className="hidden md:flex">
+              {[['#how','Jak to funguje'],['/blog','Blog'],['/prilezitosti','Příležitosti']].map(([href, label]) => (
+                <Link key={href} href={href} style={s.navLink(`nl-${href}`)} onMouseEnter={on(`nl-${href}`)} onMouseLeave={off(`nl-${href}`)} className="hidden md:inline">{label}</Link>
+              ))}
+            </div>
           </div>
-          <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-            <Link href="/ucet/login" style={s.navLink('nl-login')} onMouseEnter={on('nl-login')} onMouseLeave={off('nl-login')}>Přihlásit se</Link>
+          {/* RIGHT: CTA + divider + merchant */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
             <button style={s.navCta} onMouseEnter={on('nav-cta')} onMouseLeave={off('nav-cta')} onClick={() => setQuizOpen(true)}>Najít dárek →</button>
+            <div style={s.navDivider} className="hidden md:block" />
+            <Link href="/pro-eshopy" style={s.navMerchantLink('nl-merchant')} onMouseEnter={on('nl-merchant')} onMouseLeave={off('nl-merchant')} className="hidden md:inline">Pro e-shopy</Link>
+            <Link href="/merchant/login" style={s.navLink('nl-login')} onMouseEnter={on('nl-login')} onMouseLeave={off('nl-login')} className="hidden md:inline">Přihlásit se</Link>
           </div>
         </div>
       </div>
@@ -240,9 +252,10 @@ export default function Home() {
 
       {/* PRODUKTY */}
       <section style={{ padding: '0 24px 80px' }}>
-        <div style={s.sectionInner}>
-          <div style={s.sectionLabel}>Ukázka výsledků</div>
-          <div style={s.sectionTitle}>Takhle vypadají<br />vaše doporučení</div>
+        <div style={s.productsSection}>
+          <div style={{ ...s.sectionLabel, color: '#C9A84C' }}>Ukázka výsledků</div>
+          <div style={{ ...s.sectionTitle, color: '#F0E8DC' }}>Takhle vypadají<br />vaše doporučení</div>
+          <div style={s.productsSub}>Každý dárek dostane skóre shody. Víte proč ho doporučujeme.</div>
           <div style={s.productsGrid}>
             {PRODUCTS.map((p, i) => (
               <div key={i} style={s.pCard(`pc-${i}`)} onMouseEnter={on(`pc-${i}`)} onMouseLeave={off(`pc-${i}`)}>
@@ -255,11 +268,14 @@ export default function Home() {
                   <div style={s.pReason}><span style={{ color: '#C9A84C' }}>✦</span>{p.reason}</div>
                   <div style={s.pFooter}>
                     <div style={s.pPrice}>{p.price}</div>
-                    <div style={s.pBtn(`pb-${i}`)} onMouseEnter={on(`pb-${i}`)} onMouseLeave={off(`pb-${i}`)}>Zobrazit →</div>
+                    <div style={s.pBtn(`pb-${i}`)} onMouseEnter={on(`pb-${i}`)} onMouseLeave={off(`pb-${i}`)}>Zobrazit dárek →</div>
                   </div>
                 </div>
               </div>
             ))}
+          </div>
+          <div style={{ textAlign: 'center', marginTop: '40px' }}>
+            <button style={s.btnPrimary('products-cta')} onMouseEnter={on('products-cta')} onMouseLeave={off('products-cta')} onClick={() => setQuizOpen(true)}>Spustit kvíz a najít své dárky →</button>
           </div>
         </div>
       </section>
@@ -288,31 +304,41 @@ export default function Home() {
       <section style={s.footerWrap}>
         <div style={s.footerInner}>
           <div style={s.footerGrid}>
+            {/* Brand */}
             <div>
               <div style={s.footerLogo}>🎁 Dárkee</div>
-              <div style={s.footerTag}>Dárkový asistent pro každou příležitost.<br />Rychle, přesně, s jistotou.</div>
+              <div style={s.footerTag}>Daruj s jistotou.</div>
+              <div style={s.footerTagDesc}>Dárkový asistent pro každou příležitost. Rychle, přesně, s jistotou.</div>
             </div>
+            {/* Pro uživatele */}
             <div>
               <div style={s.footerColTitle}>Pro uživatele</div>
-              {[['/#how','Jak to funguje'],['/pruvodce','Spustit kvíz'],['/blog','Blog'],['/ucet/gems','Věrnostní program']].map(([href,label]) => (
+              {[['/#how','Jak to funguje'],['/pruvodce','Spustit kvíz'],['/blog','Blog'],['/ucet/gems','Věrnostní program'],['/prilezitosti','Příležitosti']].map(([href,label]) => (
                 <Link key={href} href={href} style={s.footerLink(`fl-${href}`)} onMouseEnter={on(`fl-${href}`)} onMouseLeave={off(`fl-${href}`)}>{label}</Link>
               ))}
             </div>
+            {/* Pro e-shopy */}
             <div>
-              <div style={s.footerColTitle}>Pro e-shopy</div>
-              {[['/pro-eshopy','Registrace e-shopu'],['/merchant/widget','B2B Widget'],['mailto:info@darkee.cz','Kontakt']].map(([href,label]) => (
+              <div style={s.footerColTitleBlue}>Pro e-shopy</div>
+              {[['/pro-eshopy','Proč Dárkee'],['/merchant/register','Registrace e-shopu'],['/merchant/widget','B2B Widget'],['/pro-eshopy#cenik','Ceník'],['mailto:info@darkee.cz','Kontakt']].map(([href,label]) => (
                 <Link key={href} href={href} style={s.footerLink(`fl-${href}`)} onMouseEnter={on(`fl-${href}`)} onMouseLeave={off(`fl-${href}`)}>{label}</Link>
               ))}
             </div>
+            {/* Kontakt */}
             <div>
               <div style={s.footerColTitle}>Kontakt</div>
               <a href="mailto:info@darkee.cz" style={s.footerLink('fl-email')} onMouseEnter={on('fl-email')} onMouseLeave={off('fl-email')}>info@darkee.cz</a>
-              <Link href="/pro-eshopy" style={{ ...s.footerLink('fl-collab'), color: hov['fl-collab'] ? '#B89840' : '#C9A84C' }} onMouseEnter={on('fl-collab')} onMouseLeave={off('fl-collab')}>Spolupráce →</Link>
+              <Link href="/pro-eshopy" style={{ ...s.footerLink('fl-collab'), color: hov['fl-collab'] ? '#B89840' : '#C9A84C' }} onMouseEnter={on('fl-collab')} onMouseLeave={off('fl-collab')}>Spolupráce s e-shopy →</Link>
+              <div style={{ display: 'flex', gap: '16px', marginTop: '12px' }}>
+                {['Instagram','Pinterest','Facebook'].map(name => (
+                  <span key={name} style={{ fontSize: '12px', color: '#6B6358', cursor: 'pointer' }}>{name}</span>
+                ))}
+              </div>
             </div>
           </div>
           <div style={s.footerBottom}>
             <span>© 2026 Dárkee.cz — Všechna práva vyhrazena</span>
-            <span>Ochrana dat · Cookies · Podmínky</span>
+            <span>Ochrana dat · Cookies · Obchodní podmínky</span>
           </div>
         </div>
       </section>
