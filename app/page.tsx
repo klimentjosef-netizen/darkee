@@ -1,6 +1,8 @@
 'use client'
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import { AnimatePresence } from 'framer-motion'
+import { QuizContainer } from '@/components/quiz/QuizContainer'
 
 const PRODUCTS = [
   { name: 'Prémiová aromaterapeutická sada', shop: 'Notino.cz', price: '1 290 Kč', match: '96', reason: 'Sedí na zájem o wellness', gradient: 'linear-gradient(135deg,#F5F0E8 0%,#EDE5D8 100%)' },
@@ -23,6 +25,7 @@ const GIFTS = Array.from({ length: 14 }, (_, i) => ({
 export default function Home() {
   const [scrolled, setScrolled] = useState(false)
   const [hov, setHov] = useState<Record<string, boolean>>({})
+  const [quizOpen, setQuizOpen] = useState(false)
   const on = (k: string) => () => setHov(p => ({ ...p, [k]: true }))
   const off = (k: string) => () => setHov(p => ({ ...p, [k]: false }))
 
@@ -140,9 +143,7 @@ export default function Home() {
           </div>
           <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
             <Link href="/ucet/login" style={s.navLink('nl-login')} onMouseEnter={on('nl-login')} onMouseLeave={off('nl-login')}>Přihlásit se</Link>
-            <Link href="/pruvodce">
-              <button style={s.navCta} onMouseEnter={on('nav-cta')} onMouseLeave={off('nav-cta')}>Najít dárek →</button>
-            </Link>
+            <button style={s.navCta} onMouseEnter={on('nav-cta')} onMouseLeave={off('nav-cta')} onClick={() => setQuizOpen(true)}>Najít dárek →</button>
           </div>
         </div>
       </div>
@@ -180,9 +181,7 @@ export default function Home() {
             Za 60 sekund máš 5 dárků které skutečně sedí.
           </p>
           <div style={s.heroBtns}>
-            <Link href="/pruvodce">
-              <button style={s.btnPrimary('hero-btn1')} onMouseEnter={on('hero-btn1')} onMouseLeave={off('hero-btn1')}>Najít dárek →</button>
-            </Link>
+            <button style={s.btnPrimary('hero-btn1')} onMouseEnter={on('hero-btn1')} onMouseLeave={off('hero-btn1')} onClick={() => setQuizOpen(true)}>Najít dárek →</button>
             <a href="#how">
               <button style={s.btnSecondary('hero-btn2')} onMouseEnter={on('hero-btn2')} onMouseLeave={off('hero-btn2')}>Jak to funguje</button>
             </a>
@@ -274,11 +273,16 @@ export default function Home() {
             <em style={{ fontStyle: 'italic', color: '#C9A84C' }}>existuje.</em>
           </div>
           <div style={s.finalSub}>Stačí 60 sekund a 8 otázek.</div>
-          <Link href="/pruvodce">
-            <button style={s.btnPrimary('final-cta')} onMouseEnter={on('final-cta')} onMouseLeave={off('final-cta')}>Najít dárek →</button>
-          </Link>
+          <button style={s.btnPrimary('final-cta')} onMouseEnter={on('final-cta')} onMouseLeave={off('final-cta')} onClick={() => setQuizOpen(true)}>Najít dárek →</button>
         </div>
       </section>
+
+      {/* QUIZ MODAL */}
+      <AnimatePresence>
+        {quizOpen && (
+          <QuizContainer isModal onClose={() => setQuizOpen(false)} />
+        )}
+      </AnimatePresence>
 
       {/* FOOTER */}
       <section style={s.footerWrap}>
