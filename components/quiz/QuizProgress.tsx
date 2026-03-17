@@ -19,7 +19,7 @@ export function QuizProgress({ current, total }: Props) {
           className="h-full"
           style={{
             background: 'linear-gradient(90deg, var(--gold-dark), var(--gold-primary), var(--gold-light))',
-            boxShadow: '0 0 8px rgba(201, 168, 76, 0.3)',
+            boxShadow: '0 0 8px rgba(166, 124, 82, 0.25)',
           }}
           initial={false}
           animate={{ width: `${progress}%` }}

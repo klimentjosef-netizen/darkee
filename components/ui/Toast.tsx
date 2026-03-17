@@ -32,7 +32,7 @@ const colors: Record<ToastType, { border: string; icon: string; bg: string }> = 
   success: {
     border: 'var(--gold-primary)',
     icon: 'var(--gold-primary)',
-    bg: 'rgba(201, 168, 76, 0.08)',
+    bg: 'rgba(166, 124, 82, 0.06)',
   },
   error: {
     border: 'var(--error)',

@@ -105,13 +105,13 @@ function SaveModal({ onClose }: { onClose: () => void }) {
         </p>
         <div className="flex flex-col gap-3">
           <Link
-            href="/login"
+            href="/ucet/login"
             className="w-full py-3 bg-[var(--gold-primary)] text-white text-sm font-[family-name:var(--font-body)] font-medium rounded-sm no-underline text-center hover:bg-[var(--gold-light)] transition-colors"
           >
             Přihlásit se
           </Link>
           <Link
-            href="/register"
+            href="/ucet/login"
             className="w-full py-3 border border-[var(--border-mid)] text-[var(--text-secondary)] text-sm font-[family-name:var(--font-body)] font-medium rounded-sm no-underline text-center hover:border-[var(--gold-primary)] hover:text-[var(--gold-primary)] transition-all"
           >
             Vytvořit účet

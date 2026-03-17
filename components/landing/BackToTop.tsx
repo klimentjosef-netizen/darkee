@@ -19,7 +19,7 @@ export function BackToTop() {
     <button
       onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
       aria-label="Zpět nahoru"
-      className="fixed bottom-6 right-6 z-40 w-10 h-10 flex items-center justify-center bg-[var(--bg-secondary)] border border-[var(--gold-primary)] rounded-sm text-[var(--gold-primary)] hover:bg-[var(--gold-primary)] hover:text-[var(--bg-primary)] transition-all duration-300 cursor-pointer"
+      className="fixed bottom-6 right-6 z-40 w-10 h-10 flex items-center justify-center bg-[var(--bg-secondary)] border border-[var(--gold-primary)] rounded-sm text-[var(--gold-primary)] hover:bg-[var(--gold-primary)] hover:text-white transition-all duration-300 cursor-pointer"
       style={{
         opacity: visible ? 1 : 0,
         pointerEvents: visible ? 'auto' : 'none',

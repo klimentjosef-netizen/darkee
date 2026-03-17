@@ -145,10 +145,6 @@ export default function ProEshopyPage() {
 
       {/* Hero */}
       <section className="relative pt-32 pb-24 px-6 text-center overflow-hidden">
-        <div
-          className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] pointer-events-none"
-          style={{ background: 'radial-gradient(ellipse, rgba(201,168,76,0.06), transparent 70%)' }}
-        />
         <div className="relative z-10 max-w-3xl mx-auto">
           <motion.p
             initial={{ opacity: 0, y: 16 }}
@@ -183,7 +179,7 @@ export default function ProEshopyPage() {
           >
             <Link
               href="/merchant/register"
-              className="group inline-flex items-center gap-3 px-10 py-4 bg-[var(--gold-primary)] text-[var(--bg-primary)] font-[family-name:var(--font-body)] text-base font-medium tracking-wide hover:bg-[var(--gold-light)] transition-all duration-300 no-underline rounded-sm"
+              className="group inline-flex items-center gap-3 px-10 py-4 bg-[var(--gold-primary)] text-white font-[family-name:var(--font-body)] text-base font-medium tracking-wide hover:bg-[var(--gold-light)] transition-all duration-300 no-underline rounded-sm"
             >
               Registrovat e-shop zdarma
               <span className="inline-block transition-transform duration-300 group-hover:translate-x-1">→</span>
@@ -268,7 +264,7 @@ export default function ProEshopyPage() {
                 }`}
               >
                 {plan.featured && (
-                  <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 bg-[var(--gold-primary)] text-[var(--bg-primary)] text-[10px] font-[family-name:var(--font-body)] font-semibold tracking-wider uppercase rounded-full">
+                  <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 bg-[var(--gold-primary)] text-white text-[10px] font-[family-name:var(--font-body)] font-semibold tracking-wider uppercase rounded-full">
                     Nejoblíbenější
                   </div>
                 )}
@@ -295,7 +291,7 @@ export default function ProEshopyPage() {
                   href="/merchant/register"
                   className={`block text-center py-3 text-sm font-[family-name:var(--font-body)] font-medium rounded-sm no-underline transition-all duration-300 ${
                     plan.featured
-                      ? 'bg-[var(--gold-primary)] text-[var(--bg-primary)] hover:bg-[var(--gold-light)]'
+                      ? 'bg-[var(--gold-primary)] text-white hover:bg-[var(--gold-light)]'
                       : 'border border-[var(--border-mid)] text-[var(--text-secondary)] hover:border-[var(--gold-primary)] hover:text-[var(--gold-primary)]'
                   }`}
                 >
@@ -328,10 +324,6 @@ export default function ProEshopyPage() {
       {/* CTA Banner */}
       <section className="px-6 py-[100px]">
         <div className="max-w-3xl mx-auto text-center p-12 bg-[var(--bg-primary)] border border-[var(--border-subtle)] rounded-sm relative overflow-hidden">
-          <div
-            className="absolute inset-0 pointer-events-none"
-            style={{ background: 'radial-gradient(ellipse, rgba(201,168,76,0.04), transparent 70%)' }}
-          />
           <div className="relative z-10">
             <h2 className="font-[family-name:var(--font-display)] text-[clamp(24px,4vw,36px)] font-light text-[var(--text-primary)] tracking-wide mb-4">
               Začněte zdarma
@@ -341,7 +333,7 @@ export default function ProEshopyPage() {
             </p>
             <Link
               href="/merchant/register"
-              className="group inline-flex items-center gap-3 px-10 py-4 bg-[var(--gold-primary)] text-[var(--bg-primary)] font-[family-name:var(--font-body)] text-base font-medium tracking-wide hover:bg-[var(--gold-light)] transition-all duration-300 no-underline rounded-sm"
+              className="group inline-flex items-center gap-3 px-10 py-4 bg-[var(--gold-primary)] text-white font-[family-name:var(--font-body)] text-base font-medium tracking-wide hover:bg-[var(--gold-light)] transition-all duration-300 no-underline rounded-sm"
             >
               Registrovat e-shop
               <span className="inline-block transition-transform duration-300 group-hover:translate-x-1">→</span>

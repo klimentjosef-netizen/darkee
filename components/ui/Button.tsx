@@ -15,7 +15,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     const base = 'inline-flex items-center justify-center font-[family-name:var(--font-body)] font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-[var(--bg-primary)] disabled:opacity-50 disabled:cursor-not-allowed'
 
     const variants: Record<Variant, string> = {
-      primary: 'border border-[var(--gold-primary)] text-[var(--gold-primary)] hover:bg-[var(--gold-primary)] hover:text-[var(--bg-primary)] focus:ring-[var(--gold-primary)]',
+      primary: 'bg-[var(--gold-primary)] text-white hover:bg-[var(--gold-light)] focus:ring-[var(--gold-primary)]',
       secondary: 'border border-[var(--border-mid)] text-[var(--text-secondary)] hover:border-[var(--border-strong)] hover:text-[var(--text-primary)] focus:ring-[var(--border-mid)]',
       ghost: 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] focus:ring-[var(--border-mid)]',
       danger: 'border border-[var(--error)] text-[var(--error)] hover:bg-[var(--error)] hover:text-white focus:ring-[var(--error)]',

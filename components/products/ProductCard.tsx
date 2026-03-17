@@ -36,12 +36,12 @@ export function ProductCard({ product, quizResultId, rank }: ProductCardProps) {
         rank === 0 && 'border-[var(--gold-dark)]'
       )}
       style={{
-        boxShadow: rank === 0 ? '0 0 20px rgba(201, 168, 76, 0.08)' : undefined,
+        boxShadow: rank === 0 ? '0 0 20px rgba(166, 124, 82, 0.06)' : undefined,
       }}
     >
       {/* Best match badge */}
       {rank === 0 && (
-        <div className="absolute top-3 left-3 z-10 px-3 py-1 bg-[var(--gold-primary)] text-[var(--bg-primary)] text-[10px] font-[family-name:var(--font-body)] font-semibold tracking-wider uppercase rounded-full">
+        <div className="absolute top-3 left-3 z-10 px-3 py-1 bg-[var(--gold-primary)] text-white text-[10px] font-[family-name:var(--font-body)] font-semibold tracking-wider uppercase rounded-full">
           Nejlepší shoda
         </div>
       )}
@@ -112,7 +112,7 @@ export function ProductCard({ product, quizResultId, rank }: ProductCardProps) {
             href={affiliateHref}
             target="_blank"
             rel="noopener noreferrer"
-            className="group/btn inline-flex items-center gap-2 px-4 py-2.5 bg-[var(--gold-primary)] text-[var(--bg-primary)] text-sm font-[family-name:var(--font-body)] font-medium hover:bg-[var(--gold-light)] transition-all duration-200 rounded-sm no-underline"
+            className="group/btn inline-flex items-center gap-2 px-4 py-2.5 bg-[var(--gold-primary)] text-white text-sm font-[family-name:var(--font-body)] font-medium hover:bg-[var(--gold-light)] transition-all duration-200 rounded-sm no-underline"
           >
             Zobrazit dárek
             <span className="inline-block transition-transform duration-300 group-hover/btn:translate-x-0.5">

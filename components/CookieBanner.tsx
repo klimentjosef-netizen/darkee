@@ -64,7 +64,7 @@ export function CookieBanner() {
               </button>
               <button
                 onClick={accept}
-                className="px-5 py-2 text-xs text-[var(--bg-primary)] font-[family-name:var(--font-body)] font-medium bg-[var(--gold-primary)] rounded-sm hover:bg-[var(--gold-light)] transition-colors cursor-pointer border-none"
+                className="px-5 py-2 text-xs text-white font-[family-name:var(--font-body)] font-medium bg-[var(--gold-primary)] rounded-sm hover:bg-[var(--gold-light)] transition-colors cursor-pointer border-none"
               >
                 Přijmout vše
               </button>

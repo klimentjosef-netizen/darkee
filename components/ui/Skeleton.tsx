@@ -6,7 +6,7 @@ export function FullPageLoader() {
       <div
         className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] pointer-events-none"
         style={{
-          background: 'radial-gradient(ellipse, rgba(201, 168, 76, 0.06), transparent 70%)',
+          background: 'radial-gradient(ellipse, rgba(166, 124, 82, 0.04), transparent 70%)',
         }}
       />
       <div className="relative z-10 flex items-center justify-center gap-2">

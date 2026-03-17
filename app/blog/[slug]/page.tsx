@@ -61,7 +61,7 @@ function InlineQuizCTA() {
         </div>
         <Link
           href="/pruvodce"
-          className="group inline-flex items-center gap-2 px-6 py-2.5 bg-[var(--gold-primary)] text-[var(--bg-primary)] text-sm font-[family-name:var(--font-body)] font-medium hover:bg-[var(--gold-light)] transition-all duration-300 no-underline rounded-sm"
+          className="group inline-flex items-center gap-2 px-6 py-2.5 bg-[var(--gold-primary)] text-white text-sm font-[family-name:var(--font-body)] font-medium hover:bg-[var(--gold-light)] transition-all duration-300 no-underline rounded-sm"
         >
           Spustit kvíz
           <span className="inline-block transition-transform duration-300 group-hover:translate-x-0.5">
@@ -94,7 +94,7 @@ function Sidebar({
         </p>
         <Link
           href="/pruvodce"
-          className="group flex items-center justify-center gap-2 w-full py-3 bg-[var(--gold-primary)] text-[var(--bg-primary)] text-sm font-[family-name:var(--font-body)] font-medium hover:bg-[var(--gold-light)] transition-all duration-300 no-underline rounded-sm"
+          className="group flex items-center justify-center gap-2 w-full py-3 bg-[var(--gold-primary)] text-white text-sm font-[family-name:var(--font-body)] font-medium hover:bg-[var(--gold-light)] transition-all duration-300 no-underline rounded-sm"
         >
           Najít dárek
           <span className="inline-block transition-transform duration-300 group-hover:translate-x-0.5">
@@ -173,7 +173,7 @@ function RelatedGrid({ currentSlug }: { currentSlug: string }) {
                   className="absolute inset-0 transition-transform duration-500 group-hover:scale-105"
                   style={{ background: article.gradient }}
                 />
-                <div className="absolute top-3 left-3 px-2.5 py-0.5 bg-[var(--bg-primary)]/80 backdrop-blur-sm border border-[var(--gold-primary)] rounded-full">
+                <div className="absolute top-3 left-3 px-2.5 py-0.5 bg-white/90 backdrop-blur-sm border border-[var(--border-mid)] rounded-full">
                   <span className="text-[var(--gold-primary)] text-[10px] font-[family-name:var(--font-body)] font-medium tracking-wider">
                     {article.category}
                   </span>
@@ -296,7 +296,7 @@ export default function BlogArticlePage() {
               transition={{ duration: 0.5, delay: 0.1 }}
             >
               <div className="flex items-center gap-3 mb-5">
-                <span className="px-3 py-1 bg-[var(--bg-secondary)] border border-[var(--gold-primary)] rounded-full text-[var(--gold-primary)] text-[10px] font-[family-name:var(--font-body)] font-medium tracking-wider">
+                <span className="px-3 py-1 bg-[var(--bg-secondary)] border border-[var(--border-mid)] rounded-full text-[var(--gold-primary)] text-[10px] font-[family-name:var(--font-body)] font-medium tracking-wider">
                   {article.category}
                 </span>
                 <span className="text-xs text-[var(--text-muted)] font-[family-name:var(--font-body)]">
@@ -466,13 +466,6 @@ export default function BlogArticlePage() {
       {/* Bottom CTA banner */}
       <div className="px-6 pb-20">
         <div className="max-w-3xl mx-auto text-center p-10 bg-[var(--bg-secondary)] border border-[var(--border-subtle)] rounded-sm">
-          <div
-            className="absolute inset-0 pointer-events-none"
-            style={{
-              background:
-                'radial-gradient(ellipse at center, rgba(201,168,76,0.03), transparent 70%)',
-            }}
-          />
           <h3 className="font-[family-name:var(--font-display)] text-2xl font-light text-[var(--text-primary)] tracking-wide mb-3">
             Najděte perfektní dárek za 60 sekund
           </h3>
@@ -481,7 +474,7 @@ export default function BlogArticlePage() {
           </p>
           <Link
             href="/pruvodce"
-            className="group inline-flex items-center gap-3 px-10 py-4 bg-[var(--gold-primary)] text-[var(--bg-primary)] font-[family-name:var(--font-body)] text-base font-medium tracking-wide hover:bg-[var(--gold-light)] transition-all duration-300 no-underline rounded-sm"
+            className="group inline-flex items-center gap-3 px-10 py-4 bg-[var(--gold-primary)] text-white font-[family-name:var(--font-body)] text-base font-medium tracking-wide hover:bg-[var(--gold-light)] transition-all duration-300 no-underline rounded-sm"
           >
             Spustit kvíz
             <span className="inline-block transition-transform duration-300 group-hover:translate-x-1">
