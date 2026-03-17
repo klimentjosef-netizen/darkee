@@ -1,0 +1,79 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Product {
+  id               String    @id @default(cuid())
+  name             String
+  price            Float
+  url              String    @unique
+  affiliateUrl     String?
+  imageUrl         String
+  sourceShop       String
+  merchantId       String?
+  merchant         Merchant? @relation(fields: [merchantId], references: [id])
+  categories       String[]
+  ageRange         String[]
+  genderFit        String[]
+  occasionFit      String[]
+  interestTags     String[]
+  styleFit         String[]
+  giftType         String
+  isPersonalizable Boolean   @default(false)
+  isLocal          Boolean   @default(false)
+  rating           Float     @default(0)
+  popularityScore  Float     @default(50)
+  inStock          Boolean   @default(true)
+  isPremium        Boolean   @default(false)
+  lastSynced       DateTime  @default(now())
+  createdAt        DateTime  @default(now())
+  clicks           Click[]
+}
+
+model QuizResult {
+  id        String   @id @default(cuid())
+  answers   Json
+  products  String[]
+  scores    Json
+  createdAt DateTime @default(now())
+  clicks    Click[]
+}
+
+model Click {
+  id           String      @id @default(cuid())
+  productId    String
+  product      Product     @relation(fields: [productId], references: [id])
+  quizResultId String?
+  quizResult   QuizResult? @relation(fields: [quizResultId], references: [id])
+  merchantId   String?
+  merchant     Merchant?   @relation(fields: [merchantId], references: [id])
+  source       String?
+  converted    Boolean     @default(false)
+  revenue      Float?
+  createdAt    DateTime    @default(now())
+  userAgent    String?
+  ipHash       String?
+}
+
+model Merchant {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  shopName      String
+  shopUrl       String
+  logoUrl       String?
+  feedUrl       String?
+  affiliateTag  String    @unique
+  commissionPct Float     @default(5)
+  isPremium     Boolean   @default(false)
+  isApproved    Boolean   @default(false)
+  widgetEnabled Boolean   @default(false)
+  apiKey        String    @unique @default(cuid())
+  products      Product[]
+  clicks        Click[]
+  createdAt     DateTime  @default(now())
+}
