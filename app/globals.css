@@ -1,6 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap');
-
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+@import "tailwindcss";
 
 :root {
   --gold: #C9A84C;
@@ -21,12 +19,10 @@
   --bg-tertiary: #EDEAE4;
   --bg-elevated: #FFFFFF;
   --gold-primary: #C9A84C;
-  --gold-light: #E8C97A;
   --gold-dark: #8A6B2A;
   --gold-glow: rgba(201,168,76,0.10);
   --text-primary: #1A1714;
   --text-secondary: #6B6358;
-  --text-muted: #A09888;
   --border-subtle: rgba(0,0,0,0.06);
   --border-mid: rgba(0,0,0,0.12);
   --border-strong: rgba(0,0,0,0.18);
