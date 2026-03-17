@@ -20,7 +20,7 @@ export function QuizOption({ option, selected, onSelect, index }: QuizOptionProp
       transition={{ delay: index * 0.04, duration: 0.3, ease: 'easeOut' }}
       onClick={onSelect}
       className={cn(
-        'relative flex items-center gap-4 w-full px-5 py-4 text-left cursor-pointer rounded-sm transition-all duration-200',
+        'relative flex items-center gap-4 w-full px-5 py-4 text-left cursor-pointer rounded-2xl transition-all duration-200',
         'border',
         selected
           ? 'border-[var(--gold-primary)] bg-[var(--gold-glow)]'
