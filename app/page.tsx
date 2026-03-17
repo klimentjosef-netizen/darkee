@@ -137,7 +137,7 @@ export default function Home() {
         <div style={s.navInner}>
           <Link href="/" style={s.logo}>🎁 Dárkee</Link>
           <div style={s.navLinks}>
-            {[['/#how','Jak to funguje'],['/#blog','Blog'],['/pro-eshopy','Pro e-shopy']].map(([href, label]) => (
+            {[['/#how','Jak to funguje'],['/blog','Blog'],['/pro-eshopy','Pro e-shopy']].map(([href, label]) => (
               <Link key={href} href={href} style={s.navLink(`nl-${href}`)} onMouseEnter={on(`nl-${href}`)} onMouseLeave={off(`nl-${href}`)}>{label}</Link>
             ))}
           </div>
