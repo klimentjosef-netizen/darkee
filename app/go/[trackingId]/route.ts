@@ -13,7 +13,7 @@ export async function GET(
 
   const product = await prisma.product.findUnique({
     where: { id: trackingId },
-    select: { id: true, originalUrl: true, affiliateUrl: true, merchantId: true },
+    select: { id: true, originalUrl: true, affiliateUrl: true, merchantId: true, sourceShop: true },
   })
 
   if (!product) {
@@ -35,25 +35,32 @@ export async function GET(
     },
   }).catch(() => {})
 
-  // Build affiliate URL with eHub wrapping if configured
-  const destination = buildAffiliateUrl(product.affiliateUrl || product.originalUrl, source)
+  // Build affiliate URL with eHub deep linking
+  const destination = buildAffiliateUrl(product.affiliateUrl || product.originalUrl, source, product.sourceShop)
   return NextResponse.redirect(destination, { status: 302 })
 }
 
-function buildAffiliateUrl(baseUrl: string, source: string): string {
-  try {
-    const u = new URL(baseUrl)
-    u.searchParams.set('utm_source', 'darkee')
-    u.searchParams.set('utm_medium', source === 'widget' ? 'widget' : 'organic')
-    u.searchParams.set('utm_campaign', 'gift-quiz')
+// eHub campaign IDs per shop
+const EHUB_CAMPAIGNS: Record<string, string> = {
+  'Dárkoviny.cz': '3e6ac74c',
+}
 
-    // eHub affiliate wrapping — activate by setting EHUB_PUBLISHER_ID env var
+function buildAffiliateUrl(baseUrl: string, source: string, sourceShop: string): string {
+  try {
+    const productUrl = new URL(baseUrl)
+    productUrl.searchParams.set('utm_source', 'darkee')
+    productUrl.searchParams.set('utm_medium', source === 'widget' ? 'widget' : 'organic')
+    productUrl.searchParams.set('utm_campaign', 'gift-quiz')
+
+    // eHub deep linking — wrap product URL with eHub tracking
     const ehubPublisherId = process.env.EHUB_PUBLISHER_ID
-    if (ehubPublisherId) {
-      return `https://track.ehub.cz/redirect?publisher_id=${ehubPublisherId}&url=${encodeURIComponent(u.toString())}`
+    const campaignId = EHUB_CAMPAIGNS[sourceShop]
+
+    if (ehubPublisherId && campaignId) {
+      return `https://ehub.cz/system/scripts/click.php?a_aid=${ehubPublisherId}&a_bid=${campaignId}&desturl=${encodeURIComponent(productUrl.toString())}`
     }
 
-    return u.toString()
+    return productUrl.toString()
   } catch {
     return baseUrl
   }
