@@ -143,7 +143,7 @@ function mapInterests(category: string, giftTypes: string[], hobbies: string[], 
 // ── AI tagging ──
 async function aiTag(name: string, description: string, category: string, price: number) {
   const { tagProduct } = await import('../lib/ai-tagger')
-  return tagProduct(name, description, category, price)
+  return tagProduct({ name, description, category, price })
 }
 
 // ── Main ──
