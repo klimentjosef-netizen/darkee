@@ -272,11 +272,11 @@ export default function VysledkyPage() {
 
       {/* Leaderboard */}
       <div className="px-6 pb-16">
-        <div className="max-w-3xl mx-auto">
+        <div className="max-w-2xl mx-auto">
           {filteredProducts.length > 0 ? (
-            <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-6">
               {filteredProducts.map((product, i) => (
-                <div key={product.id} className={i === 0 ? 'mb-2' : ''}>
+                <div key={product.id}>
                   <ProductCard
                     product={product}
                     quizResultId={quizResultId}
