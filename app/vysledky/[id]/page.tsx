@@ -3,7 +3,7 @@
 import { useState, useEffect, useMemo } from 'react'
 import { useParams } from 'next/navigation'
 import { motion } from 'framer-motion'
-import { RotateCcw } from 'lucide-react'
+import { RotateCcw, Trophy } from 'lucide-react'
 import { Navbar } from '@/components/landing/Navbar'
 import { Footer } from '@/components/landing/Footer'
 import { ProductCard } from '@/components/products/ProductCard'
@@ -11,14 +11,12 @@ import { GoldDivider } from '@/components/ui/GoldDivider'
 import { ScoredProduct, QuizAnswers } from '@/types'
 import Link from 'next/link'
 
-type FilterKey = 'all' | 'best' | 'cheapest' | 'experience' | 'physical'
+type FilterKey = 'all' | 'best' | 'cheapest'
 
 const filters: { key: FilterKey; label: string }[] = [
-  { key: 'all', label: 'Vše' },
+  { key: 'all', label: 'TOP 5' },
   { key: 'best', label: 'Nejlepší shoda' },
   { key: 'cheapest', label: 'Nejlevnější' },
-  { key: 'experience', label: 'Zážitky' },
-  { key: 'physical', label: 'Fyzické dárky' },
 ]
 
 const genderLabels: Record<string, string> = {
@@ -91,10 +89,6 @@ export default function VysledkyPage() {
         return sorted.sort((a, b) => b.matchPct - a.matchPct)
       case 'cheapest':
         return sorted.sort((a, b) => a.price - b.price)
-      case 'experience':
-        return sorted.filter((p) => p.giftType === 'experience')
-      case 'physical':
-        return sorted.filter((p) => p.giftType === 'physical')
       default:
         return sorted
     }
@@ -106,29 +100,37 @@ export default function VysledkyPage() {
     if (answers.ageGroup) summaryParts.push(`${ageLabels[answers.ageGroup] || ''} let`)
     if (answers.gender) summaryParts.push(genderLabels[answers.gender] || '')
     if (answers.occasion)
-      summaryParts.push(`příležitost: ${occasionLabels[answers.occasion] || answers.occasion}`)
+      summaryParts.push(occasionLabels[answers.occasion] || answers.occasion)
     if (answers.budget)
-      summaryParts.push(`budget: ${budgetLabels[answers.budget] || answers.budget}`)
+      summaryParts.push(budgetLabels[answers.budget] || answers.budget)
   }
 
   if (loading) {
     return (
       <div className="min-h-screen bg-[var(--bg-primary)] flex flex-col items-center justify-center">
-        <div className="flex items-center justify-center gap-2 py-8">
-          {[0, 1, 2].map((i) => (
-            <span
-              key={i}
-              className="w-2 h-2 rounded-full bg-[var(--gold-primary)]"
-              style={{
-                animation: 'softPulse 1.2s ease-in-out infinite',
-                animationDelay: `${i * 0.2}s`,
-              }}
-            />
-          ))}
-        </div>
-        <p className="text-[var(--gold-primary)] text-lg font-[family-name:var(--font-display)] font-light tracking-wide">
-          Načítáme vaše výsledky…
-        </p>
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.5 }}
+          className="text-center"
+        >
+          <Trophy size={40} className="text-[var(--gold-primary)] mx-auto mb-6 opacity-60" />
+          <div className="flex items-center justify-center gap-2 py-4">
+            {[0, 1, 2].map((i) => (
+              <span
+                key={i}
+                className="w-2 h-2 rounded-full bg-[var(--gold-primary)]"
+                style={{
+                  animation: 'softPulse 1.2s ease-in-out infinite',
+                  animationDelay: `${i * 0.2}s`,
+                }}
+              />
+            ))}
+          </div>
+          <p className="text-[var(--gold-primary)] text-lg font-[family-name:var(--font-display)] font-light tracking-wide">
+            Hledáme nejlepší dárky…
+          </p>
+        </motion.div>
       </div>
     )
   }
@@ -138,38 +140,52 @@ export default function VysledkyPage() {
       <Navbar />
 
       {/* Header section */}
-      <div className="pt-28 pb-12 px-6">
-        <div className="max-w-5xl mx-auto text-center">
+      <div className="pt-28 pb-8 px-6">
+        <div className="max-w-3xl mx-auto text-center">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
+          >
+            <Trophy size={36} className="text-[var(--gold-primary)] mx-auto mb-4" />
+          </motion.div>
+
           <motion.p
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4 }}
-            className="text-[11px] tracking-[0.3em] uppercase text-[var(--text-muted)] mb-4 font-[family-name:var(--font-body)]"
+            transition={{ duration: 0.4, delay: 0.1 }}
+            className="text-[11px] tracking-[0.3em] uppercase text-[var(--text-muted)] mb-3 font-[family-name:var(--font-body)]"
           >
-            VAŠE DOPORUČENÍ
+            TOP {products.length} DÁRKŮ PRO VÁS
           </motion.p>
+
           <motion.h1
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.1 }}
-            className="font-[family-name:var(--font-display)] text-[clamp(28px,5vw,42px)] font-light text-[var(--text-primary)] tracking-wide mb-4"
+            transition={{ duration: 0.5, delay: 0.15 }}
+            className="font-[family-name:var(--font-display)] text-[clamp(28px,5vw,42px)] font-light text-[var(--text-primary)] tracking-wide mb-3"
           >
-            Našli jsme pro vás{' '}
-            <span className="italic text-[var(--gold-primary)]">
-              {products.length} dárků
-            </span>
+            Vybrali jsme ty{' '}
+            <span className="italic text-[var(--gold-primary)]">nejlepší</span>
           </motion.h1>
 
-          {/* Search summary */}
+          {/* Search summary pills */}
           {summaryParts.length > 0 && (
-            <motion.p
+            <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ duration: 0.4, delay: 0.2 }}
-              className="text-sm text-[var(--text-secondary)] font-[family-name:var(--font-body)] mb-5"
+              transition={{ duration: 0.4, delay: 0.25 }}
+              className="flex flex-wrap items-center justify-center gap-2 mb-5"
             >
-              Pro {summaryParts.join(', ')}
-            </motion.p>
+              {summaryParts.map((part, i) => (
+                <span
+                  key={i}
+                  className="px-3 py-1 bg-[var(--bg-secondary)] border border-[var(--border-subtle)] rounded-full text-xs text-[var(--text-secondary)] font-[family-name:var(--font-body)]"
+                >
+                  {part}
+                </span>
+              ))}
+            </motion.div>
           )}
 
           <motion.div
@@ -188,25 +204,25 @@ export default function VysledkyPage() {
         </div>
       </div>
 
-      <GoldDivider className="max-w-3xl mx-auto" />
+      <GoldDivider className="max-w-2xl mx-auto" />
 
       {/* Filters */}
-      <div className="px-6 py-8">
-        <div className="max-w-5xl mx-auto">
+      <div className="px-6 py-6">
+        <div className="max-w-3xl mx-auto">
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.4, delay: 0.3 }}
-            className="flex items-center gap-1 overflow-x-auto pb-2 scrollbar-none"
+            className="flex items-center justify-center gap-1"
           >
             {filters.map((f) => (
               <button
                 key={f.key}
                 onClick={() => setActiveFilter(f.key)}
-                className={`shrink-0 px-4 py-2 text-sm font-[family-name:var(--font-body)] border-b-2 transition-all duration-200 bg-transparent cursor-pointer ${
+                className={`shrink-0 px-5 py-2 text-sm font-[family-name:var(--font-body)] rounded-full transition-all duration-200 cursor-pointer border ${
                   activeFilter === f.key
-                    ? 'text-[var(--gold-primary)] border-[var(--gold-primary)]'
-                    : 'text-[var(--text-muted)] border-transparent hover:text-[var(--text-secondary)]'
+                    ? 'text-[var(--gold-primary)] border-[var(--gold-primary)] bg-[rgba(201,168,76,0.06)]'
+                    : 'text-[var(--text-muted)] border-transparent bg-transparent hover:text-[var(--text-secondary)]'
                 }`}
               >
                 {f.label}
@@ -216,11 +232,11 @@ export default function VysledkyPage() {
         </div>
       </div>
 
-      {/* Products grid */}
+      {/* Leaderboard */}
       <div className="px-6 pb-16">
-        <div className="max-w-5xl mx-auto">
+        <div className="max-w-3xl mx-auto">
           {filteredProducts.length > 0 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+            <div className="flex flex-col gap-4">
               {filteredProducts.map((product, i) => (
                 <ProductCard
                   key={product.id}
@@ -239,7 +255,12 @@ export default function VysledkyPage() {
           )}
 
           {/* Retry CTA */}
-          <div className="text-center mt-16 py-10 border-t border-[var(--border-subtle)]">
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.4, delay: 0.8 }}
+            className="text-center mt-16 py-10 border-t border-[var(--border-subtle)]"
+          >
             <p className="text-[var(--text-secondary)] text-sm font-[family-name:var(--font-body)] mb-4">
               Nenašli jste co hledáte?
             </p>
@@ -250,7 +271,7 @@ export default function VysledkyPage() {
               <RotateCcw size={14} />
               Zkusit znovu s jinými parametry
             </Link>
-          </div>
+          </motion.div>
         </div>
       </div>
 
