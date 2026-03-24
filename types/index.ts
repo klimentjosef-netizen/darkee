@@ -1,10 +1,10 @@
 export type Relationship = 'partner' | 'parent' | 'friend' | 'sibling' | 'colleague' | 'child' | 'self' | 'pet'
 export type AgeGroup = 'baby' | 'preschool' | 'school' | 'teen' | 'young_adult' | 'adult' | 'senior' | 'elderly'
 export type Gender = 'female' | 'male' | 'neutral'
-export type Occasion = 'birthday' | 'christmas' | 'valentine' | 'mothers_day' | 'wedding' | 'graduation' | 'just_because'
+export type Occasion = 'birthday' | 'christmas' | 'nameday' | 'valentine' | 'mothers_day' | 'wedding' | 'graduation' | 'just_because'
 export type Interest = 'tech' | 'sport' | 'fashion' | 'home' | 'food' | 'books' | 'games' | 'experiences' | 'crafts' | 'wellness' | 'pets' | 'unknown'
 export type GiftType = 'physical' | 'experience' | 'both'
-export type PersonalityStyle = 'practical' | 'adventurous' | 'aesthetic' | 'intellectual' | 'comfort' | 'any_style'
+export type PersonalityStyle = 'practical' | 'adventurous' | 'aesthetic' | 'intellectual' | 'comfort' | 'food_drink' | 'any_style'
 export type Budget = 'max300' | 'max500' | 'max1000' | 'max2000' | 'max5000' | 'unlimited' | 'custom'
 
 export interface QuizAnswers {

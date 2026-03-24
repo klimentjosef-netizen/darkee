@@ -32,6 +32,7 @@ export function scoreProducts(answers: QuizAnswers, products: RawProduct[]): Sco
     if (!p.inStock) return false
     if (budgetCap !== null && p.price > budgetCap) return false
     if (budgetMin > 0 && p.price < budgetMin) return false
+    // "Nevím" (neutral) = show everything, otherwise filter by gender
     if (answers.gender !== 'neutral' && !p.genderFit.includes(answers.gender) && !p.genderFit.includes('neutral')) return false
     if (!p.ageRange.includes(answers.ageGroup)) return false
     if (answers.giftType !== 'both' && p.giftType !== answers.giftType) return false
@@ -53,12 +54,28 @@ export function scoreProducts(answers: QuizAnswers, products: RawProduct[]): Sco
       reasons.push(`Sedí na ${matchedInterests.map(i => labels[i] || i).join(' a ')}`)
     }
 
-    if (answers.style === 'any_style' || p.styleFit.includes(answers.style)) {
+    // Style matching — food_drink boosts food-tagged products
+    if (answers.style === 'any_style') {
       score += 20
-      if (answers.style !== 'any_style') reasons.push('Odpovídá osobnosti obdarovaného')
+    } else if (answers.style === 'food_drink') {
+      if (p.interestTags.includes('food')) {
+        score += 20
+        reasons.push('Něco dobrého k jídlu nebo pití')
+      }
+    } else if (p.styleFit.includes(answers.style)) {
+      score += 20
+      reasons.push(
+        answers.style === 'practical' ? 'Praktický a užitečný dárek' :
+        answers.style === 'aesthetic' ? 'Krásný design' :
+        answers.style === 'adventurous' ? 'Zábavný a originální' :
+        answers.style === 'comfort' ? 'Osobní a na míru' :
+        'Odpovídá osobnosti obdarovaného'
+      )
     }
 
-    if (p.occasionFit.includes(answers.occasion) || p.occasionFit.includes('any')) score += 20
+    // Nameday matches same products as birthday
+    const occasionToMatch = answers.occasion === 'nameday' ? 'birthday' : answers.occasion
+    if (p.occasionFit.includes(occasionToMatch) || p.occasionFit.includes(answers.occasion) || p.occasionFit.includes('any')) score += 20
     if (answers.occasion === 'christmas' && (month === 11 || month === 12)) score += 5
     if (answers.occasion === 'valentine' && (month === 1 || month === 2)) score += 5
 

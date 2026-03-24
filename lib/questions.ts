@@ -38,9 +38,9 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     title: 'Je to pro ženu nebo muže?',
     type: 'single',
     options: [
-      { value: 'female',  label: 'Žena / Dívka',         emoji: '👩' },
-      { value: 'male',    label: 'Muž / Chlapec',         emoji: '👨' },
-      { value: 'neutral', label: 'Nechci specifikovat',   emoji: '🌈' },
+      { value: 'female',  label: 'Žena / Dívka',  emoji: '👩' },
+      { value: 'male',    label: 'Muž / Chlapec',  emoji: '👨' },
+      { value: 'neutral', label: 'Nevím',           emoji: '🤷' },
     ],
   },
   {
@@ -50,6 +50,7 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     options: [
       { value: 'birthday',    label: 'Narozeniny',         emoji: '🎂' },
       { value: 'christmas',   label: 'Vánoce / Svátky',    emoji: '🎄' },
+      { value: 'nameday',     label: 'Svátek',             emoji: '📅' },
       { value: 'valentine',   label: 'Valentýn / Výročí',  emoji: '💝' },
       { value: 'mothers_day', label: 'Den matek / otců',   emoji: '🌷' },
       { value: 'wedding',     label: 'Svatba / Zásnuby',   emoji: '💍' },
@@ -84,21 +85,22 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     type: 'single',
     options: [
       { value: 'physical',   label: 'Fyzický dárek',    emoji: '📦', description: 'Něco hmatatelného' },
-      { value: 'experience', label: 'Zážitek / Poukaz', emoji: '🎟️', description: 'Nezapomenutelný moment' },
+      { value: 'experience', label: 'Poukaz / Zážitek', emoji: '🎟️', description: 'Nezapomenutelný moment' },
       { value: 'both',       label: 'Oboje',            emoji: '✨', description: 'Ukažte mi vše' },
     ],
   },
   {
     id: 'style',
-    title: 'Jaká je osobnost obdarovaného?',
+    title: 'Co by ho/ji nejvíc potěšilo?',
+    subtitle: 'Jaký typ dárku hledáte',
     type: 'single',
     options: [
-      { value: 'practical',     label: 'Praktik',       emoji: '🔧', description: 'Ocení užitečné věci' },
-      { value: 'adventurous',   label: 'Dobrodruh',     emoji: '🏔️', description: 'Miluje nové zážitky' },
-      { value: 'aesthetic',     label: 'Estét',          emoji: '🎨', description: 'Záleží mu na designu' },
-      { value: 'intellectual',  label: 'Intelektuál',    emoji: '🧠', description: 'Rád se učí' },
-      { value: 'comfort',       label: 'Pohodář',        emoji: '☕', description: 'Užívá si komfort' },
-      { value: 'any_style',     label: 'Nevím',          emoji: '🌈', description: 'Ukažte mi vše' },
+      { value: 'practical',     label: 'Něco užitečného',    emoji: '🔧', description: 'Praktické věci do života' },
+      { value: 'aesthetic',     label: 'Něco krásného',       emoji: '🎨', description: 'Design, šperky, dekorace' },
+      { value: 'adventurous',   label: 'Něco zábavného',     emoji: '😄', description: 'Vtipné, originální, překvapivé' },
+      { value: 'food_drink',    label: 'Něco k jídlu/pití',  emoji: '🍷', description: 'Delikatesy, víno, čokoláda' },
+      { value: 'comfort',       label: 'Něco osobního',      emoji: '✨', description: 'Na míru, s věnováním' },
+      { value: 'any_style',     label: 'Nevím',              emoji: '🌈', description: 'Ukažte mi vše' },
     ],
   },
   {

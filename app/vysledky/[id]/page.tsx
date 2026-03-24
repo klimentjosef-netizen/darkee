@@ -22,7 +22,7 @@ const genderLabels: Record<string, string> = {
   female: 'ženu', male: 'muže', neutral: 'osobu',
 }
 const occasionLabels: Record<string, string> = {
-  birthday: 'Narozeniny', christmas: 'Vánoce', valentine: 'Valentýn',
+  birthday: 'Narozeniny', christmas: 'Vánoce', nameday: 'Svátek', valentine: 'Valentýn',
   mothers_day: 'Den matek', wedding: 'Svatba', graduation: 'Promoce', just_because: 'Jen tak',
 }
 const ageLabels: Record<string, string> = {

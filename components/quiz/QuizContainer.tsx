@@ -110,6 +110,14 @@ export function QuizContainer({ isModal = false, onClose }: QuizContainerProps) 
   const [loading, setLoading] = useState(false)
   const [showExit, setShowExit] = useState(false)
 
+  const isPet = answers.relationship === 'pet'
+
+  // Skip ageGroup and gender for pets
+  function shouldSkip(idx: number): boolean {
+    const qId = QUIZ_QUESTIONS[idx]?.id
+    return isPet && (qId === 'ageGroup' || qId === 'gender')
+  }
+
   const q = QUIZ_QUESTIONS[step]
   const total = QUIZ_QUESTIONS.length
 
@@ -134,26 +142,37 @@ export function QuizContainer({ isModal = false, onClose }: QuizContainerProps) 
 
   const advance = useCallback(
     (a: Record<string, string | string[]> = answers) => {
-      if (step < total - 1) {
+      let next = step + 1
+      while (next < total && shouldSkip(next)) next++
+      if (next < total) {
         setDirection(1)
-        setStep((s) => s + 1)
+        setStep(next)
       } else {
+        // Pet: set default values for skipped questions
+        if (a.relationship === 'pet') {
+          a.ageGroup = a.ageGroup || 'adult'
+          a.gender = a.gender || 'neutral'
+        }
         computeResults(a)
       }
     },
-    [step, total, answers]
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [step, total, answers, isPet]
   )
 
   const goBack = useCallback(() => {
-    if (step > 0) {
+    let prev = step - 1
+    while (prev >= 0 && shouldSkip(prev)) prev--
+    if (prev >= 0) {
       setDirection(-1)
-      setStep((s) => s - 1)
+      setStep(prev)
     } else if (isModal && onClose) {
       onClose()
     } else {
       setShowExit(true)
     }
-  }, [step, isModal, onClose])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [step, isModal, onClose, isPet])
 
   function select(val: string) {
     if (q.type === 'multi') {
@@ -178,10 +197,10 @@ export function QuizContainer({ isModal = false, onClose }: QuizContainerProps) 
     try {
       const payload: Record<string, unknown> = {
         relationship: a.relationship,
-        ageGroup: a.ageGroup,
-        gender: a.gender,
+        ageGroup: a.ageGroup || 'adult',
+        gender: a.gender || 'neutral',
         occasion: a.occasion,
-        interests: a.interests,
+        interests: a.interests || ['pets'],
         giftType: a.giftType,
         style: a.style,
         budget: a.budget,
@@ -280,7 +299,7 @@ export function QuizContainer({ isModal = false, onClose }: QuizContainerProps) 
               borderRadius: isModal ? '24px 0 0 0' : 0,
             }}
             initial={false}
-            animate={{ width: `${((step + 1) / total) * 100}%` }}
+            animate={{ width: `${(QUIZ_QUESTIONS.slice(0, step + 1).filter((_, i) => !shouldSkip(i)).length / QUIZ_QUESTIONS.filter((_, i) => !shouldSkip(i)).length) * 100}%` }}
             transition={{ duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
           />
         </div>
@@ -318,7 +337,7 @@ export function QuizContainer({ isModal = false, onClose }: QuizContainerProps) 
           fontFamily: "'DM Sans', sans-serif",
           letterSpacing: '0.1em',
         }}>
-          {step + 1} / {total}
+          {QUIZ_QUESTIONS.slice(0, step + 1).filter((_, i) => !shouldSkip(i)).length} / {QUIZ_QUESTIONS.filter((_, i) => !shouldSkip(i)).length}
         </span>
       </div>
 
