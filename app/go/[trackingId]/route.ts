@@ -44,6 +44,7 @@ export async function GET(
 const EHUB_CAMPAIGNS: Record<string, string> = {
   'Dárkoviny.cz': '3e6ac74c',
   'Doke.cz': '425bddde',
+  'Danfil.cz': 'cbb5cc0e',
 }
 
 function buildAffiliateUrl(baseUrl: string, source: string, sourceShop: string): string {

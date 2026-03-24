@@ -6,6 +6,7 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       { protocol: 'https', hostname: 'cdn.myshoptet.com' },
       { protocol: 'https', hostname: '*.myshoptet.com' },
+      { protocol: 'https', hostname: 'cdn.danfil.cz' },
     ],
   },
 };

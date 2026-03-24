@@ -16,6 +16,8 @@ const args = process.argv.slice(2)
 const feedUrl = args[0]
 const shopName = args[1]
 const useAI = args.includes('--ai')
+const maxPriceArg = args.find(a => a.startsWith('--max-price='))
+const MAX_PRICE = maxPriceArg ? Number(maxPriceArg.split('=')[1]) : null
 
 if (!feedUrl || !shopName) {
   console.error('Usage: npx tsx prisma/import-shop.ts <feedUrl> <shopName> [--ai]')
@@ -171,6 +173,7 @@ async function main() {
     const category = String(item.CATEGORYTEXT || '')
 
     if (!name || !price || !url) { skipped++; continue }
+    if (MAX_PRICE && price > MAX_PRICE) { skipped++; continue }
 
     const params = getParams(item)
     let tags
