@@ -157,8 +157,23 @@ async function main() {
 
   const parser = new XMLParser({ ignoreAttributes: false, parseTagValue: false })
   const parsed = parser.parse(xml)
-  const items: Record<string, unknown>[] = parsed?.SHOP?.SHOPITEM || []
-  console.log(`Found ${items.length} products`)
+
+  // Support both Heureka (SHOP > SHOPITEM) and Google Merchant (rss > channel > item)
+  let items: Record<string, unknown>[] = parsed?.SHOP?.SHOPITEM || []
+  const isGoogle = items.length === 0 && parsed?.rss?.channel?.item
+  if (isGoogle) {
+    const raw = parsed.rss.channel.item
+    items = (Array.isArray(raw) ? raw : [raw]).map((item: Record<string, unknown>) => ({
+      PRODUCTNAME: item['g:title'] || item['title'] || '',
+      PRICE_VAT: item['g:price'] || item['price'] || '0',
+      URL: item['g:link'] || item['link'] || '',
+      IMGURL: item['g:image_link'] || item['image_link'] || '',
+      DESCRIPTION: item['g:description'] || item['description'] || '',
+      CATEGORYTEXT: item['g:product_type'] || item['g:google_product_category'] || '',
+      PARAM: [],
+    }))
+  }
+  console.log(`Found ${items.length} products${isGoogle ? ' (Google format)' : ''}`)
   if (useAI) console.log('Using AI tagging (Claude) — this will take a while...')
 
   let imported = 0

@@ -45,6 +45,15 @@ const EHUB_CAMPAIGNS: Record<string, string> = {
   'Dárkoviny.cz': '3e6ac74c',
   'Doke.cz': '425bddde',
   'Danfil.cz': 'cbb5cc0e',
+  'Brilianty.cz': 'e6e4bc7a',
+  'BJP-store.cz': '6f6c8ab9',
+  'Nejlevnějšíprotein.cz': '0377639a',
+  'Topalkohol.cz': '3e59749f',
+  'BabyMall.cz': '153ce8b7',
+  'OK-Hračky.cz': '20372289',
+  'Zdraví-global.cz': '6d4aa7d6',
+  'OceněnáVína.cz': 'c887d0ca',
+  'Kabelka.cz': '57bf721f',
 }
 
 function buildAffiliateUrl(baseUrl: string, source: string, sourceShop: string): string {
