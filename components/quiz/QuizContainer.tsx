@@ -110,12 +110,10 @@ export function QuizContainer({ isModal = false, onClose }: QuizContainerProps) 
   const [loading, setLoading] = useState(false)
   const [showExit, setShowExit] = useState(false)
 
-  const isPet = answers.relationship === 'pet'
-
-  // Skip ageGroup and gender for pets
-  function shouldSkip(idx: number): boolean {
+  // Skip ageGroup and gender for pets — check answers directly, not stale state
+  function shouldSkip(idx: number, a: Record<string, string | string[]> = answers): boolean {
     const qId = QUIZ_QUESTIONS[idx]?.id
-    return isPet && (qId === 'ageGroup' || qId === 'gender')
+    return a.relationship === 'pet' && (qId === 'ageGroup' || qId === 'gender')
   }
 
   const q = QUIZ_QUESTIONS[step]
@@ -143,7 +141,7 @@ export function QuizContainer({ isModal = false, onClose }: QuizContainerProps) 
   const advance = useCallback(
     (a: Record<string, string | string[]> = answers) => {
       let next = step + 1
-      while (next < total && shouldSkip(next)) next++
+      while (next < total && shouldSkip(next, a)) next++
       if (next < total) {
         setDirection(1)
         setStep(next)
@@ -157,7 +155,7 @@ export function QuizContainer({ isModal = false, onClose }: QuizContainerProps) 
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [step, total, answers, isPet]
+    [step, total, answers]
   )
 
   const goBack = useCallback(() => {
@@ -172,7 +170,7 @@ export function QuizContainer({ isModal = false, onClose }: QuizContainerProps) 
       setShowExit(true)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [step, isModal, onClose, isPet])
+  }, [step, isModal, onClose, answers])
 
   function select(val: string) {
     if (q.type === 'multi') {
