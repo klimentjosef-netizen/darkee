@@ -43,6 +43,7 @@ export async function GET(
 // eHub campaign IDs per shop
 const EHUB_CAMPAIGNS: Record<string, string> = {
   'Dárkoviny.cz': '3e6ac74c',
+  'Doke.cz': '425bddde',
 }
 
 function buildAffiliateUrl(baseUrl: string, source: string, sourceShop: string): string {
