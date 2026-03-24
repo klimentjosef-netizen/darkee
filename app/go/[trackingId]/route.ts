@@ -35,7 +35,7 @@ export async function GET(
     },
   }).catch(() => {})
 
-  // Build affiliate URL
+  // Build affiliate URL with eHub wrapping if configured
   const destination = buildAffiliateUrl(product.affiliateUrl || product.originalUrl, source)
   return NextResponse.redirect(destination, { status: 302 })
 }
@@ -47,11 +47,11 @@ function buildAffiliateUrl(baseUrl: string, source: string): string {
     u.searchParams.set('utm_medium', source === 'widget' ? 'widget' : 'organic')
     u.searchParams.set('utm_campaign', 'gift-quiz')
 
-    // TODO eHub: When approved, wrap URL with eHub tracking:
-    // const ehubPublisherId = process.env.EHUB_PUBLISHER_ID
-    // if (ehubPublisherId) {
-    //   return `https://track.ehub.cz/redirect?publisher_id=${ehubPublisherId}&url=${encodeURIComponent(u.toString())}`
-    // }
+    // eHub affiliate wrapping — activate by setting EHUB_PUBLISHER_ID env var
+    const ehubPublisherId = process.env.EHUB_PUBLISHER_ID
+    if (ehubPublisherId) {
+      return `https://track.ehub.cz/redirect?publisher_id=${ehubPublisherId}&url=${encodeURIComponent(u.toString())}`
+    }
 
     return u.toString()
   } catch {
