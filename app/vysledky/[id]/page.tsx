@@ -7,7 +7,6 @@ import { RotateCcw, Trophy } from 'lucide-react'
 import { Navbar } from '@/components/landing/Navbar'
 import { Footer } from '@/components/landing/Footer'
 import { ProductCard } from '@/components/products/ProductCard'
-import { GoldDivider } from '@/components/ui/GoldDivider'
 import { ScoredProduct, QuizAnswers } from '@/types'
 import Link from 'next/link'
 
@@ -63,20 +62,6 @@ function SkeletonCard({ index }: { index: number }) {
         </div>
       </div>
     </div>
-  )
-}
-
-function Sparkle({ delay, x, y }: { delay: number; x: number; y: number }) {
-  return (
-    <motion.div
-      className="absolute pointer-events-none text-[var(--gold-primary)]"
-      style={{ left: `${x}%`, top: `${y}%` }}
-      initial={{ opacity: 0, scale: 0 }}
-      animate={{ opacity: [0, 1, 0], scale: [0, 1, 0], rotate: [0, 180, 360] }}
-      transition={{ duration: 1.5, delay, ease: 'easeInOut' }}
-    >
-      ✦
-    </motion.div>
   )
 }
 
@@ -162,110 +147,62 @@ export default function VysledkyPage() {
     <div className="min-h-screen bg-[var(--bg-primary)]">
       <Navbar />
 
-      {/* Header */}
-      <div className="pt-28 pb-8 px-6">
-        <div className="max-w-3xl mx-auto text-center relative">
-          {/* Sparkles */}
-          <Sparkle delay={0.3} x={20} y={10} />
-          <Sparkle delay={0.6} x={75} y={5} />
-          <Sparkle delay={0.9} x={85} y={40} />
-          <Sparkle delay={1.2} x={10} y={35} />
-
+      {/* Compact header — gifts visible immediately */}
+      <div className="pt-24 pb-2 px-6">
+        <div className="max-w-2xl mx-auto">
           <motion.div
-            initial={{ opacity: 0, scale: 0.5, rotate: -10 }}
-            animate={{ opacity: 1, scale: 1, rotate: 0 }}
-            transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-          >
-            <Trophy size={40} className="text-[var(--gold-primary)] mx-auto mb-5" />
-          </motion.div>
-
-          <motion.p
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="flex items-center justify-between flex-wrap gap-3"
+          >
+            <div className="flex items-center gap-3">
+              <Trophy size={22} className="text-[var(--gold-primary)]" />
+              <h1 className="font-[family-name:var(--font-display)] text-2xl font-light text-[var(--text-primary)]">
+                Top {products.length} dárků
+              </h1>
+            </div>
+            <Link
+              href="/pruvodce"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-[11px] text-[var(--text-muted)] font-[family-name:var(--font-body)] hover:text-[var(--gold-primary)] transition-colors no-underline border border-[var(--border-subtle)] rounded-full"
+            >
+              <RotateCcw size={10} />
+              Změnit
+            </Link>
+          </motion.div>
+
+          {/* Summary + filters in one row */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
             transition={{ duration: 0.4, delay: 0.15 }}
-            className="text-[11px] tracking-[0.3em] uppercase text-[var(--text-muted)] mb-3 font-[family-name:var(--font-body)]"
+            className="flex items-center justify-between flex-wrap gap-2 mt-3 mb-5"
           >
-            TOP {products.length} DÁRKŮ PRO VÁS
-          </motion.p>
-
-          <motion.h1
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="font-[family-name:var(--font-display)] text-[clamp(30px,5vw,46px)] font-light text-[var(--text-primary)] tracking-wide mb-4"
-          >
-            Vybrali jsme ty{' '}
-            <span
-              className="italic"
-              style={{
-                background: 'linear-gradient(135deg, #C9A84C, #E8C97A, #C9A84C)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-              }}
-            >
-              nejlepší
-            </span>
-          </motion.h1>
-
-          {/* Summary pills — glassmorphism */}
-          {summaryParts.length > 0 && (
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4, delay: 0.35 }}
-              className="flex flex-wrap items-center justify-center gap-2 mb-5"
-            >
+            <div className="flex flex-wrap gap-1.5">
               {summaryParts.map((part, i) => (
                 <span
                   key={i}
-                  className="px-4 py-1.5 bg-white/60 backdrop-blur-sm border border-[rgba(201,168,76,0.12)] rounded-full text-xs text-[var(--text-secondary)] font-[family-name:var(--font-body)] shadow-sm"
+                  className="px-3 py-1 bg-[var(--bg-secondary)] rounded-full text-[11px] text-[var(--text-secondary)] font-[family-name:var(--font-body)]"
                 >
                   {part}
                 </span>
               ))}
-            </motion.div>
-          )}
-
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.3, delay: 0.45 }}
-          >
-            <Link
-              href="/pruvodce"
-              className="inline-flex items-center gap-2 px-4 py-2 text-xs text-[var(--text-muted)] font-[family-name:var(--font-body)] hover:text-[var(--gold-primary)] transition-colors no-underline"
-            >
-              <RotateCcw size={12} />
-              Upravit hledání
-            </Link>
-          </motion.div>
-        </div>
-      </div>
-
-      <GoldDivider className="max-w-2xl mx-auto" />
-
-      {/* Filters */}
-      <div className="px-6 py-6">
-        <div className="max-w-3xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.4, delay: 0.4 }}
-            className="flex items-center justify-center gap-2"
-          >
-            {filters.map((f) => (
-              <button
-                key={f.key}
-                onClick={() => setActiveFilter(f.key)}
-                className={`shrink-0 px-5 py-2 text-sm font-[family-name:var(--font-body)] rounded-full transition-all duration-300 cursor-pointer border ${
-                  activeFilter === f.key
-                    ? 'text-[var(--gold-primary)] border-[var(--gold-primary)] bg-[rgba(201,168,76,0.06)] shadow-sm'
-                    : 'text-[var(--text-muted)] border-transparent bg-transparent hover:text-[var(--text-secondary)] hover:bg-[var(--bg-secondary)]'
-                }`}
-              >
-                {f.label}
-              </button>
-            ))}
+            </div>
+            <div className="flex items-center gap-1">
+              {filters.map((f) => (
+                <button
+                  key={f.key}
+                  onClick={() => setActiveFilter(f.key)}
+                  className={`shrink-0 px-3 py-1 text-[11px] font-[family-name:var(--font-body)] rounded-full transition-all duration-200 cursor-pointer border ${
+                    activeFilter === f.key
+                      ? 'text-[var(--gold-primary)] border-[var(--gold-primary)] bg-[rgba(201,168,76,0.06)]'
+                      : 'text-[var(--text-muted)] border-transparent hover:text-[var(--text-secondary)]'
+                  }`}
+                >
+                  {f.label}
+                </button>
+              ))}
+            </div>
           </motion.div>
         </div>
       </div>
