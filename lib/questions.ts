@@ -103,15 +103,16 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
   {
     id: 'budget',
     title: 'Jaký je váš rozpočet?',
-    subtitle: 'Zobrazíme i levnější varianty',
+    subtitle: 'Zobrazíme dárky ve vámi zvoleném rozmezí',
     type: 'single',
     options: [
-      { value: 'max300',   label: 'Do 300 Kč',   emoji: '💰' },
-      { value: 'max500',   label: 'Do 500 Kč',   emoji: '💰' },
-      { value: 'max1000',  label: 'Do 1 000 Kč', emoji: '💳' },
-      { value: 'max2000',  label: 'Do 2 000 Kč', emoji: '💳' },
-      { value: 'max5000',  label: 'Do 5 000 Kč', emoji: '💎' },
-      { value: 'unlimited',label: 'Bez omezení',  emoji: '👑' },
+      { value: 'max300',   label: 'Do 300 Kč',      emoji: '💰' },
+      { value: 'max500',   label: 'Do 500 Kč',      emoji: '💰' },
+      { value: 'max1000',  label: 'Do 1 000 Kč',    emoji: '💳' },
+      { value: 'max2000',  label: 'Do 2 000 Kč',    emoji: '💳' },
+      { value: 'max5000',  label: 'Do 5 000 Kč',    emoji: '💎' },
+      { value: 'unlimited',label: 'Bez omezení',     emoji: '👑' },
+      { value: 'custom',   label: 'Vlastní rozsah',  emoji: '✏️', description: 'Nastavte si min a max cenu' },
     ],
   },
 ]

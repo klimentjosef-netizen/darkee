@@ -121,7 +121,13 @@ export default function VysledkyPage() {
     if (answers.ageGroup) summaryParts.push(ageLabels[answers.ageGroup] || '')
     if (answers.gender) summaryParts.push(`pro ${genderLabels[answers.gender] || ''}`)
     if (answers.occasion) summaryParts.push(occasionLabels[answers.occasion] || '')
-    if (answers.budget) summaryParts.push(budgetLabels[answers.budget] || '')
+    if (answers.budget === 'custom' && (answers.budgetMin || answers.budgetMax)) {
+      const min = answers.budgetMin || 0
+      const max = answers.budgetMax
+      summaryParts.push(max ? `${min}–${max} Kč` : `od ${min} Kč`)
+    } else if (answers.budget) {
+      summaryParts.push(budgetLabels[answers.budget] || '')
+    }
   }
 
   if (loading) {

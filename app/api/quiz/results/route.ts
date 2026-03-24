@@ -13,6 +13,8 @@ const schema = z.object({
   giftType: z.enum(['physical', 'experience', 'both']),
   style: z.string(),
   budget: z.string(),
+  budgetMin: z.number().optional(),
+  budgetMax: z.number().optional(),
   personalized: z.string().optional(),
   origin: z.string().optional(),
 })

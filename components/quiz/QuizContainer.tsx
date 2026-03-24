@@ -163,6 +163,9 @@ export function QuizContainer({ isModal = false, onClose }: QuizContainerProps) 
       } else if (cur.length < (q.maxSelections || 3)) {
         setAnswers({ ...answers, [q.id]: [...cur, val] })
       }
+    } else if (q.id === 'budget' && val === 'custom') {
+      // Custom budget — don't auto-advance, show inputs
+      setAnswers({ ...answers, [q.id]: val })
     } else {
       const updated = { ...answers, [q.id]: val }
       setAnswers(updated)
@@ -173,19 +176,24 @@ export function QuizContainer({ isModal = false, onClose }: QuizContainerProps) 
   async function computeResults(a: Record<string, string | string[]>) {
     setLoading(true)
     try {
+      const payload: Record<string, unknown> = {
+        relationship: a.relationship,
+        ageGroup: a.ageGroup,
+        gender: a.gender,
+        occasion: a.occasion,
+        interests: a.interests,
+        giftType: a.giftType,
+        style: a.style,
+        budget: a.budget,
+      }
+      if (a.budget === 'custom') {
+        payload.budgetMin = Number(a.budgetMin) || 0
+        payload.budgetMax = Number(a.budgetMax) || 99999
+      }
       const res = await fetch('/api/quiz/results', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          relationship: a.relationship,
-          ageGroup: a.ageGroup,
-          gender: a.gender,
-          occasion: a.occasion,
-          interests: a.interests,
-          giftType: a.giftType,
-          style: a.style,
-          budget: a.budget,
-        }),
+        body: JSON.stringify(payload),
       })
       const data = await res.json()
       if (data.quizResultId) {
@@ -356,6 +364,89 @@ export function QuizContainer({ isModal = false, onClose }: QuizContainerProps) 
               />
             </QuizTransition>
           </div>
+
+          {/* Custom budget inputs */}
+          <AnimatePresence>
+            {q.id === 'budget' && answers.budget === 'custom' && (
+              <motion.div
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 16 }}
+                transition={{ duration: 0.3 }}
+                style={{ textAlign: 'center', paddingBottom: 12, flexShrink: 0 }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 12, marginBottom: 20 }}>
+                  <div style={{ textAlign: 'center' }}>
+                    <label style={{ display: 'block', fontSize: 11, color: '#A09888', fontFamily: "'DM Sans', sans-serif", marginBottom: 6, textTransform: 'uppercase', letterSpacing: '0.1em' }}>Od</label>
+                    <input
+                      type="number"
+                      placeholder="0"
+                      value={answers.budgetMin as string || ''}
+                      onChange={e => setAnswers({ ...answers, budgetMin: e.target.value })}
+                      style={{
+                        width: 120,
+                        padding: '12px 16px',
+                        fontSize: 18,
+                        fontFamily: "'Cormorant Garamond', serif",
+                        fontWeight: 400,
+                        textAlign: 'center',
+                        border: '1px solid rgba(201,168,76,0.3)',
+                        borderRadius: 12,
+                        background: '#FAFAF8',
+                        color: '#1A1714',
+                        outline: 'none',
+                      }}
+                    />
+                    <span style={{ fontSize: 12, color: '#A09888', fontFamily: "'DM Sans', sans-serif", marginLeft: 4 }}>Kč</span>
+                  </div>
+                  <span style={{ fontSize: 16, color: '#C9A84C', fontFamily: "'Cormorant Garamond', serif", marginTop: 20 }}>—</span>
+                  <div style={{ textAlign: 'center' }}>
+                    <label style={{ display: 'block', fontSize: 11, color: '#A09888', fontFamily: "'DM Sans', sans-serif", marginBottom: 6, textTransform: 'uppercase', letterSpacing: '0.1em' }}>Do</label>
+                    <input
+                      type="number"
+                      placeholder="2000"
+                      value={answers.budgetMax as string || ''}
+                      onChange={e => setAnswers({ ...answers, budgetMax: e.target.value })}
+                      style={{
+                        width: 120,
+                        padding: '12px 16px',
+                        fontSize: 18,
+                        fontFamily: "'Cormorant Garamond', serif",
+                        fontWeight: 400,
+                        textAlign: 'center',
+                        border: '1px solid rgba(201,168,76,0.3)',
+                        borderRadius: 12,
+                        background: '#FAFAF8',
+                        color: '#1A1714',
+                        outline: 'none',
+                      }}
+                    />
+                    <span style={{ fontSize: 12, color: '#A09888', fontFamily: "'DM Sans', sans-serif", marginLeft: 4 }}>Kč</span>
+                  </div>
+                </div>
+                <button
+                  onClick={() => advance()}
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: 10,
+                    padding: '14px 36px',
+                    background: '#C9A84C',
+                    color: '#FFFFFF',
+                    fontSize: 15,
+                    fontWeight: 500,
+                    fontFamily: "'DM Sans', sans-serif",
+                    border: 'none',
+                    borderRadius: 100,
+                    cursor: 'pointer',
+                    transition: 'all 0.25s',
+                  }}
+                >
+                  Pokračovat →
+                </button>
+              </motion.div>
+            )}
+          </AnimatePresence>
 
           {/* Multi-select continue button */}
           <AnimatePresence>

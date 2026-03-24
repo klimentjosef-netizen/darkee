@@ -24,12 +24,14 @@ type RawProduct = {
 }
 
 export function scoreProducts(answers: QuizAnswers, products: RawProduct[]): ScoredProduct[] {
-  const budgetCap = BUDGET_MAP[answers.budget]
+  const budgetCap = answers.budget === 'custom' ? (answers.budgetMax || null) : BUDGET_MAP[answers.budget]
+  const budgetMin = answers.budget === 'custom' ? (answers.budgetMin || 0) : 0
   const month = new Date().getMonth() + 1
 
   const eligible = products.filter(p => {
     if (!p.inStock) return false
     if (budgetCap !== null && p.price > budgetCap) return false
+    if (budgetMin > 0 && p.price < budgetMin) return false
     if (answers.gender !== 'neutral' && !p.genderFit.includes(answers.gender) && !p.genderFit.includes('neutral')) return false
     if (!p.ageRange.includes(answers.ageGroup)) return false
     if (answers.giftType !== 'both' && p.giftType !== answers.giftType) return false
