@@ -70,6 +70,7 @@ export function scoreProducts(answers: QuizAnswers, products: RawProduct[]): Sco
       colleague: ['neutral', 'home', 'food', 'books'],
       child: ['games', 'crafts', 'sport', 'books'],
       self: ['tech', 'fashion', 'wellness', 'experiences'],
+      pet: ['pets', 'food', 'home', 'sport'],
     }
     const relTags = relMap[answers.relationship] || []
     if (p.interestTags.some(t => relTags.includes(t)) || p.styleFit.some(t => relTags.includes(t))) {

@@ -1,4 +1,4 @@
-export type Relationship = 'partner' | 'parent' | 'friend' | 'sibling' | 'colleague' | 'child' | 'self'
+export type Relationship = 'partner' | 'parent' | 'friend' | 'sibling' | 'colleague' | 'child' | 'self' | 'pet'
 export type AgeGroup = 'baby' | 'preschool' | 'school' | 'teen' | 'young_adult' | 'adult' | 'senior' | 'elderly'
 export type Gender = 'female' | 'male' | 'neutral'
 export type Occasion = 'birthday' | 'christmas' | 'valentine' | 'mothers_day' | 'wedding' | 'graduation' | 'just_because'

@@ -14,6 +14,7 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
       { value: 'colleague', label: 'Kolega / Kolegyně',   emoji: '💼', description: 'Neutrální, profesionální' },
       { value: 'child',     label: 'Dítě',                emoji: '🧒', description: 'Hravé, vzdělávací' },
       { value: 'self',      label: 'Pro sebe',            emoji: '✨', description: 'Sebeodměna' },
+      { value: 'pet',       label: 'Domácí mazlíček',     emoji: '🐾', description: 'Pes, kočka, králík...' },
     ],
   },
   {
