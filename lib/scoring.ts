@@ -105,22 +105,26 @@ export function scoreProducts(answers: QuizAnswers, products: RawProduct[]): Sco
     }
   })
 
-  const sorted = scored.sort((a, b) => b.score - a.score)
+  // Add small random jitter to break ties between shops (same-score products)
+  const sorted = scored
+    .map(p => ({ ...p, score: p.score + (Math.random() * 0.5) }))
+    .sort((a, b) => b.score - a.score)
+
   const result: ScoredProduct[] = []
   const shopCount: Record<string, number> = {}
   const seenNames = new Set<string>()
 
-  // Determine max per shop based on number of shops with eligible products
+  // Strict shop diversity: max 2 per shop, forces variety
   const shopsWithResults = new Set(sorted.map(p => p.sourceShop))
-  const maxPerShop = shopsWithResults.size >= 2 ? 3 : 5
+  const maxPerShop = shopsWithResults.size >= 3 ? 2 : shopsWithResults.size >= 2 ? 3 : 5
 
   for (const p of sorted) {
     // Skip near-duplicates (same product name prefix)
-    const nameKey = p.name.toLowerCase().slice(0, 25)
+    const nameKey = p.name.toLowerCase().slice(0, 20)
     if (seenNames.has(nameKey)) continue
     seenNames.add(nameKey)
 
-    // Shop diversity: limit per shop
+    // Shop diversity: strict limit per shop
     if ((shopCount[p.sourceShop] || 0) >= maxPerShop) continue
     shopCount[p.sourceShop] = (shopCount[p.sourceShop] || 0) + 1
 
@@ -128,11 +132,11 @@ export function scoreProducts(answers: QuizAnswers, products: RawProduct[]): Sco
     if (result.length >= 5) break
   }
 
-  // If we have less than 5 results, fill from remaining
+  // If we have less than 5 results, fill from remaining (relax shop limit)
   if (result.length < 5) {
     for (const p of sorted) {
       if (result.some(r => r.id === p.id)) continue
-      const nameKey = p.name.toLowerCase().slice(0, 25)
+      const nameKey = p.name.toLowerCase().slice(0, 20)
       if (seenNames.has(nameKey)) continue
       seenNames.add(nameKey)
       result.push(p)
