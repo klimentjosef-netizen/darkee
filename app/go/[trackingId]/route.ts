@@ -46,6 +46,13 @@ function buildAffiliateUrl(baseUrl: string, source: string): string {
     u.searchParams.set('utm_source', 'darkee')
     u.searchParams.set('utm_medium', source === 'widget' ? 'widget' : 'organic')
     u.searchParams.set('utm_campaign', 'gift-quiz')
+
+    // TODO eHub: When approved, wrap URL with eHub tracking:
+    // const ehubPublisherId = process.env.EHUB_PUBLISHER_ID
+    // if (ehubPublisherId) {
+    //   return `https://track.ehub.cz/redirect?publisher_id=${ehubPublisherId}&url=${encodeURIComponent(u.toString())}`
+    // }
+
     return u.toString()
   } catch {
     return baseUrl

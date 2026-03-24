@@ -39,7 +39,7 @@ export function Navbar() {
             boxShadow: scrolled ? '0 2px 20px rgba(0,0,0,0.15)' : 'none',
           }}
         >
-          {/* LEFT: Logo + user links */}
+          {/* LEFT: Logo + links */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '24px' }}>
             <Link
               href="/"
@@ -56,31 +56,24 @@ export function Navbar() {
               🎁 Dárkee
             </Link>
             <nav className="hidden md:flex" style={{ display: undefined, gap: '24px', alignItems: 'center' }}>
-              {[
-                { href: '#how', label: 'Jak to funguje' },
-                { href: '/blog', label: 'Blog' },
-                { href: '/prilezitosti', label: 'Příležitosti' },
-              ].map(({ href, label }) => (
-                <Link
-                  key={href}
-                  href={href}
-                  className="hidden md:inline"
-                  style={{
-                    fontSize: '13px',
-                    color: '#9A8870',
-                    textDecoration: 'none',
-                    transition: 'color 0.2s',
-                  }}
-                  onMouseEnter={(e) => (e.currentTarget.style.color = '#F0E8DC')}
-                  onMouseLeave={(e) => (e.currentTarget.style.color = '#9A8870')}
-                >
-                  {label}
-                </Link>
-              ))}
+              <Link
+                href="/#how"
+                className="hidden md:inline"
+                style={{
+                  fontSize: '13px',
+                  color: '#9A8870',
+                  textDecoration: 'none',
+                  transition: 'color 0.2s',
+                }}
+                onMouseEnter={(e) => (e.currentTarget.style.color = '#F0E8DC')}
+                onMouseLeave={(e) => (e.currentTarget.style.color = '#9A8870')}
+              >
+                Jak to funguje
+              </Link>
             </nav>
           </div>
 
-          {/* RIGHT: CTA + divider + merchant */}
+          {/* RIGHT: CTA */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
             <Link
               href="/pruvodce"
@@ -100,45 +93,6 @@ export function Navbar() {
             >
               Najít dárek →
             </Link>
-
-            {/* Divider + merchant links (desktop only) */}
-            <div className="hidden md:flex" style={{ alignItems: 'center', gap: '12px' }}>
-              <div
-                style={{
-                  width: '1px',
-                  height: '20px',
-                  background: 'rgba(201,168,76,0.2)',
-                }}
-              />
-              <Link
-                href="/pro-eshopy"
-                style={{
-                  fontSize: '13px',
-                  color: '#378ADD',
-                  textDecoration: 'none',
-                  transition: 'color 0.2s',
-                  whiteSpace: 'nowrap',
-                }}
-                onMouseEnter={(e) => (e.currentTarget.style.color = '#5BA3EE')}
-                onMouseLeave={(e) => (e.currentTarget.style.color = '#378ADD')}
-              >
-                Pro e-shopy
-              </Link>
-              <Link
-                href="/ucet/gems"
-                style={{
-                  fontSize: '13px',
-                  color: '#9A8870',
-                  textDecoration: 'none',
-                  transition: 'color 0.2s',
-                  whiteSpace: 'nowrap',
-                }}
-                onMouseEnter={(e) => (e.currentTarget.style.color = '#F0E8DC')}
-                onMouseLeave={(e) => (e.currentTarget.style.color = '#9A8870')}
-              >
-                Přihlásit se
-              </Link>
-            </div>
 
             {/* Mobile hamburger */}
             <button
@@ -176,27 +130,19 @@ export function Navbar() {
             gap: '32px',
           }}
         >
-          {[
-            { href: '#how', label: 'Jak to funguje' },
-            { href: '/blog', label: 'Blog' },
-            { href: '/prilezitosti', label: 'Příležitosti' },
-            { href: '/pro-eshopy', label: 'Pro e-shopy' },
-          ].map(({ href, label }) => (
-            <Link
-              key={href}
-              href={href}
-              onClick={() => setMobileOpen(false)}
-              style={{
-                fontFamily: "'Cormorant Garamond', serif",
-                fontSize: '24px',
-                color: '#F0E8DC',
-                textDecoration: 'none',
-                letterSpacing: '0.03em',
-              }}
-            >
-              {label}
-            </Link>
-          ))}
+          <Link
+            href="/#how"
+            onClick={() => setMobileOpen(false)}
+            style={{
+              fontFamily: "'Cormorant Garamond', serif",
+              fontSize: '24px',
+              color: '#F0E8DC',
+              textDecoration: 'none',
+              letterSpacing: '0.03em',
+            }}
+          >
+            Jak to funguje
+          </Link>
           <div style={{ width: '48px', height: '1px', background: 'rgba(201,168,76,0.2)', margin: '8px 0' }} />
           <Link
             href="/pruvodce"

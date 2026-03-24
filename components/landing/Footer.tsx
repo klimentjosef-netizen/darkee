@@ -49,34 +49,14 @@ export function Footer() {
           </div>
         </div>
 
-        {/* Pro uživatele */}
+        {/* Navigace */}
         <div>
           <div style={{ fontSize: '10px', letterSpacing: '0.12em', color: '#6B6358', textTransform: 'uppercase', marginBottom: '14px' }}>
-            Pro uživatele
+            Navigace
           </div>
           {[
             ['/#how', 'Jak to funguje'],
             ['/pruvodce', 'Spustit kvíz'],
-            ['/blog', 'Blog'],
-            ['/ucet/gems', 'Věrnostní program'],
-            ['/prilezitosti', 'Příležitosti'],
-          ].map(([href, label]) => (
-            <Link key={href} href={href} style={linkStyle(`fl-${href}`)} onMouseEnter={on(`fl-${href}`)} onMouseLeave={off(`fl-${href}`)}>
-              {label}
-            </Link>
-          ))}
-        </div>
-
-        {/* Pro e-shopy */}
-        <div>
-          <div style={{ fontSize: '10px', letterSpacing: '0.12em', color: '#378ADD', textTransform: 'uppercase', marginBottom: '14px' }}>
-            Pro e-shopy
-          </div>
-          {[
-            ['/pro-eshopy', 'Proč Dárkee'],
-            ['/merchant/register', 'Registrace e-shopu'],
-            ['/merchant/widget', 'B2B Widget'],
-            ['/pro-eshopy#cenik', 'Ceník'],
             ['mailto:info@darkee.cz', 'Kontakt'],
           ].map(([href, label]) => (
             <Link key={href} href={href} style={linkStyle(`fl-${href}`)} onMouseEnter={on(`fl-${href}`)} onMouseLeave={off(`fl-${href}`)}>
@@ -93,9 +73,6 @@ export function Footer() {
           <a href="mailto:info@darkee.cz" style={linkStyle('fl-email')} onMouseEnter={on('fl-email')} onMouseLeave={off('fl-email')}>
             info@darkee.cz
           </a>
-          <Link href="/pro-eshopy" style={linkStyle('fl-collab', '#C9A84C', '#B89840')} onMouseEnter={on('fl-collab')} onMouseLeave={off('fl-collab')}>
-            Spolupráce s e-shopy →
-          </Link>
           <div style={{ display: 'flex', gap: '16px', marginTop: '12px' }}>
             {['Instagram', 'Pinterest', 'Facebook'].map((name) => (
               <span key={name} style={{ fontSize: '12px', color: '#6B6358', cursor: 'pointer' }}>
@@ -121,7 +98,13 @@ export function Footer() {
         marginRight: 'auto',
       }}>
         <span>© 2026 Dárkee.cz — Všechna práva vyhrazena</span>
-        <span>Ochrana dat · Cookies · Obchodní podmínky</span>
+        <div style={{ display: 'flex', gap: '12px' }}>
+          <Link href="/gdpr" style={{ color: '#6B6358', textDecoration: 'none', fontSize: '12px' }}>Ochrana dat</Link>
+          <span>·</span>
+          <Link href="/cookies" style={{ color: '#6B6358', textDecoration: 'none', fontSize: '12px' }}>Cookies</Link>
+          <span>·</span>
+          <Link href="/obchodni-podminky" style={{ color: '#6B6358', textDecoration: 'none', fontSize: '12px' }}>Obchodní podmínky</Link>
+        </div>
       </div>
     </footer>
   )
