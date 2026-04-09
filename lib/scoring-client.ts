@@ -69,7 +69,7 @@ export function scoreLocally(answers: Answers): ScoredResult[] {
 
     // Vztah — 10 bodů
     const relMap: Record<string, string[]> = {
-      partner: ['valentine', 'personal', 'premium', 'aesthetic'],
+      partner: ['valentine', 'personal', 'aesthetic', 'fashion'],
       parent: ['sentimental', 'practical', 'comfort', 'home'],
       friend: ['fun', 'games', 'experiences', 'food'],
       sibling: ['games', 'tech', 'fashion', 'experiences'],

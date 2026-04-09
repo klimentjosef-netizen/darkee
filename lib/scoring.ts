@@ -83,7 +83,7 @@ export function scoreProducts(answers: QuizAnswers, products: RawProduct[]): Sco
     if (answers.occasion === 'valentine' && (month === 1 || month === 2)) score += 5
 
     const relMap: Record<string, string[]> = {
-      partner: ['valentine', 'personal', 'premium', 'aesthetic'],
+      partner: ['valentine', 'personal', 'aesthetic', 'fashion'],
       parent: ['sentimental', 'practical', 'comfort', 'home'],
       friend: ['fun', 'games', 'experiences', 'food'],
       sibling: ['games', 'tech', 'fashion', 'experiences'],
