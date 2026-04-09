@@ -145,7 +145,7 @@ export default function MerchantRegisterPage() {
               Dárkee
             </span>
           </Link>
-          <h1 className="font-[family-name:var(--font-display)] text-[28px] font-light text-[var(--text-primary)] tracking-wide">
+          <h1 className="font-[family-name:var(--font-display)] text-[28px] font-normal text-[var(--text-primary)] tracking-wide">
             Registrace e-shopu
           </h1>
         </div>

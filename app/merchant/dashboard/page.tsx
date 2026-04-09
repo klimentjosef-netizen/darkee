@@ -139,7 +139,7 @@ export default function MerchantDashboardPage() {
       <div className="max-w-5xl">
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
-          <h1 className="font-[family-name:var(--font-display)] text-[clamp(24px,4vw,32px)] font-light text-[var(--text-primary)] tracking-wide">
+          <h1 className="font-[family-name:var(--font-display)] text-[clamp(24px,4vw,32px)] font-normal text-[var(--text-primary)] tracking-wide">
             Přehled
           </h1>
           <div className="flex gap-2">
@@ -179,7 +179,7 @@ export default function MerchantDashboardPage() {
                   {label}
                 </span>
               </div>
-              <p className="font-[family-name:var(--font-display)] text-2xl font-light text-[var(--text-primary)]">
+              <p className="font-[family-name:var(--font-display)] text-2xl font-normal text-[var(--text-primary)]">
                 {value}
               </p>
             </motion.div>

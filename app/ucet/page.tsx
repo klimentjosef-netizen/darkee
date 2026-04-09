@@ -39,7 +39,7 @@ export default function DashboardPage() {
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4 }}
-          className="font-[family-name:var(--font-display)] text-[clamp(24px,4vw,36px)] font-light text-[var(--text-primary)] tracking-wide mb-8"
+          className="font-[family-name:var(--font-display)] text-[clamp(24px,4vw,36px)] font-normal text-[var(--text-primary)] tracking-wide mb-8"
         >
           {greeting}, {MOCK_USER.name?.split(' ')[0]} 👋
         </motion.h1>
@@ -60,7 +60,7 @@ export default function DashboardPage() {
                   {label}
                 </span>
               </div>
-              <p className="font-[family-name:var(--font-display)] text-2xl font-light text-[var(--text-primary)]">
+              <p className="font-[family-name:var(--font-display)] text-2xl font-normal text-[var(--text-primary)]">
                 {value}
               </p>
             </motion.div>

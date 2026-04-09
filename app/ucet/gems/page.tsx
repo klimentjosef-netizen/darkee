@@ -31,7 +31,7 @@ export default function GemsPage() {
   return (
     <DashboardLayout>
       <div className="max-w-3xl">
-        <h1 className="font-[family-name:var(--font-display)] text-[clamp(24px,4vw,32px)] font-light text-[var(--text-primary)] tracking-wide mb-8">
+        <h1 className="font-[family-name:var(--font-display)] text-[clamp(24px,4vw,32px)] font-normal text-[var(--text-primary)] tracking-wide mb-8">
           Věrnostní program
         </h1>
 
@@ -47,7 +47,7 @@ export default function GemsPage() {
           </p>
           <div className="flex items-center justify-center gap-3 mb-6">
             <span className="text-3xl">💎</span>
-            <span className="font-[family-name:var(--font-display)] text-[clamp(36px,6vw,56px)] font-light text-[var(--gold-primary)]">
+            <span className="font-[family-name:var(--font-display)] text-[clamp(36px,6vw,56px)] font-normal text-[var(--gold-primary)]">
               {MOCK_USER.gems.toLocaleString('cs-CZ')}
             </span>
             <span className="text-lg text-[var(--text-muted)] font-[family-name:var(--font-body)]">
@@ -102,7 +102,7 @@ export default function GemsPage() {
                       : 'border-[var(--border-subtle)] opacity-50'
                   }`}
                 >
-                  <p className="text-2xl font-[family-name:var(--font-display)] font-light text-[var(--gold-primary)] mb-1">
+                  <p className="text-2xl font-[family-name:var(--font-display)] font-normal text-[var(--gold-primary)] mb-1">
                     {discount}
                   </p>
                   <p className="text-xs text-[var(--text-muted)] font-[family-name:var(--font-body)] mb-4">

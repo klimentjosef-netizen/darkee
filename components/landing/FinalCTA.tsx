@@ -14,7 +14,7 @@ export function FinalCTA() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-80px' }}
           transition={{ duration: 0.7, ease }}
-          className="font-[family-name:var(--font-display)] text-[clamp(32px,6vw,64px)] font-light text-[var(--text-primary)] leading-[1.1] mb-6"
+          className="font-[family-name:var(--font-display)] text-[clamp(32px,6vw,64px)] font-normal text-[var(--text-primary)] leading-[1.1] mb-6"
         >
           Přestaňte hádat.
           <br />

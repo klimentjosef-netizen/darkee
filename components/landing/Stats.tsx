@@ -28,7 +28,7 @@ export function Stats() {
               }}
               className="text-center"
             >
-              <div className="font-[family-name:var(--font-display)] text-[clamp(28px,4vw,40px)] font-light text-[var(--gold-primary)] mb-2">
+              <div className="font-[family-name:var(--font-display)] text-[clamp(28px,4vw,40px)] font-normal text-[var(--gold-primary)] mb-2">
                 {value}
               </div>
               <div className="text-[var(--text-muted)] text-xs font-[family-name:var(--font-body)] tracking-[0.12em] uppercase">

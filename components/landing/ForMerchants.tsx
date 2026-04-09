@@ -30,7 +30,7 @@ export function ForMerchants() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-50px' }}
           transition={{ duration: 0.6, delay: 0.1 }}
-          className="font-[family-name:var(--font-display)] text-[clamp(30px,5vw,48px)] font-light text-[var(--text-primary)] leading-tight mb-6"
+          className="font-[family-name:var(--font-display)] text-[clamp(30px,5vw,48px)] font-normal text-[var(--text-primary)] leading-tight mb-6"
         >
           Získejte zákazníky, kteří{' '}
           <em className="text-[var(--gold-primary)]">hledají dárek</em>

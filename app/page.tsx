@@ -27,7 +27,7 @@ export default function Home() {
   }, [])
 
   return (
-    <div style={{ background: '#080806', color: '#F0EBE0', fontFamily: "var(--font-body, 'DM Sans'), sans-serif", minHeight: '100vh', overflowX: 'hidden' }}>
+    <div style={{ background: '#080806', color: '#F0EBE0', fontFamily: "var(--font-body, 'Plus Jakarta Sans'), sans-serif", minHeight: '100vh', overflowX: 'hidden' }}>
       <style>{`
         @keyframes marquee {
           0% { transform: translateX(0); }
@@ -65,7 +65,7 @@ export default function Home() {
         borderBottom: scrolled ? '1px solid rgba(201,168,76,0.08)' : '1px solid transparent',
         transition: 'all 0.4s ease',
       }}>
-        <Link href="/" style={{ fontFamily: "var(--font-display, 'Cormorant Garamond'), serif", fontSize: '22px', color: '#C9A84C', fontWeight: 400, letterSpacing: '0.06em', textDecoration: 'none' }}>
+        <Link href="/" style={{ fontFamily: "var(--font-display, 'Playfair Display'), serif", fontSize: '22px', color: '#C9A84C', fontWeight: 400, letterSpacing: '0.06em', textDecoration: 'none' }}>
           Dárkee
         </Link>
         <div style={{ display: 'flex', alignItems: 'center', gap: '32px' }}>
@@ -126,18 +126,18 @@ export default function Home() {
             </div>
 
             <h1 className="dk-fade-2" style={{
-              fontFamily: "var(--font-display, 'Cormorant Garamond'), serif",
+              fontFamily: "var(--font-display, 'Playfair Display'), serif",
               fontSize: 'clamp(52px, 9vw, 88px)',
-              fontWeight: 300, lineHeight: 1.02,
+              fontWeight: 400, lineHeight: 1.02,
               color: '#F0EBE0', marginBottom: '8px',
               letterSpacing: '-0.01em',
             }}>
               Daruj s jistotou.
             </h1>
             <h1 className="dk-fade-2" style={{
-              fontFamily: "var(--font-display, 'Cormorant Garamond'), serif",
+              fontFamily: "var(--font-display, 'Playfair Display'), serif",
               fontSize: 'clamp(52px, 9vw, 88px)',
-              fontWeight: 300, lineHeight: 1.02,
+              fontWeight: 400, lineHeight: 1.02,
               color: 'rgba(240,235,224,0.22)', marginBottom: '36px',
               fontStyle: 'italic', letterSpacing: '-0.01em',
             }}>
@@ -224,8 +224,8 @@ export default function Home() {
               Jak to funguje
             </p>
             <h2 style={{
-              fontFamily: "var(--font-display, 'Cormorant Garamond'), serif",
-              fontSize: 'clamp(36px, 5vw, 52px)', fontWeight: 300,
+              fontFamily: "var(--font-display, 'Playfair Display'), serif",
+              fontSize: 'clamp(36px, 5vw, 52px)', fontWeight: 400,
               color: '#F0EBE0', lineHeight: 1.1,
             }}>
               Od otázky k dárku<br />
@@ -266,8 +266,8 @@ export default function Home() {
                 }}
               >
                 <div className="dk-step-num" style={{
-                  fontFamily: "var(--font-display, 'Cormorant Garamond'), serif",
-                  fontSize: '96px', fontWeight: 300,
+                  fontFamily: "var(--font-display, 'Playfair Display'), serif",
+                  fontSize: '96px', fontWeight: 400,
                   color: 'rgba(201,168,76,0.07)',
                   position: 'absolute', top: '8px', right: '20px',
                   lineHeight: 1, pointerEvents: 'none',
@@ -287,7 +287,7 @@ export default function Home() {
                   </svg>
                 </div>
                 <div style={{
-                  fontFamily: "var(--font-display, 'Cormorant Garamond'), serif",
+                  fontFamily: "var(--font-display, 'Playfair Display'), serif",
                   fontSize: '22px', fontWeight: 400, color: '#F0EBE0',
                   marginBottom: '12px',
                 }}>
@@ -341,7 +341,7 @@ export default function Home() {
                 </div>
                 <div style={{ fontSize: '12px', color: '#4A4540', marginBottom: '10px' }}>{item.recipient}</div>
                 <div style={{
-                  fontFamily: "var(--font-display, 'Cormorant Garamond'), serif",
+                  fontFamily: "var(--font-display, 'Playfair Display'), serif",
                   fontSize: '20px', color: '#F0EBE0', lineHeight: 1.2,
                   marginBottom: '10px', fontWeight: 400,
                 }}>
@@ -350,7 +350,7 @@ export default function Home() {
                 <div style={{ fontSize: '12px', color: '#4A4540', marginBottom: '16px' }}>{item.tag}</div>
                 <div style={{
                   fontSize: '16px', fontWeight: 500, color: '#C9A84C',
-                  fontFamily: "var(--font-display, 'Cormorant Garamond'), serif",
+                  fontFamily: "var(--font-display, 'Playfair Display'), serif",
                 }}>
                   {item.price}
                 </div>
@@ -379,8 +379,8 @@ export default function Home() {
                 borderRadius: i === 0 ? '20px 0 0 20px' : i === 2 ? '0 20px 20px 0' : '0',
               }}>
                 <div style={{
-                  fontFamily: "var(--font-display, 'Cormorant Garamond'), serif",
-                  fontSize: '56px', fontWeight: 300, color: '#C9A84C',
+                  fontFamily: "var(--font-display, 'Playfair Display'), serif",
+                  fontSize: '56px', fontWeight: 400, color: '#C9A84C',
                   lineHeight: 1, marginBottom: '10px',
                 }}>
                   {stat.num}
@@ -415,8 +415,8 @@ export default function Home() {
               background: 'linear-gradient(to right, transparent, rgba(201,168,76,0.2), transparent)',
             }} />
             <h2 style={{
-              fontFamily: "var(--font-display, 'Cormorant Garamond'), serif",
-              fontSize: 'clamp(40px, 6vw, 64px)', fontWeight: 300,
+              fontFamily: "var(--font-display, 'Playfair Display'), serif",
+              fontSize: 'clamp(40px, 6vw, 64px)', fontWeight: 400,
               color: '#F0EBE0', lineHeight: 1.08, marginBottom: '16px',
               position: 'relative',
             }}>
@@ -459,7 +459,7 @@ export default function Home() {
           <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr', gap: '40px', marginBottom: '48px' }}>
             <div>
               <div style={{
-                fontFamily: "var(--font-display, 'Cormorant Garamond'), serif",
+                fontFamily: "var(--font-display, 'Playfair Display'), serif",
                 fontSize: '24px', color: '#C9A84C', marginBottom: '10px', fontWeight: 400,
               }}>
                 Dárkee

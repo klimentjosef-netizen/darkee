@@ -131,7 +131,7 @@ export default function VysledkyPage() {
                 />
               ))}
             </div>
-            <p className="text-[var(--gold-primary)] text-lg font-[family-name:var(--font-display)] font-light tracking-wide mb-12">
+            <p className="text-[var(--gold-primary)] text-lg font-[family-name:var(--font-display)] font-normal tracking-wide mb-12">
               Hledáme nejlepší dárky…
             </p>
           </div>
@@ -158,7 +158,7 @@ export default function VysledkyPage() {
           >
             <div className="flex items-center gap-3">
               <Trophy size={22} className="text-[var(--gold-primary)]" />
-              <h1 className="font-[family-name:var(--font-display)] text-2xl font-light text-[var(--text-primary)]">
+              <h1 className="font-[family-name:var(--font-display)] text-2xl font-normal text-[var(--text-primary)]">
                 Top {products.length} dárků
               </h1>
             </div>

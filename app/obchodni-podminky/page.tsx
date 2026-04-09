@@ -12,7 +12,7 @@ export default function ObchodniPodminkyPage() {
         <p className="text-[11px] tracking-[0.3em] uppercase text-[var(--text-muted)] mb-4 font-[family-name:var(--font-body)]">
           Právní informace
         </p>
-        <h1 className="font-[family-name:var(--font-display)] text-[clamp(28px,5vw,42px)] font-light text-[var(--text-primary)] tracking-wide mb-10">
+        <h1 className="font-[family-name:var(--font-display)] text-[clamp(28px,5vw,42px)] font-normal text-[var(--text-primary)] tracking-wide mb-10">
           Obchodní podmínky
         </h1>
 
@@ -21,7 +21,7 @@ export default function ObchodniPodminkyPage() {
           <p>Poslední aktualizace: 24. března 2026</p>
 
           <section>
-            <h2 className="font-[family-name:var(--font-display)] text-xl font-light text-[var(--text-primary)] mb-3">1. Úvodní ustanovení</h2>
+            <h2 className="font-[family-name:var(--font-display)] text-xl font-normal text-[var(--text-primary)] mb-3">1. Úvodní ustanovení</h2>
             <p>
               Tyto obchodní podmínky upravují pravidla používání webové služby Dárkee.cz (dále jen &quot;Služba&quot;),
               provozované na adrese www.darkee.cz. Používáním Služby vyjadřujete souhlas s těmito podmínkami.
@@ -29,7 +29,7 @@ export default function ObchodniPodminkyPage() {
           </section>
 
           <section>
-            <h2 className="font-[family-name:var(--font-display)] text-xl font-light text-[var(--text-primary)] mb-3">2. Popis služby</h2>
+            <h2 className="font-[family-name:var(--font-display)] text-xl font-normal text-[var(--text-primary)] mb-3">2. Popis služby</h2>
             <p>
               Dárkee.cz je bezplatná webová služba, která na základě personalizovaného kvízu doporučuje dárkové produkty
               z nabídky partnerských e-shopů. Služba funguje jako zprostředkovatel — neprodáváme žádné produkty přímo.
@@ -43,7 +43,7 @@ export default function ObchodniPodminkyPage() {
           </section>
 
           <section>
-            <h2 className="font-[family-name:var(--font-display)] text-xl font-light text-[var(--text-primary)] mb-3">3. Affiliate model</h2>
+            <h2 className="font-[family-name:var(--font-display)] text-xl font-normal text-[var(--text-primary)] mb-3">3. Affiliate model</h2>
             <p>
               Služba je financována prostřednictvím affiliate (provizních) programů. Když kliknete na odkaz produktu
               a následně provedete nákup v partnerském e-shopu, obdržíme provizi od affiliate sítě.
@@ -55,7 +55,7 @@ export default function ObchodniPodminkyPage() {
           </section>
 
           <section>
-            <h2 className="font-[family-name:var(--font-display)] text-xl font-light text-[var(--text-primary)] mb-3">4. Odpovědnost</h2>
+            <h2 className="font-[family-name:var(--font-display)] text-xl font-normal text-[var(--text-primary)] mb-3">4. Odpovědnost</h2>
             <ul className="list-disc pl-5 space-y-2">
               <li>Doporučení produktů jsou generována algoritmicky a slouží jako inspirace. Negarantujeme vhodnost konkrétního dárku.</li>
               <li>Za dostupnost, cenu, kvalitu a dodání produktů odpovídá výhradně příslušný e-shop.</li>
@@ -66,7 +66,7 @@ export default function ObchodniPodminkyPage() {
           </section>
 
           <section>
-            <h2 className="font-[family-name:var(--font-display)] text-xl font-light text-[var(--text-primary)] mb-3">5. Uživatelská pravidla</h2>
+            <h2 className="font-[family-name:var(--font-display)] text-xl font-normal text-[var(--text-primary)] mb-3">5. Uživatelská pravidla</h2>
             <p>Uživatel se zavazuje:</p>
             <ul className="list-disc pl-5 space-y-2 mt-3">
               <li>Používat Službu v souladu s platnými právními předpisy České republiky.</li>
@@ -76,7 +76,7 @@ export default function ObchodniPodminkyPage() {
           </section>
 
           <section>
-            <h2 className="font-[family-name:var(--font-display)] text-xl font-light text-[var(--text-primary)] mb-3">6. Duševní vlastnictví</h2>
+            <h2 className="font-[family-name:var(--font-display)] text-xl font-normal text-[var(--text-primary)] mb-3">6. Duševní vlastnictví</h2>
             <p>
               Veškerý obsah Služby (texty, grafika, algoritmy, zdrojový kód) je chráněn autorským právem.
               Bez předchozího písemného souhlasu je zakázáno obsah kopírovat, šířit nebo upravovat.
@@ -85,7 +85,7 @@ export default function ObchodniPodminkyPage() {
           </section>
 
           <section>
-            <h2 className="font-[family-name:var(--font-display)] text-xl font-light text-[var(--text-primary)] mb-3">7. Ochrana osobních údajů</h2>
+            <h2 className="font-[family-name:var(--font-display)] text-xl font-normal text-[var(--text-primary)] mb-3">7. Ochrana osobních údajů</h2>
             <p>
               Zpracování osobních údajů se řídí našimi{' '}
               <Link href="/gdpr" className="text-[var(--gold-primary)] no-underline hover:underline">Zásadami ochrany osobních údajů</Link>.
@@ -95,7 +95,7 @@ export default function ObchodniPodminkyPage() {
           </section>
 
           <section>
-            <h2 className="font-[family-name:var(--font-display)] text-xl font-light text-[var(--text-primary)] mb-3">8. Změny podmínek</h2>
+            <h2 className="font-[family-name:var(--font-display)] text-xl font-normal text-[var(--text-primary)] mb-3">8. Změny podmínek</h2>
             <p>
               Vyhrazujeme si právo tyto obchodní podmínky kdykoli změnit. Aktuální verze je vždy dostupná na této stránce.
               Pokračováním v používání Služby po změně podmínek vyjadřujete souhlas s jejich novou verzí.
@@ -103,7 +103,7 @@ export default function ObchodniPodminkyPage() {
           </section>
 
           <section>
-            <h2 className="font-[family-name:var(--font-display)] text-xl font-light text-[var(--text-primary)] mb-3">9. Rozhodné právo</h2>
+            <h2 className="font-[family-name:var(--font-display)] text-xl font-normal text-[var(--text-primary)] mb-3">9. Rozhodné právo</h2>
             <p>
               Tyto obchodní podmínky se řídí právním řádem České republiky. Případné spory budou řešeny
               příslušnými soudy České republiky.
@@ -111,7 +111,7 @@ export default function ObchodniPodminkyPage() {
           </section>
 
           <section>
-            <h2 className="font-[family-name:var(--font-display)] text-xl font-light text-[var(--text-primary)] mb-3">10. Kontakt</h2>
+            <h2 className="font-[family-name:var(--font-display)] text-xl font-normal text-[var(--text-primary)] mb-3">10. Kontakt</h2>
             <p>
               S dotazy k těmto podmínkám nás kontaktujte na{' '}
               <a href="mailto:info@darkee.cz" className="text-[var(--gold-primary)] no-underline hover:underline">info@darkee.cz</a>.

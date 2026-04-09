@@ -11,14 +11,14 @@ export default function KontaktPage() {
         <p className="text-[11px] tracking-[0.3em] uppercase text-[var(--text-muted)] mb-4 font-[family-name:var(--font-body)]">
           Spojte se s námi
         </p>
-        <h1 className="font-[family-name:var(--font-display)] text-[clamp(28px,5vw,42px)] font-light text-[var(--text-primary)] tracking-wide mb-10">
+        <h1 className="font-[family-name:var(--font-display)] text-[clamp(28px,5vw,42px)] font-normal text-[var(--text-primary)] tracking-wide mb-10">
           Kontakt
         </h1>
 
         <div className="space-y-8 text-sm text-[var(--text-secondary)] font-[family-name:var(--font-body)] leading-relaxed">
 
           <section className="p-6 border border-[var(--border-subtle)] rounded-sm">
-            <h2 className="font-[family-name:var(--font-display)] text-xl font-light text-[var(--text-primary)] mb-4">Dárkee.cz</h2>
+            <h2 className="font-[family-name:var(--font-display)] text-xl font-normal text-[var(--text-primary)] mb-4">Dárkee.cz</h2>
             <div className="space-y-3">
               <div>
                 <span className="text-[var(--text-muted)] text-xs uppercase tracking-wider">E-mail</span>
@@ -34,7 +34,7 @@ export default function KontaktPage() {
           </section>
 
           <section>
-            <h2 className="font-[family-name:var(--font-display)] text-xl font-light text-[var(--text-primary)] mb-3">Na co se nám můžete ozvat</h2>
+            <h2 className="font-[family-name:var(--font-display)] text-xl font-normal text-[var(--text-primary)] mb-3">Na co se nám můžete ozvat</h2>
             <ul className="list-disc pl-5 space-y-2">
               <li><strong>Dotazy k doporučením</strong> — potřebujete poradit s výběrem dárku?</li>
               <li><strong>Ochrana osobních údajů</strong> — uplatnění práv dle GDPR, žádost o výmaz dat.</li>
@@ -44,7 +44,7 @@ export default function KontaktPage() {
           </section>
 
           <section>
-            <h2 className="font-[family-name:var(--font-display)] text-xl font-light text-[var(--text-primary)] mb-3">Doba odpovědi</h2>
+            <h2 className="font-[family-name:var(--font-display)] text-xl font-normal text-[var(--text-primary)] mb-3">Doba odpovědi</h2>
             <p>Na e-maily odpovídáme obvykle do 2 pracovních dnů.</p>
           </section>
 

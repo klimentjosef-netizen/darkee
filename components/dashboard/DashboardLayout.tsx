@@ -87,7 +87,7 @@ function SidebarContent({ onClose }: { onClose?: () => void }) {
       <div className="mx-5 px-4 py-3 bg-[var(--bg-tertiary)] border border-[var(--border-subtle)] rounded-sm mb-4">
         <div className="flex items-center gap-2">
           <span className="text-base">💎</span>
-          <span className="text-lg text-[var(--gold-primary)] font-[family-name:var(--font-display)] font-light">
+          <span className="text-lg text-[var(--gold-primary)] font-[family-name:var(--font-display)] font-normal">
             {MOCK_USER.gems.toLocaleString('cs-CZ')}
           </span>
           <span className="text-xs text-[var(--text-muted)] font-[family-name:var(--font-body)]">

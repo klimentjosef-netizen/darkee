@@ -7,15 +7,15 @@ import { BLOG_ARTICLES } from '@/lib/blog-data'
 
 export default function BlogPage() {
   return (
-    <div style={{ background: '#FAFAF8', color: '#1A1714', fontFamily: "'DM Sans', sans-serif", minHeight: '100vh' }}>
+    <div style={{ background: '#FAFAF8', color: '#1A1714', fontFamily: "'Plus Jakarta Sans', sans-serif", minHeight: '100vh' }}>
       <Navbar />
 
       {/* Hero */}
       <section style={{ padding: '120px 24px 64px', textAlign: 'center' }}>
         <h1 style={{
-          fontFamily: "'Cormorant Garamond', serif",
+          fontFamily: "'Playfair Display', serif",
           fontSize: 'clamp(42px, 8vw, 64px)',
-          fontWeight: 300,
+          fontWeight: 400,
           color: '#1A1714',
           marginBottom: '16px',
         }}>
@@ -80,7 +80,7 @@ export default function BlogPage() {
 
                 {/* Title */}
                 <h2 style={{
-                  fontFamily: "'Cormorant Garamond', serif",
+                  fontFamily: "'Playfair Display', serif",
                   fontSize: '22px',
                   fontWeight: 400,
                   color: '#1A1714',
@@ -133,7 +133,7 @@ export default function BlogPage() {
             fontWeight: 500,
             borderRadius: '100px',
             textDecoration: 'none',
-            fontFamily: "'DM Sans', sans-serif",
+            fontFamily: "'Plus Jakarta Sans', sans-serif",
             transition: 'all 0.2s',
           }}
         >

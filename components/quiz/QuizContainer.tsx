@@ -40,7 +40,7 @@ function ExitConfirm({ onStay, onLeave }: { onStay: () => void; onLeave: () => v
       >
         <div style={{ fontSize: 32, marginBottom: 16 }}>🎁</div>
         <h3 style={{
-          fontFamily: "'Cormorant Garamond', serif",
+          fontFamily: "'Playfair Display', serif",
           fontSize: 22,
           fontWeight: 400,
           color: '#F0EBE0',
@@ -51,7 +51,7 @@ function ExitConfirm({ onStay, onLeave }: { onStay: () => void; onLeave: () => v
         <p style={{
           fontSize: 14,
           color: '#5A5248',
-          fontFamily: "'DM Sans', sans-serif",
+          fontFamily: "'Plus Jakarta Sans', sans-serif",
           marginBottom: 24,
           lineHeight: 1.6,
         }}>
@@ -63,7 +63,7 @@ function ExitConfirm({ onStay, onLeave }: { onStay: () => void; onLeave: () => v
             style={{
               padding: '10px 24px',
               fontSize: 14,
-              fontFamily: "'DM Sans', sans-serif",
+              fontFamily: "'Plus Jakarta Sans', sans-serif",
               background: 'transparent',
               border: '1px solid rgba(255,255,255,0.10)',
               borderRadius: 100,
@@ -79,7 +79,7 @@ function ExitConfirm({ onStay, onLeave }: { onStay: () => void; onLeave: () => v
             style={{
               padding: '10px 24px',
               fontSize: 14,
-              fontFamily: "'DM Sans', sans-serif",
+              fontFamily: "'Plus Jakarta Sans', sans-serif",
               fontWeight: 500,
               background: '#C9A84C',
               border: 'none',
@@ -322,7 +322,7 @@ export function QuizContainer({ isModal = false, onClose }: QuizContainerProps) 
             color: '#5A5248',
             fontSize: 14,
             cursor: 'pointer',
-            fontFamily: "'DM Sans', sans-serif",
+            fontFamily: "'Plus Jakarta Sans', sans-serif",
             transition: 'color 0.2s',
           }}
         >
@@ -332,7 +332,7 @@ export function QuizContainer({ isModal = false, onClose }: QuizContainerProps) 
         <span style={{
           color: '#5A5248',
           fontSize: 12,
-          fontFamily: "'DM Sans', sans-serif",
+          fontFamily: "'Plus Jakarta Sans', sans-serif",
           letterSpacing: '0.1em',
         }}>
           {QUIZ_QUESTIONS.slice(0, step + 1).filter((_, i) => !shouldSkip(i)).length} / {QUIZ_QUESTIONS.filter((_, i) => !shouldSkip(i)).length}
@@ -353,8 +353,8 @@ export function QuizContainer({ isModal = false, onClose }: QuizContainerProps) 
             color: '#C9A84C',
             marginTop: 16,
             fontSize: 18,
-            fontFamily: "'Cormorant Garamond', serif",
-            fontWeight: 300,
+            fontFamily: "'Playfair Display', serif",
+            fontWeight: 400,
           }}>
             Hledáme pro vás ideální dárky…
           </p>
@@ -362,7 +362,7 @@ export function QuizContainer({ isModal = false, onClose }: QuizContainerProps) 
             color: '#5A5248',
             marginTop: 8,
             fontSize: 12,
-            fontFamily: "'DM Sans', sans-serif",
+            fontFamily: "'Plus Jakarta Sans', sans-serif",
           }}>
             Prohledáváme tisíce produktů z českých e-shopů
           </p>
@@ -394,7 +394,7 @@ export function QuizContainer({ isModal = false, onClose }: QuizContainerProps) 
               >
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 12, marginBottom: 20 }}>
                   <div style={{ textAlign: 'center' }}>
-                    <label style={{ display: 'block', fontSize: 11, color: '#5A5248', fontFamily: "'DM Sans', sans-serif", marginBottom: 6, textTransform: 'uppercase', letterSpacing: '0.1em' }}>Od</label>
+                    <label style={{ display: 'block', fontSize: 11, color: '#5A5248', fontFamily: "'Plus Jakarta Sans', sans-serif", marginBottom: 6, textTransform: 'uppercase', letterSpacing: '0.1em' }}>Od</label>
                     <input
                       type="number"
                       placeholder="0"
@@ -404,7 +404,7 @@ export function QuizContainer({ isModal = false, onClose }: QuizContainerProps) 
                         width: 120,
                         padding: '12px 16px',
                         fontSize: 18,
-                        fontFamily: "'Cormorant Garamond', serif",
+                        fontFamily: "'Playfair Display', serif",
                         fontWeight: 400,
                         textAlign: 'center',
                         border: '1px solid rgba(201,168,76,0.3)',
@@ -414,11 +414,11 @@ export function QuizContainer({ isModal = false, onClose }: QuizContainerProps) 
                         outline: 'none',
                       }}
                     />
-                    <span style={{ fontSize: 12, color: '#5A5248', fontFamily: "'DM Sans', sans-serif", marginLeft: 4 }}>Kč</span>
+                    <span style={{ fontSize: 12, color: '#5A5248', fontFamily: "'Plus Jakarta Sans', sans-serif", marginLeft: 4 }}>Kč</span>
                   </div>
-                  <span style={{ fontSize: 16, color: '#C9A84C', fontFamily: "'Cormorant Garamond', serif", marginTop: 20 }}>—</span>
+                  <span style={{ fontSize: 16, color: '#C9A84C', fontFamily: "'Playfair Display', serif", marginTop: 20 }}>—</span>
                   <div style={{ textAlign: 'center' }}>
-                    <label style={{ display: 'block', fontSize: 11, color: '#5A5248', fontFamily: "'DM Sans', sans-serif", marginBottom: 6, textTransform: 'uppercase', letterSpacing: '0.1em' }}>Do</label>
+                    <label style={{ display: 'block', fontSize: 11, color: '#5A5248', fontFamily: "'Plus Jakarta Sans', sans-serif", marginBottom: 6, textTransform: 'uppercase', letterSpacing: '0.1em' }}>Do</label>
                     <input
                       type="number"
                       placeholder="2000"
@@ -428,7 +428,7 @@ export function QuizContainer({ isModal = false, onClose }: QuizContainerProps) 
                         width: 120,
                         padding: '12px 16px',
                         fontSize: 18,
-                        fontFamily: "'Cormorant Garamond', serif",
+                        fontFamily: "'Playfair Display', serif",
                         fontWeight: 400,
                         textAlign: 'center',
                         border: '1px solid rgba(201,168,76,0.3)',
@@ -438,7 +438,7 @@ export function QuizContainer({ isModal = false, onClose }: QuizContainerProps) 
                         outline: 'none',
                       }}
                     />
-                    <span style={{ fontSize: 12, color: '#5A5248', fontFamily: "'DM Sans', sans-serif", marginLeft: 4 }}>Kč</span>
+                    <span style={{ fontSize: 12, color: '#5A5248', fontFamily: "'Plus Jakarta Sans', sans-serif", marginLeft: 4 }}>Kč</span>
                   </div>
                 </div>
                 <button
@@ -452,7 +452,7 @@ export function QuizContainer({ isModal = false, onClose }: QuizContainerProps) 
                     color: '#080806',
                     fontSize: 15,
                     fontWeight: 500,
-                    fontFamily: "'DM Sans', sans-serif",
+                    fontFamily: "'Plus Jakarta Sans', sans-serif",
                     border: 'none',
                     borderRadius: 100,
                     cursor: 'pointer',
@@ -486,7 +486,7 @@ export function QuizContainer({ isModal = false, onClose }: QuizContainerProps) 
                     color: '#080806',
                     fontSize: 15,
                     fontWeight: 500,
-                    fontFamily: "'DM Sans', sans-serif",
+                    fontFamily: "'Plus Jakarta Sans', sans-serif",
                     border: 'none',
                     borderRadius: 100,
                     cursor: 'pointer',

@@ -104,7 +104,7 @@ function FAQItem({ q, a }: { q: string; a: string }) {
           cursor: 'pointer',
         }}
       >
-        <span style={{ fontSize: '15px', color: '#F0E8DC', fontFamily: "'DM Sans', sans-serif", fontWeight: 500, paddingRight: '16px' }}>
+        <span style={{ fontSize: '15px', color: '#F0E8DC', fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 500, paddingRight: '16px' }}>
           {q}
         </span>
         <ChevronDown
@@ -123,7 +123,7 @@ function FAQItem({ q, a }: { q: string; a: string }) {
         transition={{ duration: 0.2 }}
         style={{ overflow: 'hidden' }}
       >
-        <p style={{ fontSize: '14px', color: '#9A8870', fontFamily: "'DM Sans', sans-serif", lineHeight: 1.7, paddingBottom: '20px' }}>
+        <p style={{ fontSize: '14px', color: '#9A8870', fontFamily: "'Plus Jakarta Sans', sans-serif", lineHeight: 1.7, paddingBottom: '20px' }}>
           {a}
         </p>
       </motion.div>
@@ -133,7 +133,7 @@ function FAQItem({ q, a }: { q: string; a: string }) {
 
 export default function ProEshopyPage() {
   return (
-    <div style={{ background: '#0D0B08', color: '#F0E8DC', fontFamily: "'DM Sans', sans-serif", minHeight: '100vh' }}>
+    <div style={{ background: '#0D0B08', color: '#F0E8DC', fontFamily: "'Plus Jakarta Sans', sans-serif", minHeight: '100vh' }}>
       <Navbar />
 
       {/* HERO */}
@@ -151,9 +151,9 @@ export default function ProEshopyPage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, ease, delay: 0.1 }}
           style={{
-            fontFamily: "'Cormorant Garamond', serif",
+            fontFamily: "'Playfair Display', serif",
             fontSize: 'clamp(36px, 6vw, 56px)',
-            fontWeight: 300,
+            fontWeight: 400,
             color: '#F0E8DC',
             lineHeight: 1.1,
             marginBottom: '20px',
@@ -188,7 +188,7 @@ export default function ProEshopyPage() {
               fontWeight: 500,
               borderRadius: '100px',
               textDecoration: 'none',
-              fontFamily: "'DM Sans', sans-serif",
+              fontFamily: "'Plus Jakarta Sans', sans-serif",
               transition: 'all 0.2s',
             }}
           >
@@ -204,7 +204,7 @@ export default function ProEshopyPage() {
               border: '1px solid rgba(201,168,76,0.2)',
               borderRadius: '100px',
               textDecoration: 'none',
-              fontFamily: "'DM Sans', sans-serif",
+              fontFamily: "'Plus Jakarta Sans', sans-serif",
               transition: 'all 0.2s',
             }}
           >
@@ -222,7 +222,7 @@ export default function ProEshopyPage() {
           <p style={{ fontSize: '11px', letterSpacing: '0.14em', color: '#C9A84C', textTransform: 'uppercase', marginBottom: '14px' }}>
             PROČ DÁRKEE
           </p>
-          <h2 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 'clamp(32px, 5vw, 44px)', fontWeight: 300, color: '#F0E8DC', lineHeight: 1.15, marginBottom: '48px' }}>
+          <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(32px, 5vw, 44px)', fontWeight: 400, color: '#F0E8DC', lineHeight: 1.15, marginBottom: '48px' }}>
             Váš nový prodejní kanál
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '16px' }}>
@@ -241,7 +241,7 @@ export default function ProEshopyPage() {
                 }}
               >
                 <div style={{ fontSize: '32px', marginBottom: '16px' }}>{b.icon}</div>
-                <h3 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: '22px', fontWeight: 400, color: '#F0E8DC', marginBottom: '12px' }}>
+                <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: '22px', fontWeight: 400, color: '#F0E8DC', marginBottom: '12px' }}>
                   {b.title}
                 </h3>
                 <p style={{ fontSize: '14px', color: '#9A8870', lineHeight: 1.7 }}>
@@ -259,7 +259,7 @@ export default function ProEshopyPage() {
           <p style={{ fontSize: '11px', letterSpacing: '0.14em', color: '#C9A84C', textTransform: 'uppercase', marginBottom: '14px' }}>
             CENÍK
           </p>
-          <h2 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 'clamp(32px, 5vw, 44px)', fontWeight: 300, color: '#F0E8DC' }}>
+          <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(32px, 5vw, 44px)', fontWeight: 400, color: '#F0E8DC' }}>
             Jednoduchý a transparentní
           </h2>
         </div>
@@ -298,11 +298,11 @@ export default function ProEshopyPage() {
                   Nejoblíbenější
                 </div>
               )}
-              <h3 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: '22px', fontWeight: 400, color: '#F0E8DC', marginBottom: '8px' }}>
+              <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: '22px', fontWeight: 400, color: '#F0E8DC', marginBottom: '8px' }}>
                 {plan.name}
               </h3>
               <div style={{ marginBottom: '24px' }}>
-                <span style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: '36px', fontWeight: 300, color: '#C9A84C' }}>
+                <span style={{ fontFamily: "'Playfair Display', serif", fontSize: '36px', fontWeight: 400, color: '#C9A84C' }}>
                   {plan.price}
                 </span>
                 {plan.period && (
@@ -344,7 +344,7 @@ export default function ProEshopyPage() {
       <section style={{ padding: '0 24px 80px' }}>
         <div style={{ maxWidth: '680px', marginLeft: 'auto', marginRight: 'auto' }}>
           <div style={{ textAlign: 'center', marginBottom: '48px' }}>
-            <h2 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 'clamp(32px, 5vw, 44px)', fontWeight: 300, color: '#F0E8DC' }}>
+            <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(32px, 5vw, 44px)', fontWeight: 400, color: '#F0E8DC' }}>
               Časté dotazy
             </h2>
           </div>
@@ -366,7 +366,7 @@ export default function ProEshopyPage() {
           borderRadius: '24px',
           border: '1px solid rgba(201,168,76,0.12)',
         }}>
-          <h2 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 'clamp(28px, 4vw, 40px)', fontWeight: 300, color: '#F0E8DC', marginBottom: '12px' }}>
+          <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(28px, 4vw, 40px)', fontWeight: 400, color: '#F0E8DC', marginBottom: '12px' }}>
             Začněte zdarma — registrace za 2 minuty
           </h2>
           <div style={{ marginTop: '32px' }}>
@@ -380,7 +380,7 @@ export default function ProEshopyPage() {
                 fontWeight: 500,
                 borderRadius: '100px',
                 textDecoration: 'none',
-                fontFamily: "'DM Sans', sans-serif",
+                fontFamily: "'Plus Jakarta Sans', sans-serif",
               }}
             >
               Registrovat e-shop →

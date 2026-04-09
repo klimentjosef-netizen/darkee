@@ -44,7 +44,7 @@ export function Navbar() {
             <Link
               href="/"
               style={{
-                fontFamily: "'Cormorant Garamond', serif",
+                fontFamily: "'Playfair Display', serif",
                 fontSize: '22px',
                 color: '#C9A84C',
                 fontWeight: 500,
@@ -86,7 +86,7 @@ export function Navbar() {
                 border: 'none',
                 borderRadius: '100px',
                 textDecoration: 'none',
-                fontFamily: "'DM Sans', sans-serif",
+                fontFamily: "'Plus Jakarta Sans', sans-serif",
                 transition: 'all 0.2s',
                 whiteSpace: 'nowrap',
               }}
@@ -134,7 +134,7 @@ export function Navbar() {
             href="/#how"
             onClick={() => setMobileOpen(false)}
             style={{
-              fontFamily: "'Cormorant Garamond', serif",
+              fontFamily: "'Playfair Display', serif",
               fontSize: '24px',
               color: '#F0E8DC',
               textDecoration: 'none',
@@ -155,7 +155,7 @@ export function Navbar() {
               fontWeight: 500,
               borderRadius: '100px',
               textDecoration: 'none',
-              fontFamily: "'DM Sans', sans-serif",
+              fontFamily: "'Plus Jakarta Sans', sans-serif",
             }}
           >
             Najít dárek →

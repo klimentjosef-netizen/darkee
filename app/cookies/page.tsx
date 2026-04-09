@@ -12,7 +12,7 @@ export default function CookiesPage() {
         <p className="text-[11px] tracking-[0.3em] uppercase text-[var(--text-muted)] mb-4 font-[family-name:var(--font-body)]">
           Právní informace
         </p>
-        <h1 className="font-[family-name:var(--font-display)] text-[clamp(28px,5vw,42px)] font-light text-[var(--text-primary)] tracking-wide mb-10">
+        <h1 className="font-[family-name:var(--font-display)] text-[clamp(28px,5vw,42px)] font-normal text-[var(--text-primary)] tracking-wide mb-10">
           Zásady používání cookies
         </h1>
 
@@ -21,7 +21,7 @@ export default function CookiesPage() {
           <p>Poslední aktualizace: 24. března 2026</p>
 
           <section>
-            <h2 className="font-[family-name:var(--font-display)] text-xl font-light text-[var(--text-primary)] mb-3">Co jsou cookies?</h2>
+            <h2 className="font-[family-name:var(--font-display)] text-xl font-normal text-[var(--text-primary)] mb-3">Co jsou cookies?</h2>
             <p>
               Cookies jsou malé textové soubory, které se ukládají do vašeho prohlížeče při návštěvě webových stránek.
               Pomáhají nám zapamatovat si vaše preference a zlepšit fungování webu.
@@ -29,7 +29,7 @@ export default function CookiesPage() {
           </section>
 
           <section>
-            <h2 className="font-[family-name:var(--font-display)] text-xl font-light text-[var(--text-primary)] mb-3">Jaké cookies používáme</h2>
+            <h2 className="font-[family-name:var(--font-display)] text-xl font-normal text-[var(--text-primary)] mb-3">Jaké cookies používáme</h2>
 
             <div className="mt-4 space-y-4">
               <div className="p-4 border border-[var(--border-subtle)] rounded-sm">
@@ -83,7 +83,7 @@ export default function CookiesPage() {
           </section>
 
           <section>
-            <h2 className="font-[family-name:var(--font-display)] text-xl font-light text-[var(--text-primary)] mb-3">Affiliate sledování</h2>
+            <h2 className="font-[family-name:var(--font-display)] text-xl font-normal text-[var(--text-primary)] mb-3">Affiliate sledování</h2>
             <p>
               Při kliknutí na odkaz produktu vás přesměrujeme na partnerský e-shop přes naši trasovací URL (/go/...).
               Při tomto přesměrování zaznamenáváme na naší straně anonymizovaný záznam o kliknutí (bez cookies).
@@ -95,7 +95,7 @@ export default function CookiesPage() {
           </section>
 
           <section>
-            <h2 className="font-[family-name:var(--font-display)] text-xl font-light text-[var(--text-primary)] mb-3">Jak spravovat cookies</h2>
+            <h2 className="font-[family-name:var(--font-display)] text-xl font-normal text-[var(--text-primary)] mb-3">Jak spravovat cookies</h2>
             <p>
               Při první návštěvě webu se zobrazí lišta, kde můžete cookies přijmout nebo odmítnout.
               Cookies můžete kdykoli smazat v nastavení svého prohlížeče.
@@ -104,7 +104,7 @@ export default function CookiesPage() {
           </section>
 
           <section>
-            <h2 className="font-[family-name:var(--font-display)] text-xl font-light text-[var(--text-primary)] mb-3">Kontakt</h2>
+            <h2 className="font-[family-name:var(--font-display)] text-xl font-normal text-[var(--text-primary)] mb-3">Kontakt</h2>
             <p>
               S dotazy ohledně cookies nás kontaktujte na{' '}
               <a href="mailto:info@darkee.cz" className="text-[var(--gold-primary)] no-underline hover:underline">info@darkee.cz</a>.

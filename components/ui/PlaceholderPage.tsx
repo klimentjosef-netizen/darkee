@@ -32,9 +32,9 @@ export function PlaceholderPage({ title, description }: Props) {
         <div style={{ fontSize: 48, marginBottom: 24 }}>🚧</div>
         <h1
           style={{
-            fontFamily: "'Cormorant Garamond', serif",
+            fontFamily: "'Playfair Display', serif",
             fontSize: 36,
-            fontWeight: 300,
+            fontWeight: 400,
             color: '#1A1714',
             marginBottom: 12,
           }}
@@ -45,7 +45,7 @@ export function PlaceholderPage({ title, description }: Props) {
           style={{
             fontSize: 16,
             color: '#6B6358',
-            fontFamily: "'DM Sans', sans-serif",
+            fontFamily: "'Plus Jakarta Sans', sans-serif",
             marginBottom: 32,
             lineHeight: 1.6,
           }}
@@ -60,7 +60,7 @@ export function PlaceholderPage({ title, description }: Props) {
             background: '#C9A84C',
             color: '#FFFFFF',
             fontSize: 14,
-            fontFamily: "'DM Sans', sans-serif",
+            fontFamily: "'Plus Jakarta Sans', sans-serif",
             fontWeight: 500,
             borderRadius: 100,
             textDecoration: 'none',

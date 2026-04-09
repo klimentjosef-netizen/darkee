@@ -33,7 +33,7 @@ export function Hero() {
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease, delay: 0.35 }}
-          className="font-[family-name:var(--font-display)] text-[clamp(40px,8vw,86px)] font-light text-[var(--text-primary)] leading-[1.05] mb-8"
+          className="font-[family-name:var(--font-display)] text-[clamp(40px,8vw,86px)] font-normal text-[var(--text-primary)] leading-[1.05] mb-8"
         >
           Nevíte, co{' '}
           <br className="hidden sm:block" />

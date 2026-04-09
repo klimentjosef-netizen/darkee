@@ -22,7 +22,7 @@ export function QuizResults({ products, onRestart }: QuizResultsProps) {
         <p className="text-xs tracking-[0.3em] uppercase text-[var(--gold-primary)] mb-4 font-[family-name:var(--font-body)]">
           Vaše doporučení
         </p>
-        <h1 className="font-[family-name:var(--font-display)] text-[clamp(28px,5vw,44px)] font-light text-[var(--text-primary)] mb-3 tracking-wide">
+        <h1 className="font-[family-name:var(--font-display)] text-[clamp(28px,5vw,44px)] font-normal text-[var(--text-primary)] mb-3 tracking-wide">
           Vybrali jsme pro vás
         </h1>
         <p className="text-sm text-[var(--text-muted)] font-[family-name:var(--font-body)]">

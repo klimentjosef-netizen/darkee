@@ -129,7 +129,7 @@ export function ProductCard({ product, quizResultId, rank }: ProductCardProps) {
                 isTop ? 'bg-[rgba(201,168,76,0.9)]' : 'bg-white/80'
               }`}
             >
-              <span className={`font-[family-name:var(--font-display)] font-light ${
+              <span className={`font-[family-name:var(--font-display)] font-normal ${
                 isTop ? 'text-3xl text-white' : 'text-2xl'
               }`} style={isTop ? {} : { color: matchColor }}>
                 <AnimatedPercent value={product.matchPct} delay={rank * 150 + 400} />
@@ -186,7 +186,7 @@ export function ProductCard({ product, quizResultId, rank }: ProductCardProps) {
 
           {/* Price + CTA */}
           <div className="flex items-center justify-between">
-            <span className={`text-[var(--gold-primary)] font-[family-name:var(--font-display)] font-light ${
+            <span className={`text-[var(--gold-primary)] font-[family-name:var(--font-display)] font-normal ${
               isTop ? 'text-3xl' : 'text-2xl'
             }`}>
               {product.price.toLocaleString('cs-CZ')}&nbsp;Kč

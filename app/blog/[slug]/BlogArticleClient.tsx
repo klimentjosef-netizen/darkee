@@ -158,7 +158,7 @@ function RelatedGrid({ currentSlug }: { currentSlug: string }) {
   return (
     <div className="px-6 py-16">
       <div className="max-w-5xl mx-auto">
-        <h3 className="font-[family-name:var(--font-display)] text-2xl font-light text-[var(--text-primary)] tracking-wide text-center mb-10">
+        <h3 className="font-[family-name:var(--font-display)] text-2xl font-normal text-[var(--text-primary)] tracking-wide text-center mb-10">
           Mohlo by vás zajímat
         </h3>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
@@ -304,7 +304,7 @@ export default function BlogArticleClient() {
                 </span>
               </div>
 
-              <h1 className="font-[family-name:var(--font-display)] text-[clamp(28px,5vw,52px)] font-light text-[var(--text-primary)] tracking-wide leading-[1.15] mb-6">
+              <h1 className="font-[family-name:var(--font-display)] text-[clamp(28px,5vw,52px)] font-normal text-[var(--text-primary)] tracking-wide leading-[1.15] mb-6">
                 {article.title}
               </h1>
 
@@ -357,7 +357,7 @@ export default function BlogArticleClient() {
                   return (
                     <h2
                       id={id}
-                      className="font-[family-name:var(--font-display)] text-[clamp(22px,3vw,28px)] font-light text-[var(--gold-primary)] tracking-wide mt-12 mb-4 scroll-mt-24"
+                      className="font-[family-name:var(--font-display)] text-[clamp(22px,3vw,28px)] font-normal text-[var(--gold-primary)] tracking-wide mt-12 mb-4 scroll-mt-24"
                     >
                       {children}
                     </h2>
@@ -482,7 +482,7 @@ export default function BlogArticleClient() {
       {/* Bottom CTA banner */}
       <div className="px-6 pb-20">
         <div className="max-w-3xl mx-auto text-center p-10 bg-[var(--bg-secondary)] border border-[var(--border-subtle)] rounded-sm">
-          <h3 className="font-[family-name:var(--font-display)] text-2xl font-light text-[var(--text-primary)] tracking-wide mb-3">
+          <h3 className="font-[family-name:var(--font-display)] text-2xl font-normal text-[var(--text-primary)] tracking-wide mb-3">
             Najděte perfektní dárek za 60 sekund
           </h3>
           <p className="text-sm text-[var(--text-muted)] font-[family-name:var(--font-body)] mb-6">

@@ -24,7 +24,7 @@ export default function Error({
 
       <div className="relative z-10">
         <div className="text-4xl mb-6">⚠️</div>
-        <h1 className="font-[family-name:var(--font-display)] text-2xl font-light text-[var(--text-primary)] tracking-wide mb-3">
+        <h1 className="font-[family-name:var(--font-display)] text-2xl font-normal text-[var(--text-primary)] tracking-wide mb-3">
           Něco se pokazilo
         </h1>
         <p className="text-sm text-[var(--text-muted)] font-[family-name:var(--font-body)] mb-8 max-w-md">

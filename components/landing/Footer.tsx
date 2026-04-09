@@ -37,7 +37,7 @@ export function Footer() {
         {/* Brand */}
         <div>
           <Link href="/" style={{ textDecoration: 'none' }}>
-            <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: '22px', color: '#C9A84C', marginBottom: '8px' }}>
+            <div style={{ fontFamily: "'Playfair Display', serif", fontSize: '22px', color: '#C9A84C', marginBottom: '8px' }}>
               🎁 Dárkee
             </div>
           </Link>

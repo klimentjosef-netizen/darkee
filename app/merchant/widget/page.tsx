@@ -52,7 +52,7 @@ export default function WidgetConfiguratorPage() {
   return (
     <MerchantLayout shopName={shopName}>
       <div className="max-w-5xl">
-        <h1 className="font-[family-name:var(--font-display)] text-[clamp(24px,4vw,32px)] font-light text-[var(--text-primary)] tracking-wide mb-2">
+        <h1 className="font-[family-name:var(--font-display)] text-[clamp(24px,4vw,32px)] font-normal text-[var(--text-primary)] tracking-wide mb-2">
           Widget konfigurátor
         </h1>
         <p className="text-sm text-[var(--text-muted)] font-[family-name:var(--font-body)] mb-8">

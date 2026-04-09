@@ -32,7 +32,7 @@ export function QuizQuestion({ question, value, onSelect, step, total }: Props) 
       </p>
 
       {/* Title */}
-      <h2 className="font-[family-name:var(--font-display)] text-[clamp(28px,5vw,48px)] font-light text-[var(--text-primary)] text-center mb-2 tracking-wide leading-[1.15]">
+      <h2 className="font-[family-name:var(--font-display)] text-[clamp(28px,5vw,48px)] font-normal text-[var(--text-primary)] text-center mb-2 tracking-wide leading-[1.15]">
         {question.title}
       </h2>
 

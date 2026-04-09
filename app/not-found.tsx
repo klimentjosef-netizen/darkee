@@ -4,10 +4,10 @@ export default function NotFound() {
   return (
     <div className="min-h-screen bg-[var(--bg-primary)] flex flex-col items-center justify-center px-6 text-center">
       <div className="relative z-10">
-        <h1 className="font-[family-name:var(--font-display)] text-[120px] md:text-[160px] font-light text-[var(--gold-primary)] opacity-15 leading-none select-none">
+        <h1 className="font-[family-name:var(--font-display)] text-[120px] md:text-[160px] font-normal text-[var(--gold-primary)] opacity-15 leading-none select-none">
           404
         </h1>
-        <h2 className="font-[family-name:var(--font-display)] text-2xl font-light text-[var(--text-primary)] tracking-wide mb-3 -mt-4">
+        <h2 className="font-[family-name:var(--font-display)] text-2xl font-normal text-[var(--text-primary)] tracking-wide mb-3 -mt-4">
           Stránka nenalezena
         </h2>
         <p className="text-sm text-[var(--text-muted)] font-[family-name:var(--font-body)] mb-10">

@@ -14,7 +14,7 @@ export default function GlobalError({
           margin: 0,
           background: '#0A0A0B',
           color: '#F2EDE4',
-          fontFamily: "'DM Sans', system-ui, sans-serif",
+          fontFamily: "'Plus Jakarta Sans', system-ui, sans-serif",
           minHeight: '100vh',
           display: 'flex',
           alignItems: 'center',
@@ -27,9 +27,9 @@ export default function GlobalError({
           <div style={{ fontSize: '48px', marginBottom: '24px' }}>⚠️</div>
           <h1
             style={{
-              fontFamily: "'Cormorant Garamond', Georgia, serif",
+              fontFamily: "'Playfair Display', Georgia, serif",
               fontSize: '28px',
-              fontWeight: 300,
+              fontWeight: 400,
               marginBottom: '12px',
               letterSpacing: '0.02em',
             }}
@@ -57,7 +57,7 @@ export default function GlobalError({
               fontSize: '14px',
               fontWeight: 500,
               cursor: 'pointer',
-              fontFamily: "'DM Sans', system-ui, sans-serif",
+              fontFamily: "'Plus Jakarta Sans', system-ui, sans-serif",
             }}
           >
             Zkusit znovu

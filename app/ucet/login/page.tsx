@@ -67,7 +67,7 @@ export default function LoginPage() {
               Dárkee
             </span>
           </Link>
-          <h1 className="font-[family-name:var(--font-display)] text-[28px] font-light text-[var(--text-primary)] tracking-wide">
+          <h1 className="font-[family-name:var(--font-display)] text-[28px] font-normal text-[var(--text-primary)] tracking-wide">
             Přihlásit se do Dárkee
           </h1>
         </div>
@@ -80,7 +80,7 @@ export default function LoginPage() {
             className="text-center p-8 bg-[var(--bg-secondary)] border border-[var(--border-subtle)] rounded-sm"
           >
             <Mail size={32} className="text-[var(--gold-primary)] mx-auto mb-4" />
-            <h2 className="font-[family-name:var(--font-display)] text-xl font-light text-[var(--text-primary)] mb-2">
+            <h2 className="font-[family-name:var(--font-display)] text-xl font-normal text-[var(--text-primary)] mb-2">
               Zkontrolujte svůj email
             </h2>
             <p className="text-sm text-[var(--text-secondary)] font-[family-name:var(--font-body)] mb-1">

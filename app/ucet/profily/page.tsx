@@ -110,7 +110,7 @@ function AddProfileModal({ onClose }: { onClose: () => void }) {
           <X size={18} />
         </button>
 
-        <h2 className="font-[family-name:var(--font-display)] text-xl font-light text-[var(--text-primary)] mb-6">
+        <h2 className="font-[family-name:var(--font-display)] text-xl font-normal text-[var(--text-primary)] mb-6">
           Přidat dárkový profil
         </h2>
 
@@ -153,7 +153,7 @@ export default function ProfilesPage() {
     <DashboardLayout>
       <div className="max-w-4xl">
         <div className="flex items-center justify-between mb-8">
-          <h1 className="font-[family-name:var(--font-display)] text-[clamp(24px,4vw,32px)] font-light text-[var(--text-primary)] tracking-wide">
+          <h1 className="font-[family-name:var(--font-display)] text-[clamp(24px,4vw,32px)] font-normal text-[var(--text-primary)] tracking-wide">
             Dárkové profily
           </h1>
           <span className="text-xs text-[var(--text-muted)] font-[family-name:var(--font-body)]">

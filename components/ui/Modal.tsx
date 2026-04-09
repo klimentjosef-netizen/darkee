@@ -57,7 +57,7 @@ export function Modal({ open, onClose, children, title, maxWidth = 'max-w-md' }:
             {/* Header */}
             {title && (
               <div className="flex items-center justify-between px-6 pt-6 pb-0">
-                <h2 className="font-[family-name:var(--font-display)] text-xl font-light text-[var(--text-primary)]">
+                <h2 className="font-[family-name:var(--font-display)] text-xl font-normal text-[var(--text-primary)]">
                   {title}
                 </h2>
                 <button
