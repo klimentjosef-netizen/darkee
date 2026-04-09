@@ -5,7 +5,7 @@ export type Occasion = 'birthday' | 'christmas' | 'nameday' | 'valentine' | 'mot
 export type Interest = 'tech' | 'sport' | 'fashion' | 'home' | 'food' | 'books' | 'games' | 'experiences' | 'crafts' | 'wellness' | 'pets' | 'unknown'
 export type GiftType = 'physical' | 'experience' | 'both'
 export type PersonalityStyle = 'practical' | 'adventurous' | 'aesthetic' | 'intellectual' | 'comfort' | 'food_drink' | 'any_style'
-export type Budget = 'max300' | 'max500' | 'max1000' | 'max2000' | 'max5000' | 'unlimited' | 'custom'
+export type Budget = 'max300' | 'range300_500' | 'range500_1000' | 'range1000_2000' | 'range2000_5000' | 'unlimited' | 'custom'
 
 export interface QuizAnswers {
   relationship: Relationship
@@ -22,14 +22,14 @@ export interface QuizAnswers {
   origin?: 'local' | 'any_origin'
 }
 
-export const BUDGET_MAP: Record<Budget, number | null> = {
-  max300: 300,
-  max500: 500,
-  max1000: 1000,
-  max2000: 2000,
-  max5000: 5000,
-  unlimited: null,
-  custom: null,
+export const BUDGET_MAP: Record<Budget, { min: number; max: number | null }> = {
+  max300:          { min: 0,    max: 300 },
+  range300_500:    { min: 300,  max: 500 },
+  range500_1000:   { min: 500,  max: 1000 },
+  range1000_2000:  { min: 1000, max: 2000 },
+  range2000_5000:  { min: 2000, max: 5000 },
+  unlimited:       { min: 0,    max: null },
+  custom:          { min: 0,    max: null },
 }
 
 export interface QuizQuestion {

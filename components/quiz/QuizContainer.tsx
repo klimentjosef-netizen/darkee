@@ -27,14 +27,14 @@ function ExitConfirm({ onStay, onLeave }: { onStay: () => void; onLeave: () => v
         exit={{ opacity: 0, scale: 0.95, y: 8 }}
         transition={{ duration: 0.2 }}
         style={{
-          background: '#FFFFFF',
-          border: '1px solid rgba(0,0,0,0.06)',
+          background: '#141310',
+          border: '1px solid rgba(255,255,255,0.08)',
           borderRadius: 20,
           padding: '36px 32px',
           maxWidth: 360,
           width: '90%',
           textAlign: 'center',
-          boxShadow: '0 20px 60px rgba(0,0,0,0.1)',
+          boxShadow: '0 20px 60px rgba(0,0,0,0.4)',
         }}
         onClick={(e) => e.stopPropagation()}
       >
@@ -43,14 +43,14 @@ function ExitConfirm({ onStay, onLeave }: { onStay: () => void; onLeave: () => v
           fontFamily: "'Cormorant Garamond', serif",
           fontSize: 22,
           fontWeight: 400,
-          color: '#1A1714',
+          color: '#F0EBE0',
           marginBottom: 8,
         }}>
           Opravdu chceš skončit?
         </h3>
         <p style={{
           fontSize: 14,
-          color: '#A09888',
+          color: '#5A5248',
           fontFamily: "'DM Sans', sans-serif",
           marginBottom: 24,
           lineHeight: 1.6,
@@ -65,9 +65,9 @@ function ExitConfirm({ onStay, onLeave }: { onStay: () => void; onLeave: () => v
               fontSize: 14,
               fontFamily: "'DM Sans', sans-serif",
               background: 'transparent',
-              border: '1px solid rgba(0,0,0,0.12)',
+              border: '1px solid rgba(255,255,255,0.10)',
               borderRadius: 100,
-              color: '#6B6358',
+              color: '#8A8070',
               cursor: 'pointer',
               transition: 'all 0.2s',
             }}
@@ -84,7 +84,7 @@ function ExitConfirm({ onStay, onLeave }: { onStay: () => void; onLeave: () => v
               background: '#C9A84C',
               border: 'none',
               borderRadius: 100,
-              color: '#FFFFFF',
+              color: '#080806',
               cursor: 'pointer',
               transition: 'all 0.2s',
             }}
@@ -243,10 +243,10 @@ export function QuizContainer({ isModal = false, onClose }: QuizContainerProps) 
         maxHeight: isModal ? '720px' : undefined,
         width: isModal ? '100%' : undefined,
         maxWidth: isModal ? '640px' : undefined,
-        background: '#FFFFFF',
+        background: '#0E0D09',
         borderRadius: isModal ? 24 : 0,
-        border: isModal ? '1px solid rgba(0,0,0,0.08)' : 'none',
-        boxShadow: isModal ? '0 25px 80px rgba(0,0,0,0.12)' : 'none',
+        border: isModal ? '1px solid rgba(255,255,255,0.08)' : 'none',
+        boxShadow: isModal ? '0 25px 80px rgba(0,0,0,0.5)' : 'none',
         overflow: 'hidden',
       }}
     >
@@ -272,14 +272,14 @@ export function QuizContainer({ isModal = false, onClose }: QuizContainerProps) 
             width: 36,
             height: 36,
             borderRadius: '50%',
-            border: '1px solid rgba(0,0,0,0.08)',
-            background: '#FAFAF8',
+            border: '1px solid rgba(255,255,255,0.08)',
+            background: '#141310',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             cursor: 'pointer',
             transition: 'all 0.2s',
-            color: '#6B6358',
+            color: '#8A8070',
           }}
           aria-label="Zavřít"
         >
@@ -289,7 +289,7 @@ export function QuizContainer({ isModal = false, onClose }: QuizContainerProps) 
 
       {/* Progress bar */}
       <div style={{ flexShrink: 0 }}>
-        <div style={{ height: 3, width: '100%', background: '#EDEAE4', borderRadius: isModal ? '24px 24px 0 0' : 0 }}>
+        <div style={{ height: 3, width: '100%', background: '#1A1814', borderRadius: isModal ? '24px 24px 0 0' : 0 }}>
           <motion.div
             style={{
               height: '100%',
@@ -319,7 +319,7 @@ export function QuizContainer({ isModal = false, onClose }: QuizContainerProps) 
             gap: 6,
             background: 'none',
             border: 'none',
-            color: '#A09888',
+            color: '#5A5248',
             fontSize: 14,
             cursor: 'pointer',
             fontFamily: "'DM Sans', sans-serif",
@@ -330,7 +330,7 @@ export function QuizContainer({ isModal = false, onClose }: QuizContainerProps) 
           Zpět
         </button>
         <span style={{
-          color: '#A09888',
+          color: '#5A5248',
           fontSize: 12,
           fontFamily: "'DM Sans', sans-serif",
           letterSpacing: '0.1em',
@@ -359,7 +359,7 @@ export function QuizContainer({ isModal = false, onClose }: QuizContainerProps) 
             Hledáme pro vás ideální dárky…
           </p>
           <p style={{
-            color: '#A09888',
+            color: '#5A5248',
             marginTop: 8,
             fontSize: 12,
             fontFamily: "'DM Sans', sans-serif",
@@ -394,7 +394,7 @@ export function QuizContainer({ isModal = false, onClose }: QuizContainerProps) 
               >
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 12, marginBottom: 20 }}>
                   <div style={{ textAlign: 'center' }}>
-                    <label style={{ display: 'block', fontSize: 11, color: '#A09888', fontFamily: "'DM Sans', sans-serif", marginBottom: 6, textTransform: 'uppercase', letterSpacing: '0.1em' }}>Od</label>
+                    <label style={{ display: 'block', fontSize: 11, color: '#5A5248', fontFamily: "'DM Sans', sans-serif", marginBottom: 6, textTransform: 'uppercase', letterSpacing: '0.1em' }}>Od</label>
                     <input
                       type="number"
                       placeholder="0"
@@ -409,16 +409,16 @@ export function QuizContainer({ isModal = false, onClose }: QuizContainerProps) 
                         textAlign: 'center',
                         border: '1px solid rgba(201,168,76,0.3)',
                         borderRadius: 12,
-                        background: '#FAFAF8',
-                        color: '#1A1714',
+                        background: '#141310',
+                        color: '#F0EBE0',
                         outline: 'none',
                       }}
                     />
-                    <span style={{ fontSize: 12, color: '#A09888', fontFamily: "'DM Sans', sans-serif", marginLeft: 4 }}>Kč</span>
+                    <span style={{ fontSize: 12, color: '#5A5248', fontFamily: "'DM Sans', sans-serif", marginLeft: 4 }}>Kč</span>
                   </div>
                   <span style={{ fontSize: 16, color: '#C9A84C', fontFamily: "'Cormorant Garamond', serif", marginTop: 20 }}>—</span>
                   <div style={{ textAlign: 'center' }}>
-                    <label style={{ display: 'block', fontSize: 11, color: '#A09888', fontFamily: "'DM Sans', sans-serif", marginBottom: 6, textTransform: 'uppercase', letterSpacing: '0.1em' }}>Do</label>
+                    <label style={{ display: 'block', fontSize: 11, color: '#5A5248', fontFamily: "'DM Sans', sans-serif", marginBottom: 6, textTransform: 'uppercase', letterSpacing: '0.1em' }}>Do</label>
                     <input
                       type="number"
                       placeholder="2000"
@@ -433,12 +433,12 @@ export function QuizContainer({ isModal = false, onClose }: QuizContainerProps) 
                         textAlign: 'center',
                         border: '1px solid rgba(201,168,76,0.3)',
                         borderRadius: 12,
-                        background: '#FAFAF8',
-                        color: '#1A1714',
+                        background: '#141310',
+                        color: '#F0EBE0',
                         outline: 'none',
                       }}
                     />
-                    <span style={{ fontSize: 12, color: '#A09888', fontFamily: "'DM Sans', sans-serif", marginLeft: 4 }}>Kč</span>
+                    <span style={{ fontSize: 12, color: '#5A5248', fontFamily: "'DM Sans', sans-serif", marginLeft: 4 }}>Kč</span>
                   </div>
                 </div>
                 <button
@@ -449,7 +449,7 @@ export function QuizContainer({ isModal = false, onClose }: QuizContainerProps) 
                     gap: 10,
                     padding: '14px 36px',
                     background: '#C9A84C',
-                    color: '#FFFFFF',
+                    color: '#080806',
                     fontSize: 15,
                     fontWeight: 500,
                     fontFamily: "'DM Sans', sans-serif",
@@ -483,7 +483,7 @@ export function QuizContainer({ isModal = false, onClose }: QuizContainerProps) 
                     gap: 10,
                     padding: '14px 36px',
                     background: '#C9A84C',
-                    color: '#FFFFFF',
+                    color: '#080806',
                     fontSize: 15,
                     fontWeight: 500,
                     fontFamily: "'DM Sans', sans-serif",
@@ -540,7 +540,7 @@ export function QuizContainer({ isModal = false, onClose }: QuizContainerProps) 
 
   // Fullscreen fallback (for /pruvodce page)
   return (
-    <div style={{ background: '#FAFAF8', minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24 }}>
+    <div style={{ background: '#080806', minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24 }}>
       {quizContent}
     </div>
   )

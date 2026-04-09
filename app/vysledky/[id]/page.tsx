@@ -30,8 +30,8 @@ const ageLabels: Record<string, string> = {
   young_adult: '19–30 let', adult: '31–50 let', senior: '51–70 let', elderly: '70+ let',
 }
 const budgetLabels: Record<string, string> = {
-  max300: 'do 300 Kč', max500: 'do 500 Kč', max1000: 'do 1 000 Kč',
-  max2000: 'do 2 000 Kč', max5000: 'do 5 000 Kč', unlimited: 'bez omezení',
+  max300: 'do 300 Kč', range300_500: '300–500 Kč', range500_1000: '500–1 000 Kč',
+  range1000_2000: '1 000–2 000 Kč', range2000_5000: '2 000–5 000 Kč', unlimited: 'bez omezení',
 }
 
 function SkeletonCard({ index }: { index: number }) {

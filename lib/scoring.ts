@@ -24,8 +24,11 @@ type RawProduct = {
 }
 
 export function scoreProducts(answers: QuizAnswers, products: RawProduct[]): ScoredProduct[] {
-  const budgetCap = answers.budget === 'custom' ? (answers.budgetMax || null) : BUDGET_MAP[answers.budget]
-  const budgetMin = answers.budget === 'custom' ? (answers.budgetMin || 0) : 0
+  const budgetRange = answers.budget === 'custom'
+    ? { min: answers.budgetMin || 0, max: answers.budgetMax || null }
+    : BUDGET_MAP[answers.budget]
+  const budgetCap = budgetRange.max
+  const budgetMin = budgetRange.min
   const month = new Date().getMonth() + 1
 
   const eligible = products.filter(p => {
@@ -100,9 +103,30 @@ export function scoreProducts(answers: QuizAnswers, products: RawProduct[]): Sco
     if (p.isPremium) score += 3
     if (p.isPersonalizable) reasons.push('Lze personalizovat')
 
+    // Budget utilization bonus — up to 10pts
+    if (budgetCap !== null && budgetCap > 0) {
+      const utilization = p.price / budgetCap
+      if (utilization >= 0.6) {
+        score += 10
+      } else if (utilization >= 0.3) {
+        score += Math.round(10 * ((utilization - 0.3) / 0.3))
+      }
+    }
+
+    // Multi-category match bonus — up to 5pts
+    let matchDimensions = 0
+    if (matchedInterests.length > 0) matchDimensions++
+    if (answers.style === 'any_style' || p.styleFit.includes(answers.style)) matchDimensions++
+    if (p.occasionFit.includes(occasionToMatch) || p.occasionFit.includes(answers.occasion) || p.occasionFit.includes('any')) matchDimensions++
+    if (matchDimensions >= 3) {
+      score += 5
+    } else if (matchDimensions === 2) {
+      score += 2
+    }
+
     if (reasons.length === 0) reasons.push('Dobře hodnocený produkt v dané kategorii')
 
-    const maxPossible = 103
+    const maxPossible = 118
     const matchPct = Math.round(Math.min(99, (score / maxPossible) * 100))
 
     return {

@@ -3,31 +3,31 @@
 :root {
   --gold: #C9A84C;
   --gold-light: #E8C97A;
-  --gold-dim: rgba(201,168,76,0.10);
-  --bg: #FAFAF8;
-  --bg-card: #FFFFFF;
-  --bg-warm: #F5F3EE;
-  --text: #1A1714;
-  --text-mid: #6B6358;
-  --text-muted: #A09888;
+  --gold-dim: rgba(201,168,76,0.12);
+  --bg: #080806;
+  --bg-card: #141310;
+  --bg-warm: #0E0D09;
+  --text: #F0EBE0;
+  --text-mid: #8A8070;
+  --text-muted: #5A5248;
   --font-display: 'Cormorant Garamond', Georgia, serif;
   --font-body: 'DM Sans', system-ui, sans-serif;
 
   /* kompletní aliasy pro všechny stránky */
-  --bg-primary: #FAFAF8;
-  --bg-secondary: #F5F3EE;
-  --bg-tertiary: #EDEAE4;
-  --bg-elevated: #FFFFFF;
+  --bg-primary: #080806;
+  --bg-secondary: #0E0D09;
+  --bg-tertiary: #1A1814;
+  --bg-elevated: #141310;
   --gold-primary: #C9A84C;
   --gold-dark: #8A6B2A;
-  --gold-glow: rgba(201,168,76,0.10);
-  --text-primary: #1A1714;
-  --text-secondary: #6B6358;
-  --border-subtle: rgba(0,0,0,0.06);
-  --border-mid: rgba(0,0,0,0.12);
-  --border-strong: rgba(0,0,0,0.18);
-  --error: #C0392B;
-  --success: #27AE60;
+  --gold-glow: rgba(201,168,76,0.12);
+  --text-primary: #F0EBE0;
+  --text-secondary: #8A8070;
+  --border-subtle: rgba(255,255,255,0.06);
+  --border-mid: rgba(255,255,255,0.10);
+  --border-strong: rgba(255,255,255,0.15);
+  --error: #E74C3C;
+  --success: #2ECC71;
 }
 
 html { scroll-behavior: smooth; }
@@ -40,9 +40,9 @@ body {
   min-height: 100vh;
 }
 
-::selection { background: var(--gold); color: #FFFFFF; }
+::selection { background: rgba(201,168,76,0.25); color: #F0EBE0; }
 ::-webkit-scrollbar { width: 4px; }
-::-webkit-scrollbar-track { background: #F0EDE8; }
+::-webkit-scrollbar-track { background: #1A1814; }
 ::-webkit-scrollbar-thumb { background: #C9A84C; border-radius: 2px; }
 
 /* Luxury animations */
