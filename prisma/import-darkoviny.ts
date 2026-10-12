@@ -62,21 +62,27 @@ function mapInterests(category: string, giftTypes: string[], hobbies: string[]):
   const tags = new Set<string>()
   const all = [category, ...giftTypes, ...hobbies].join(' ').toLowerCase()
 
-  if (all.includes('tech') || all.includes('inteligent')) tags.add('tech')
-  if (all.includes('sport') || all.includes('cykl') || all.includes('fotbal') || all.includes('hokej') || all.includes('golf') || all.includes('vodák')) tags.add('sport')
-  if (all.includes('móda') || all.includes('fashion') || all.includes('design')) tags.add('fashion')
-  if (all.includes('domác') || all.includes('kuchyn') || all.includes('kancelář') || all.includes('zahrád') || all.includes('zahrad') || all.includes('kutil')) tags.add('home')
-  if (all.includes('jedl') || all.includes('jídl') || all.includes('piv') || all.includes('vín') || all.includes('čaj') || all.includes('čokol') || all.includes('gurmán') || all.includes('alkohol') || all.includes('whisky') || all.includes('kuchyn')) tags.add('food')
-  if (all.includes('knih') || all.includes('čten') || all.includes('čtená')) tags.add('books')
-  if (all.includes('hra') || all.includes('puzzle') || all.includes('zábav') || all.includes('vtip') || all.includes('film')) tags.add('games')
-  if (all.includes('zážit') || all.includes('cestov') || all.includes('dobrodruž')) tags.add('experiences')
-  if (all.includes('kreativ') || all.includes('ruční') || all.includes('dřev')) tags.add('crafts')
-  if (all.includes('wellness') || all.includes('relax') || all.includes('aroma') || all.includes('levandule') || all.includes('masáž') || all.includes('kosmetik') || all.includes('antistres')) tags.add('wellness')
-  if (all.includes('mazlíč') || all.includes('koč') || all.includes('pes') || all.includes('pejsk')) tags.add('pets')
-  if (all.includes('osobní') || all.includes('památk') || all.includes('sentim')) tags.add('crafts')
-  if (all.includes('romanti') || all.includes('lás') || all.includes('zamilov') || all.includes('sexy')) tags.add('experiences')
-  if (all.includes('dět') || all.includes('školka') || all.includes('škol')) tags.add('games')
-  if (all.includes('retro')) tags.add('home')
+  if (all.match(/tech|inteligent|gadget|smart|elektro|nabíje|bluetooth/)) tags.add('tech')
+  if (all.match(/sport|cykl|fotbal|hokej|golf|vodák|outdoor|fitness|běh|lyž/)) tags.add('sport')
+  if (all.match(/mód|fashion|šátek|čepice|rukavic|obleč|šperky|náušnic|náhrdelník|opasek|kabelk|peněženk|hodinky/)) tags.add('fashion')
+  if (all.match(/domác|kancelář|zahrád|zahrad|kutil|dekorac|svíčk|polštář|organizér/)) tags.add('home')
+  // food = ONLY edible/drinkable gifts
+  if (all.match(/jedl|jídl|piv[no]|víno|vín[aá]|čaj[ůo]?[vý]?\b|čokol|gurmán|alkohol|whisky|degustac|koření|med\b|bonbon/)) tags.add('food')
+  if (all.match(/knih[auy]|čtení|čtená|román|encykloped/)) tags.add('books')
+  if (all.match(/hra\b|hry\b|puzzle|zábav|stolní|deskov|stavebnic|lego/)) tags.add('games')
+  if (all.match(/zážit|cestov|dobrodruž|výlet|pobyt|poukáz/)) tags.add('experiences')
+  if (all.match(/kreativ|ruční práce|dřevěn|háčkov|pleten|vyšív|keramik/)) tags.add('crafts')
+  if (all.match(/wellness|relax|aroma|levandule|masáž|kosmetik|antistres|koupel|péče o tělo/)) tags.add('wellness')
+  // pets = products FOR animals only
+  if (all.match(/pro psa|pro kočk|obojek|pelíšek|krmiv|granul|vodítk|psí|kočičí|mazlíč/)) tags.add('pets')
+  if (all.match(/osobní|památk|sentim/)) tags.add('crafts')
+  if (all.match(/romanti|zamilov/)) tags.add('experiences')
+  if (all.match(/retro/)) tags.add('home')
+  // kitchenware = home, not food
+  if (all.match(/kuchyn|hrnk|hrníč|talíř|příbor|prkénk|forma|nůž|nože|servírov|konvic|šálek/)) {
+    tags.add('home')
+    tags.delete('food')
+  }
 
   // Fallback: map from gift type
   for (const t of giftTypes) {

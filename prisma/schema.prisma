@@ -38,10 +38,20 @@ model Product {
   createdAt        DateTime  @default(now())
   updatedAt        DateTime  @updatedAt
 
+  // AI posouzení dárkovosti (prisma/assess-products.ts)
+  giftScore        Int?
+  blindBuy         Boolean?
+  giftKind         String?
+  recipients       String[]
+  giftReason       String?
+  aiVersion        String?
+  aiAssessedAt     DateTime?
+
   clicks           Click[]
 
   @@index([merchantId])
   @@index([giftType, inStock])
+  @@index([giftScore])
 }
 
 model QuizResult {

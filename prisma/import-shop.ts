@@ -128,17 +128,24 @@ function mapStyle(giftTypes: string[], name: string): string[] {
 function mapInterests(category: string, giftTypes: string[], hobbies: string[], name: string): string[] {
   const tags = new Set<string>()
   const all = [category, ...giftTypes, ...hobbies, name].join(' ').toLowerCase()
-  if (all.match(/tech|inteligent|gadget|smart|elektro/)) tags.add('tech')
-  if (all.match(/sport|cykl|fotbal|hokej|golf|outdoor|fitness/)) tags.add('sport')
-  if (all.match(/mód|fashion|design|šátek|čepice|rukavic|obleč|šperky|náušnic/)) tags.add('fashion')
-  if (all.match(/domác|kuchyn|kancelář|zahrád|kutil|dekorac|svíčk/)) tags.add('home')
-  if (all.match(/jedl|jídl|piv|vín|čaj|čokol|gurmán|alkohol|whisky/)) tags.add('food')
-  if (all.match(/knih|čten/)) tags.add('books')
-  if (all.match(/hra|puzzle|zábav|vtipn|film/)) tags.add('games')
-  if (all.match(/zážit|cestov|dobrodruž/)) tags.add('experiences')
-  if (all.match(/kreativ|ruční|dřev|háčkov|pleten/)) tags.add('crafts')
-  if (all.match(/wellness|relax|aroma|kosmetik|masáž|antistres/)) tags.add('wellness')
-  if (all.match(/mazlíč|koč|pes|pejsk/)) tags.add('pets')
+  if (all.match(/tech|inteligent|gadget|smart|elektro|nabíje|bluetooth|wifi|sluchátk/)) tags.add('tech')
+  if (all.match(/sport|cykl|fotbal|hokej|golf|outdoor|fitness|běh|kolo|lyž|turistik/)) tags.add('sport')
+  if (all.match(/mód|fashion|šátek|čepice|rukavic|obleč|šperky|náušnic|náhrdelník|opasek|kabelk|peněženk|hodinky/)) tags.add('fashion')
+  if (all.match(/domác|kancelář|zahrád|kutil|dekorac|svíčk|polštář|dek[au]|rám|váz|stojan|organizér|úklid/)) tags.add('home')
+  // food = ONLY edible/drinkable gifts, NOT kitchenware or items with food imagery
+  if (all.match(/jedl|jídl|piv[no]|víno|vín[aá]|čaj[ůo]?[vý]?\b|čokol|gurmán|alkohol|whisky|rum\b|degustac|koření|med\b|sirup|kávov|bonbon/)) tags.add('food')
+  if (all.match(/knih[auy]|čtení|čtená|román|příběh|atlas|encykloped/)) tags.add('books')
+  if (all.match(/hra\b|hry\b|puzzle|zábav|stolní|deskov|stavebnic|lego/)) tags.add('games')
+  if (all.match(/zážit|cestov|dobrodruž|výlet|pobyt|vstupenk|poukáz/)) tags.add('experiences')
+  if (all.match(/kreativ|ruční práce|dřevěn|háčkov|pleten|vyšív|malování|keramik/)) tags.add('crafts')
+  if (all.match(/wellness|relax|aroma|kosmetik|masáž|antistres|koupel|péče o tělo|krém|sérum/)) tags.add('wellness')
+  // pets = products FOR animals, NOT products with animal imagery
+  if (all.match(/pro psa|pro kočk|obojek|pelíšek|krmiv|granul|vodítk|psí|kočičí|mazlíč/)) tags.add('pets')
+  // kitchenware goes to home, not food
+  if (all.match(/kuchyn|hrnk|hrníč|talíř|příbor|prkénk|forma|nůž|nože|servírov|konvic|šálek/)) {
+    tags.add('home')
+    tags.delete('food') // kitchen items are NOT food
+  }
   return tags.size > 0 ? [...tags] : ['home']
 }
 

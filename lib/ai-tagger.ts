@@ -25,24 +25,27 @@ export async function tagProduct(product: {
     messages: [
       {
         role: 'user',
-        content: `Otaguj produkt pro dárkový doporučovací systém. Vrať POUZE validní JSON, žádný text navíc.
+        content: `Jsi přesný tagovací systém pro dárkový doporučovač Dárkee.cz. Uživatel odpovídá na kvíz (komu, kolik let, zájmy, příležitost, rozpočet) a my mu matchujeme produkty.
+
+Otaguj tento produkt. Vrať POUZE validní JSON, žádný text navíc.
 
 Produkt: "${product.name}"
 Popis: "${product.description || 'není k dispozici'}"
 Kategorie: "${product.category || 'obecná'}"
 Cena: ${product.price} Kč
 
-Dostupné hodnoty:
-- interestTags: tech, sport, fashion, home, food, books, games, experiences, crafts, wellness, pets, premium, sentimental, practical, fun, original, neutral, universal, kids, educational, personal, valentine
-- styleFit: practical, adventurous, aesthetic, intellectual, comfort
-- occasionFit: birthday, christmas, valentine, mothers_day, wedding, graduation, just_because, any
-- genderFit: female, male, neutral
-- ageRange: baby, preschool, school, teen, young_adult, adult, senior, elderly
+PRAVIDLA:
+- interestTags: POUZE tyto hodnoty — tech, sport, fashion, home, food, books, games, experiences, crafts, wellness, pets
+  Vyber 1-3 tagy, které OPRAVDU sedí na produkt. Čepice = fashion, NE food. Hrnek s obrázkem psa = home, NE pets (pokud to není produkt PRO mazlíčky). Termoska = sport, NE food. Servírovací nádobí = home, NE food. "food" = jedlé/pitné dárky (čokoláda, víno, čaj, degustace). "pets" = produkty PRO zvířata (obojek, pelíšek, krmivo), NE produkty s motivem zvířete.
+- styleFit: practical, adventurous, aesthetic, intellectual, comfort — vyber 1-2
+  practical = užitečné v životě. aesthetic = krásný design/šperky/dekorace. adventurous = zábavné/originální/překvapivé. intellectual = vzdělávací/knihy/puzzle. comfort = osobní/útulné/relaxační.
+- occasionFit: birthday, christmas, valentine, mothers_day, wedding, graduation, just_because — vyber 2-4 příležitosti kde dává smysl tento dárek darovat
+- genderFit: female, male, neutral — pro koho se hodí
+- ageRange: baby (0-2), preschool (3-5), school (6-12), teen (13-18), young_adult (19-30), adult (31-50), senior (51-70), elderly (70+) — vyber všechny vhodné
 - giftType: "physical" nebo "experience"
-- isPersonalizable: true/false
-- isLocal: true/false (český/lokální výrobce?)
+- isPersonalizable: true jen pokud lze gravírovat/potisknout vlastním textem/fotkou
+- isLocal: true jen pokud je to PROKAZATELNĚ český/moravský výrobce
 
-Vrať JSON:
 {
   "interestTags": ["..."],
   "styleFit": ["..."],
