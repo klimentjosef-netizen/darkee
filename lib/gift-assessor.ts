@@ -116,7 +116,7 @@ export async function assessProducts(
   })
 
   if (response.stop_reason === 'refusal') {
-    throw new Error(`Model odmítl dávku: ${response.stop_details?.explanation ?? 'bez vysvětlení'}`)
+    throw new Error('Model odmítl dávku posoudit')
   }
   if (!response.parsed_output) {
     throw new Error(`Odpověď se nepodařilo zpracovat (stop_reason: ${response.stop_reason})`)
