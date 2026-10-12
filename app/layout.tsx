@@ -13,14 +13,14 @@ const playfair = Playfair_Display({
 
 const jakarta = Plus_Jakarta_Sans({
   subsets: ['latin', 'latin-ext'],
-  weight: ['300', '400', '500', '600'],
+  weight: ['300', '400', '500', '600', '700'],
   variable: '--font-body',
   display: 'swap',
 })
 
 export const metadata: Metadata = {
-  title: 'Dárkee — Najděte ideální dárek za 60 sekund',
-  description: 'Personalizovaný dárkový asistent. 8 otázek, 5 doporučení, přímý odkaz na nákup.',
+  title: 'Dárkee: dárek, který opravdu sedí',
+  description: 'Odpovíte na pár otázek a dostanete pět konkrétních dárků z českých e-shopů, se zdůvodněním a přímým odkazem ke koupi.',
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

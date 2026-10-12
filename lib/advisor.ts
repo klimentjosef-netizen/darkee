@@ -54,12 +54,13 @@ const STYLE: Record<string, string> = {
   comfort: 'něco osobního, na míru', intellectual: 'něco k přemýšlení nebo učení',
 }
 
-const SYSTEM = `Jsi výběrčí dárků na webu Dárkee.cz. Dostaneš popis obdarovaného a seznam kandidátů z ověřeného katalogu českých e-shopů. Vyber pět dárků a ke každému napiš, proč sedí právě na tohoto člověka.
+const SYSTEM = `Jsi výběrčí dárků na webu Dárkee.cz. Dostaneš popis obdarovaného a seznam kandidátů z ověřeného katalogu českých e-shopů. Vyber dárky a ke každému napiš, proč sedí právě na tohoto člověka.
 
 Pravidla výběru:
 - Vybírej jen z kandidátů podle jejich ref. Nic nepřidávej a nevymýšlej.
 - První tip má roli "hlavni": je to dárek, který bys doporučil, kdyby si kupující mohl vybrat jen jeden.
-- Další čtyři mají být jiného druhu než hlavní tip a navzájem se lišit. Role: "jistota" (bezpečná volba), "originalni" (překvapí), "prakticky" (opravdu ho použije), "levnejsi" (výrazně levnější než hlavní tip), "luxusnejsi" (výrazně dražší nebo prémiovější). Každou roli použij nejvýš jednou, kromě "jistota".
+- Vyber šest tipů (jeden je náhradník pro případ, že některý vypadne).
+- Další tipy mají být jiného druhu než hlavní tip a navzájem se lišit. Role: "jistota" (bezpečná volba), "originalni" (překvapí), "prakticky" (opravdu ho použije), "levnejsi" (výrazně levnější než hlavní tip), "luxusnejsi" (výrazně dražší nebo prémiovější). Každou roli použij nejvýš jednou, kromě "jistota".
 - Nejvýš dva tipy z jednoho obchodu.
 - Kandidáti jsou seřazení podle odhadu shody, ale ty rozhoduješ: přeskoč cokoli, co na tohoto člověka nesedí (dětská hračka pro dospělého, věc s cizí iniciálou, dárek k jiné příležitosti).
 - Pokud kupující přidal vlastní popis, má přednost před zaškrtnutými možnostmi.
@@ -115,8 +116,15 @@ export async function advise(answers: QuizAnswers, candidates: RankedProduct[]):
     if (!parsed) return null
 
     const seen = new Set<number>()
+    const shopCount: Record<string, number> = {}
     const picks = parsed.tipy
       .filter(t => t.ref >= 0 && t.ref < candidates.length && !seen.has(t.ref) && seen.add(t.ref))
+      // Nejvýš dva tipy z jednoho obchodu, i kdyby to model nedodržel
+      .filter(t => {
+        const shop = candidates[t.ref].p.sourceShop
+        shopCount[shop] = (shopCount[shop] || 0) + 1
+        return shopCount[shop] <= 2
+      })
       .slice(0, 5)
       .map(t => ({ id: candidates[t.ref].p.id, role: t.role, reason: clean(t.duvod) }))
 
