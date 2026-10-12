@@ -10,9 +10,11 @@ interface QuizOptionProps {
   selected: boolean
   onSelect: () => void
   index: number
+  // Úsporná dlaždice pro dlouhé seznamy (záliby), aby se jich na mobil vešlo víc
+  compact?: boolean
 }
 
-export function QuizOption({ option, selected, onSelect, index }: QuizOptionProps) {
+export function QuizOption({ option, selected, onSelect, index, compact = false }: QuizOptionProps) {
   return (
     <motion.button
       initial={{ opacity: 0, y: 12 }}
@@ -20,7 +22,8 @@ export function QuizOption({ option, selected, onSelect, index }: QuizOptionProp
       transition={{ delay: index * 0.04, duration: 0.3, ease: 'easeOut' }}
       onClick={onSelect}
       className={cn(
-        'relative flex items-center gap-4 w-full px-5 py-4 text-left cursor-pointer rounded-2xl transition-all duration-200',
+        'relative flex items-center w-full text-left cursor-pointer rounded-2xl transition-all duration-200',
+        compact ? 'gap-2.5 px-3 py-3' : 'gap-4 px-5 py-4',
         'border',
         selected
           ? 'border-[var(--gold-primary)] bg-[var(--gold-glow)]'
@@ -33,13 +36,14 @@ export function QuizOption({ option, selected, onSelect, index }: QuizOptionProp
       }
     >
       {/* Emoji */}
-      <span className="text-[32px] leading-none shrink-0">{option.emoji}</span>
+      <span className={cn('leading-none shrink-0', compact ? 'text-[20px]' : 'text-[32px]')}>{option.emoji}</span>
 
       {/* Text */}
       <div className="flex-1 min-w-0">
         <span
           className={cn(
-            'block text-base font-[family-name:var(--font-body)] font-medium',
+            'block font-[family-name:var(--font-body)] font-medium',
+            compact ? 'text-sm leading-snug' : 'text-base',
             selected ? 'text-[var(--gold-primary)]' : 'text-[var(--text-primary)]'
           )}
         >

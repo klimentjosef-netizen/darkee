@@ -199,7 +199,7 @@ export function QuizContainer({ isModal = false, onClose }: QuizContainerProps) 
         gender: a.gender || 'neutral',
         occasion: a.occasion,
         interests: a.interests || ['pets'],
-        giftType: a.giftType,
+        giftType: a.giftType || 'both',
         style: a.style,
         budget: a.budget,
       }
@@ -371,7 +371,7 @@ export function QuizContainer({ isModal = false, onClose }: QuizContainerProps) 
       ) : (
         <>
           {/* Question area */}
-          <div style={{ flex: q.type === 'text' ? 'none' : 1, paddingTop: q.type === 'text' ? '12vh' : 0, display: 'flex', flexDirection: 'column', justifyContent: 'center', minHeight: 0, overflow: 'auto' }}>
+          <div style={{ flex: q.type === 'text' ? 'none' : 1, paddingTop: q.type === 'text' ? '12vh' : 0, display: 'flex', flexDirection: 'column', justifyContent: q.options.length > 12 ? 'flex-start' : 'center', minHeight: 0, overflow: 'auto' }}>
             <QuizTransition stepKey={q.id} direction={direction}>
               <QuizQuestion
                 question={q}

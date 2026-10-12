@@ -12,7 +12,7 @@ const STYLES = ['practical', 'adventurous', 'aesthetic', 'intellectual', 'comfor
 const OCCASIONS = ['birthday', 'christmas', 'valentine', 'mothers_day', 'wedding', 'graduation', 'just_because'] as const
 const GENDERS = ['female', 'male', 'neutral'] as const
 const AGES = ['baby', 'preschool', 'school', 'teen', 'young_adult', 'adult', 'senior', 'elderly'] as const
-const RECIPIENTS = ['partner', 'parent', 'friend', 'sibling', 'colleague', 'child', 'self', 'pet'] as const
+const RECIPIENTS = ['partner', 'parent', 'grandparent', 'friend', 'sibling', 'colleague', 'child', 'self', 'pet'] as const
 const KINDS = ['jistota', 'originalni', 'zazitek', 'prakticky', 'luxus', 'drobnost', 'neni_darek'] as const
 
 export const AssessmentItemSchema = z.object({
@@ -64,7 +64,7 @@ kind říká, jakou roli by produkt hrál v pětici tipů:
 - drobnost: malý dárek, pozornost.
 - neni_darek: použij vždy, když je giftScore pod 20.
 
-recipients: komu by se dárek hodil z pohledu toho, kdo ho kupuje (partner, rodič, kamarád, sourozenec, kolega, dítě, sám sobě, domácí mazlíček). "pet" jen u věcí určených přímo pro zvíře.
+recipients: komu by se dárek hodil z pohledu toho, kdo ho kupuje (partner, rodič, prarodič, kamarád, sourozenec, kolega, dítě, sám sobě, domácí mazlíček). Dárek určený babičce nebo dědovi patří jen pod "grandparent", ne pod "parent". "pet" jen u věcí určených přímo pro zvíře.
 
 interestTags: jen zájmy, kterým produkt opravdu slouží, nejvýš tři. Motiv na produktu není zájem: hrnek s obrázkem psa je "home", ne "pets". "food" jsou jen jedlé a pitné dárky, nádobí je "home".
 

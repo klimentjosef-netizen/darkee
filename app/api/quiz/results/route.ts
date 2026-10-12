@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { rankCandidates, scoreProducts, toScoredProduct } from '@/lib/scoring'
 import { advise } from '@/lib/advisor'
+import { resolveInterests } from '@/lib/hobbies'
 import { QuizAnswers, BUDGET_MAP, Budget, ScoredProduct } from '@/types'
 import { z } from 'zod'
 
@@ -31,7 +32,11 @@ const AI_DAILY_LIMIT = Number(process.env.DARKEE_AI_DAILY_LIMIT || 800)
 export async function POST(request: NextRequest) {
   try {
     const parsed = schema.parse(await request.json())
-    const answers = { ...parsed, about: parsed.about?.trim() || undefined } as unknown as QuizAnswers
+    const answers = {
+      ...parsed,
+      ...resolveInterests(parsed.interests),
+      about: parsed.about?.trim() || undefined,
+    } as unknown as QuizAnswers
 
     // Rozpočet a dárkovost filtruje už databáze, motor pak pracuje jen s kandidáty
     const range = parsed.budget === 'custom'

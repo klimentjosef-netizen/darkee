@@ -43,7 +43,7 @@ const SAME_KIND_PENALTY = 8
 const SAME_SHOP_PENALTY = 5
 // Dárek, u kterého je potřeba znát velikost nebo vkus obdarovaného (prsten, iniciála)
 const NOT_BLIND_PENALTY = 10
-// Slovo z volného popisu obdarovaného nalezené v názvu nebo popisu dárku
+// Slovo z volného popisu nebo ze zvolené záliby nalezené v názvu nebo popisu dárku
 const ABOUT_MATCH_BONUS = 12
 const ABOUT_MATCH_MAX = 24
 
@@ -131,7 +131,7 @@ function rankAll(answers: QuizAnswers, products: EngineProduct[]): RankedProduct
   // Když pro zvolený typ dárku není dost tipů, doplní se z ostatních
   if (eligible.length < TIPS) eligible = products.filter(p => passesFilters(p, answers, true))
 
-  const stems = aboutStems(answers.about)
+  const stems = [...new Set([...aboutStems(answers.about), ...(answers.hobbyWords || [])])]
   return eligible
     .map(p => ({ p, ...matchScore(p, answers, stems) }))
     .sort((a, b) => b.score - a.score)

@@ -1,4 +1,4 @@
-export type Relationship = 'partner' | 'parent' | 'friend' | 'sibling' | 'colleague' | 'child' | 'self' | 'pet'
+export type Relationship = 'partner' | 'parent' | 'grandparent' | 'friend' | 'sibling' | 'colleague' | 'child' | 'self' | 'pet'
 export type AgeGroup = 'baby' | 'preschool' | 'school' | 'teen' | 'young_adult' | 'adult' | 'senior' | 'elderly'
 export type Gender = 'female' | 'male' | 'neutral'
 export type Occasion = 'birthday' | 'christmas' | 'nameday' | 'valentine' | 'mothers_day' | 'wedding' | 'graduation' | 'just_because'
@@ -20,6 +20,9 @@ export interface QuizAnswers {
   budgetMax?: number
   // Nepovinný vlastní popis obdarovaného
   about?: string
+  // Konkrétní záliby z kvízu (popisky) a slova, podle kterých je motor hledá v dárcích
+  hobbies?: string[]
+  hobbyWords?: string[]
   personalized?: 'personalized' | 'standard'
   origin?: 'local' | 'any_origin'
 }

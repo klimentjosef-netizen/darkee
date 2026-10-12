@@ -30,7 +30,7 @@ export type Advice = {
 }
 
 const RELATIONSHIP: Record<string, string> = {
-  partner: 'partner nebo partnerka', parent: 'rodič', friend: 'kamarád nebo kamarádka', sibling: 'sourozenec',
+  partner: 'partner nebo partnerka', parent: 'rodič', grandparent: 'babička nebo děda', friend: 'kamarád nebo kamarádka', sibling: 'sourozenec',
   colleague: 'kolega nebo kolegyně', child: 'dítě', self: 'kupující sám sobě', pet: 'domácí mazlíček',
 }
 const AGE: Record<string, string> = {
@@ -79,7 +79,7 @@ function describe(answers: QuizAnswers): string {
     answers.relationship === 'pet' ? null : `Věk: ${AGE[answers.ageGroup] || answers.ageGroup}`,
     answers.relationship === 'pet' ? null : `Pohlaví: ${GENDER[answers.gender] || answers.gender}`,
     `Příležitost: ${OCCASION[answers.occasion] || answers.occasion}`,
-    `Zájmy: ${interests.length ? interests.join(', ') : 'kupující neví'}`,
+    `Co ho nebo ji baví: ${answers.hobbies?.length ? answers.hobbies.join(', ') : interests.length ? interests.join(', ') : 'kupující neví'}`,
     STYLE[answers.style] ? `Nejvíc potěší: ${STYLE[answers.style]}` : null,
     answers.about ? `Vlastní popis od kupujícího: "${answers.about}"` : null,
   ]

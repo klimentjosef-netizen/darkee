@@ -1,4 +1,5 @@
 import { QuizQuestion } from '@/types'
+import { HOBBIES } from './hobbies'
 
 export const QUIZ_QUESTIONS: QuizQuestion[] = [
   {
@@ -9,6 +10,7 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     options: [
       { value: 'partner',   label: 'Partner / Partnerka', emoji: '💑', description: 'Romantické, osobní' },
       { value: 'parent',    label: 'Maminka / Tatínek',   emoji: '👨‍👩‍👧', description: 'Sentimentální, kvalitní' },
+      { value: 'grandparent', label: 'Babička / Děda',    emoji: '👵', description: 'Vřelé, pro radost' },
       { value: 'friend',    label: 'Kamarád / Kamarádka', emoji: '🤝', description: 'Zábavné, originální' },
       { value: 'sibling',   label: 'Sourozenec',          emoji: '👫', description: 'Osobní, sdílené zájmy' },
       { value: 'colleague', label: 'Kolega / Kolegyně',   emoji: '💼', description: 'Neutrální, profesionální' },
@@ -23,13 +25,13 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     subtitle: 'Věk je klíčový filtr',
     type: 'single',
     options: [
-      { value: 'baby',        label: '0–2 roky',    emoji: '👶' },
-      { value: 'preschool',   label: '3–5 let',     emoji: '🎨' },
-      { value: 'school',      label: '6–12 let',    emoji: '📚' },
-      { value: 'teen',        label: '13–18 let',   emoji: '🎮' },
-      { value: 'young_adult', label: '19–30 let',   emoji: '🚀' },
-      { value: 'adult',       label: '31–50 let',   emoji: '💎' },
-      { value: 'senior',      label: '51–70 let',   emoji: '🌿' },
+      { value: 'baby',        label: '0 až 2 roky',    emoji: '👶' },
+      { value: 'preschool',   label: '3 až 5 let',     emoji: '🎨' },
+      { value: 'school',      label: '6 až 12 let',    emoji: '📚' },
+      { value: 'teen',        label: '13 až 18 let',   emoji: '🎮' },
+      { value: 'young_adult', label: '19 až 30 let',   emoji: '🚀' },
+      { value: 'adult',       label: '31 až 50 let',   emoji: '💎' },
+      { value: 'senior',      label: '51 až 70 let',   emoji: '🌿' },
       { value: 'elderly',     label: '70+ let',     emoji: '☕' },
     ],
   },
@@ -60,39 +62,18 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
   },
   {
     id: 'interests',
-    title: 'Jaké jsou zájmy obdarovaného?',
-    subtitle: 'Vyberte 1–3 oblasti',
+    title: 'Co obdarovaného baví?',
+    subtitle: 'Vyberte až čtyři. Když nevíte, zvolte Nevím.',
     type: 'multi',
-    maxSelections: 3,
+    maxSelections: 4,
     options: [
-      { value: 'tech',        label: 'Technologie & Gadgety', emoji: '📱' },
-      { value: 'sport',       label: 'Sport & Outdoor',       emoji: '⚽' },
-      { value: 'fashion',     label: 'Móda & Krása',          emoji: '👗' },
-      { value: 'home',        label: 'Domácnost & Bydlení',   emoji: '🏠' },
-      { value: 'food',        label: 'Jídlo & Pití',          emoji: '🍷' },
-      { value: 'books',       label: 'Knihy & Vzdělávání',    emoji: '📖' },
-      { value: 'games',       label: 'Hry & Zábava',          emoji: '🎲' },
-      { value: 'experiences', label: 'Zážitky & Cestování',   emoji: '✈️' },
-      { value: 'crafts',      label: 'Tvoření & Ruční práce', emoji: '🎨' },
-      { value: 'wellness',    label: 'Zdraví & Wellness',     emoji: '🧘' },
-      { value: 'pets',        label: 'Zvířata',               emoji: '🐾' },
-      { value: 'unknown',     label: 'Nevím',                 emoji: '🎁' },
-    ],
-  },
-  {
-    id: 'giftType',
-    title: 'Jaký typ dárku hledáte?',
-    type: 'single',
-    options: [
-      { value: 'physical',   label: 'Fyzický dárek',    emoji: '📦', description: 'Něco hmatatelného' },
-      { value: 'experience', label: 'Poukaz / Zážitek', emoji: '🎟️', description: 'Nezapomenutelný moment' },
-      { value: 'both',       label: 'Oboje',            emoji: '✨', description: 'Ukažte mi vše' },
+      ...Object.entries(HOBBIES).map(([value, h]) => ({ value, label: h.label, emoji: h.emoji })),
+      { value: 'unknown', label: 'Nevím', emoji: '🎁' },
     ],
   },
   {
     id: 'style',
-    title: 'Co by ho/ji nejvíc potěšilo?',
-    subtitle: 'Jaký typ dárku hledáte',
+    title: 'Co by obdarovaného nejvíc potěšilo?',
     type: 'single',
     options: [
       { value: 'practical',     label: 'Něco užitečného',    emoji: '🔧', description: 'Praktické věci do života' },
@@ -110,10 +91,10 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     type: 'single',
     options: [
       { value: 'max300',          label: 'Do 300 Kč',        emoji: '💰' },
-      { value: 'range300_500',    label: '300–500 Kč',       emoji: '💰' },
-      { value: 'range500_1000',   label: '500–1 000 Kč',     emoji: '💳' },
-      { value: 'range1000_2000',  label: '1 000–2 000 Kč',   emoji: '💳' },
-      { value: 'range2000_5000',  label: '2 000–5 000 Kč',   emoji: '💎' },
+      { value: 'range300_500',    label: '300 až 500 Kč',       emoji: '💰' },
+      { value: 'range500_1000',   label: '500 až 1 000 Kč',     emoji: '💳' },
+      { value: 'range1000_2000',  label: '1 000 až 2 000 Kč',   emoji: '💳' },
+      { value: 'range2000_5000',  label: '2 000 až 5 000 Kč',   emoji: '💎' },
       { value: 'unlimited',       label: 'Bez omezení',      emoji: '👑' },
       { value: 'custom',          label: 'Vlastní rozsah',   emoji: '✏️', description: 'Nastavte si min a max cenu' },
     ],

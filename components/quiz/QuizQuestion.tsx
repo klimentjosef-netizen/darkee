@@ -18,7 +18,9 @@ export function QuizQuestion({ question, value, onSelect, step, total }: Props) 
   }
 
   const colClass =
-    question.options.length <= 3
+    question.options.length > 12
+      ? 'grid-cols-2 md:grid-cols-3 max-w-[720px] !gap-2'
+      : question.options.length <= 3
       ? 'grid-cols-1 max-w-[420px]'
       : question.options.length <= 6
         ? 'grid-cols-1 sm:grid-cols-2 max-w-[520px]'
@@ -53,6 +55,7 @@ export function QuizQuestion({ question, value, onSelect, step, total }: Props) 
             selected={isSelected(option.value)}
             onSelect={() => onSelect(option.value)}
             index={i}
+            compact={question.options.length > 12}
           />
         ))}
       </div>
