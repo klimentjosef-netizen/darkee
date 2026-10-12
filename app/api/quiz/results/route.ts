@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
-import { scoreProducts } from '@/lib/scoring'
-import { QuizAnswers, BUDGET_MAP, Budget } from '@/types'
+import { rankCandidates, scoreProducts, toScoredProduct } from '@/lib/scoring'
+import { advise } from '@/lib/advisor'
+import { QuizAnswers, BUDGET_MAP, Budget, ScoredProduct } from '@/types'
 import { z } from 'zod'
 
 const schema = z.object({
@@ -15,21 +16,27 @@ const schema = z.object({
   budget: z.string(),
   budgetMin: z.number().optional(),
   budgetMax: z.number().optional(),
+  about: z.string().max(300).optional(),
   personalized: z.string().optional(),
   origin: z.string().optional(),
 })
 
 // Do doporučení jdou jen produkty, které posouzení označilo jako dobrý dárek
 const MIN_GIFT_SCORE = 50
+// Kolik kandidátů z motoru dostane výběrčí
+const CANDIDATES = 30
+// Pojistka proti nečekanému účtu za AI: po překročení denního počtu radí jen motor
+const AI_DAILY_LIMIT = Number(process.env.DARKEE_AI_DAILY_LIMIT || 800)
 
 export async function POST(request: NextRequest) {
   try {
-    const answers = schema.parse(await request.json())
+    const parsed = schema.parse(await request.json())
+    const answers = { ...parsed, about: parsed.about?.trim() || undefined } as unknown as QuizAnswers
 
     // Rozpočet a dárkovost filtruje už databáze, motor pak pracuje jen s kandidáty
-    const range = answers.budget === 'custom'
-      ? { min: answers.budgetMin || 0, max: answers.budgetMax || null }
-      : BUDGET_MAP[answers.budget as Budget] || { min: 0, max: null }
+    const range = parsed.budget === 'custom'
+      ? { min: parsed.budgetMin || 0, max: parsed.budgetMax || null }
+      : BUDGET_MAP[parsed.budget as Budget] || { min: 0, max: null }
 
     const products = await prisma.product.findMany({
       where: {
@@ -48,17 +55,34 @@ export async function POST(request: NextRequest) {
       },
     })
 
-    const scored = scoreProducts(answers as unknown as QuizAnswers, products)
+    const candidates = rankCandidates(answers, products, CANDIDATES)
+
+    const startOfDay = new Date()
+    startOfDay.setHours(0, 0, 0, 0)
+    const advisedToday = await prisma.quizResult.count({ where: { createdAt: { gte: startOfDay }, adviceModel: { not: null } } })
+    const advice = advisedToday < AI_DAILY_LIMIT ? await advise(answers, candidates) : null
+
+    let scored: ScoredProduct[]
+    if (advice) {
+      const byId = new Map(candidates.map(c => [c.p.id, c]))
+      scored = advice.picks.flatMap(pick => {
+        const c = byId.get(pick.id)
+        return c ? [toScoredProduct(c, { reason: pick.reason, role: pick.role })] : []
+      })
+    } else {
+      scored = scoreProducts(answers, products)
+    }
 
     const quizResult = await prisma.quizResult.create({
       data: {
         answers: JSON.parse(JSON.stringify(answers)),
         productIds: scored.map(p => p.id),
         scores: JSON.parse(JSON.stringify(scored.reduce((acc, p) => ({ ...acc, [p.id]: p.score }), {}))),
+        ...(advice ? { advice: JSON.parse(JSON.stringify(advice)), adviceModel: advice.model } : {}),
       },
     })
 
-    return NextResponse.json({ quizResultId: quizResult.id, products: scored })
+    return NextResponse.json({ quizResultId: quizResult.id, products: scored, headline: advice?.headline ?? null })
   } catch (error) {
     console.error('Quiz results error:', error)
     return NextResponse.json({ error: 'Nepodařilo se zpracovat kvíz' }, { status: 500 })

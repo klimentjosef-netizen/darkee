@@ -60,6 +60,9 @@ model QuizResult {
   productIds String[]
   scores     Json
   sessionId  String?
+  // Výběr a zdůvodnění od výběrčího (lib/advisor.ts); null = pětici složil jen motor
+  advice      Json?
+  adviceModel String?
   createdAt  DateTime @default(now())
   clicks     Click[]
 }

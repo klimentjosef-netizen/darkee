@@ -4,6 +4,7 @@ import Image from 'next/image'
 import { motion, useInView } from 'framer-motion'
 import { useRef, useState, useEffect } from 'react'
 import { ScoredProduct } from '@/types'
+import { ROLE_LABELS } from '@/lib/roles'
 import { ExternalLink } from 'lucide-react'
 
 interface ProductCardProps {
@@ -142,6 +143,11 @@ export function ProductCard({ product, quizResultId, rank }: ProductCardProps) {
 
           {/* Product name overlay on image — bottom left */}
           <div className="absolute bottom-4 left-4 right-24 z-10">
+            {product.role && ROLE_LABELS[product.role] && (
+              <span className="inline-block mb-2 px-2.5 py-1 rounded-full bg-[var(--gold-primary)] text-[#080806] text-[11px] font-medium font-[family-name:var(--font-body)]">
+                {ROLE_LABELS[product.role]}
+              </span>
+            )}
             <p className="text-white/70 text-[10px] tracking-[0.18em] uppercase mb-1 font-[family-name:var(--font-body)]">
               {product.sourceShop}
             </p>

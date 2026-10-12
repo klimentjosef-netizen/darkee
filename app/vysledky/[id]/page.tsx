@@ -71,6 +71,7 @@ export default function VysledkyPage() {
 
   const [products, setProducts] = useState<ScoredProduct[]>([])
   const [answers, setAnswers] = useState<Partial<QuizAnswers> | null>(null)
+  const [headline, setHeadline] = useState<string | null>(null)
   const [activeFilter, setActiveFilter] = useState<FilterKey>('all')
   const [loading, setLoading] = useState(true)
 
@@ -82,6 +83,7 @@ export default function VysledkyPage() {
           const data = await res.json()
           setProducts(data.products || [])
           setAnswers(data.answers || null)
+          setHeadline(data.headline || null)
         }
       } catch {
         // fallback
@@ -170,6 +172,12 @@ export default function VysledkyPage() {
               Změnit
             </Link>
           </motion.div>
+
+          {headline && (
+            <p className="mt-4 text-[15px] leading-relaxed text-[var(--text-secondary)] font-[family-name:var(--font-body)] max-w-[60ch]">
+              {headline}
+            </p>
+          )}
 
           {/* Summary + filters in one row */}
           <motion.div

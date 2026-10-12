@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
-import { scoreProducts } from '@/lib/scoring'
-import { QuizAnswers } from '@/types'
+import { scoreProducts, toScoredProduct } from '@/lib/scoring'
+import { Advice } from '@/lib/advisor'
+import { QuizAnswers, ScoredProduct } from '@/types'
 
 export async function GET(
   _request: NextRequest,
@@ -19,8 +20,10 @@ export async function GET(
     }
 
     const answers = quizResult.answers as unknown as QuizAnswers
+    const advice = quizResult.advice as unknown as Advice | null
+    const storedScores = (quizResult.scores || {}) as Record<string, number>
 
-    // Re-score with current product data for freshness
+    // Aktuální data produktů (cena, dostupnost), pořadí a důvody z uloženého výsledku
     const products = await prisma.product.findMany({
       where: {
         id: { in: quizResult.productIds },
@@ -37,11 +40,21 @@ export async function GET(
       },
     })
 
-    const scored = scoreProducts(answers, products)
+    let scored: ScoredProduct[]
+    if (advice?.picks?.length) {
+      const byId = new Map(products.map(p => [p.id, p]))
+      scored = advice.picks.flatMap(pick => {
+        const p = byId.get(pick.id)
+        return p ? [toScoredProduct({ p, score: storedScores[p.id] ?? 0, reasons: [] }, { reason: pick.reason, role: pick.role })] : []
+      })
+    } else {
+      scored = scoreProducts(answers, products)
+    }
 
     return NextResponse.json({
       products: scored,
       answers,
+      headline: advice?.headline ?? null,
     })
   } catch (error) {
     console.error('Fetch quiz result error:', error)

@@ -118,4 +118,11 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
       { value: 'custom',          label: 'Vlastní rozsah',   emoji: '✏️', description: 'Nastavte si min a max cenu' },
     ],
   },
+  {
+    id: 'about',
+    title: 'Chcete nám o obdarovaném říct víc?',
+    subtitle: 'Nepovinné. Pár slov pomůže vybrat přesněji.',
+    type: 'text',
+    options: [],
+  },
 ]

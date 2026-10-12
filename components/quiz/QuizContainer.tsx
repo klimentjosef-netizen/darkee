@@ -203,6 +203,7 @@ export function QuizContainer({ isModal = false, onClose }: QuizContainerProps) 
         style: a.style,
         budget: a.budget,
       }
+      if (typeof a.about === 'string' && a.about.trim()) payload.about = a.about.trim().slice(0, 300)
       if (a.budget === 'custom') {
         payload.budgetMin = Number(a.budgetMin) || 0
         payload.budgetMax = Number(a.budgetMax) || 99999
@@ -364,7 +365,7 @@ export function QuizContainer({ isModal = false, onClose }: QuizContainerProps) 
             fontSize: 12,
             fontFamily: "'Plus Jakarta Sans', sans-serif",
           }}>
-            Prohledáváme tisíce produktů z českých e-shopů
+            Vybíráme z ověřených dárků z českých e-shopů
           </p>
         </div>
       ) : (
@@ -464,6 +465,54 @@ export function QuizContainer({ isModal = false, onClose }: QuizContainerProps) 
               </motion.div>
             )}
           </AnimatePresence>
+
+          {/* Free-text step */}
+          {q.type === 'text' && (
+            <div style={{ textAlign: 'center', padding: '0 24px 28px', flexShrink: 0 }}>
+              <textarea
+                aria-label={q.title}
+                maxLength={300}
+                rows={3}
+                placeholder="Například: rybář, má rád dobrou slivovici, nesnáší zbytečnosti"
+                value={(answers.about as string) || ''}
+                onChange={e => setAnswers({ ...answers, about: e.target.value })}
+                style={{
+                  display: 'block',
+                  width: '100%',
+                  maxWidth: 520,
+                  margin: '0 auto 20px',
+                  padding: '14px 16px',
+                  fontSize: 16,
+                  fontFamily: "'Plus Jakarta Sans', sans-serif",
+                  border: '1px solid rgba(201,168,76,0.3)',
+                  borderRadius: 12,
+                  background: '#141310',
+                  color: '#F0EBE0',
+                  outline: 'none',
+                  resize: 'none',
+                }}
+              />
+              <button
+                onClick={() => advance()}
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: 10,
+                  padding: '14px 36px',
+                  background: '#C9A84C',
+                  color: '#080806',
+                  fontSize: 15,
+                  fontWeight: 500,
+                  fontFamily: "'Plus Jakarta Sans', sans-serif",
+                  border: 'none',
+                  borderRadius: 100,
+                  cursor: 'pointer',
+                }}
+              >
+                {(answers.about as string)?.trim() ? 'Najít dárky' : 'Přeskočit a najít dárky'}
+              </button>
+            </div>
+          )}
 
           {/* Multi-select continue button */}
           <AnimatePresence>

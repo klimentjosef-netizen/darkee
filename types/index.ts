@@ -18,6 +18,8 @@ export interface QuizAnswers {
   budget: Budget
   budgetMin?: number
   budgetMax?: number
+  // Nepovinný vlastní popis obdarovaného
+  about?: string
   personalized?: 'personalized' | 'standard'
   origin?: 'local' | 'any_origin'
 }
@@ -36,7 +38,7 @@ export interface QuizQuestion {
   id: keyof QuizAnswers
   title: string
   subtitle?: string
-  type: 'single' | 'multi'
+  type: 'single' | 'multi' | 'text'
   maxSelections?: number
   options: QuizOption[]
 }
@@ -63,6 +65,8 @@ export interface ScoredProduct {
   score: number
   matchPct: number
   reasons: string[]
+  // Role tipu v pětici od výběrčího (hlavni, jistota, originalni…)
+  role?: string
 }
 
 export interface MerchantStats {

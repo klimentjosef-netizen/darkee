@@ -7,6 +7,9 @@ import { QuizAnswers, ScoredProduct } from '@/types'
 // 2) Shoda 0 až 100: dárkovost 30, komu 20, zájmy 25, příležitost 15, osobnost 10.
 // 3) Pětice se skládá jako sestava: nejlepší shoda první, další tipy mají být
 //    jiného druhu, z jiného obchodu a nesmí to být varianta téhož.
+//
+// rankCandidates() dává kandidáty pro výběrčího (lib/advisor.ts),
+// scoreProducts() složí pětici bez něj a slouží jako záloha.
 
 export type EngineProduct = {
   id: string
@@ -31,6 +34,8 @@ export type EngineProduct = {
   giftReason: string | null
 }
 
+export type RankedProduct = { p: EngineProduct; score: number; reasons: string[] }
+
 const WEIGHTS = { gift: 30, recipient: 20, interests: 25, occasion: 15, style: 10 }
 const TIPS = 5
 const MAX_PER_SHOP = 2
@@ -38,6 +43,9 @@ const SAME_KIND_PENALTY = 8
 const SAME_SHOP_PENALTY = 5
 // Dárek, u kterého je potřeba znát velikost nebo vkus obdarovaného (prsten, iniciála)
 const NOT_BLIND_PENALTY = 10
+// Slovo z volného popisu obdarovaného nalezené v názvu nebo popisu dárku
+const ABOUT_MATCH_BONUS = 12
+const ABOUT_MATCH_MAX = 24
 
 const INTEREST_LABELS: Record<string, string> = {
   tech: 'technologie', sport: 'sport', fashion: 'módu', home: 'domácnost',
@@ -46,12 +54,25 @@ const INTEREST_LABELS: Record<string, string> = {
 }
 
 // Názvy z feedů občas obsahují HTML entity (&#039;, &amp;)
-function decodeEntities(text: string): string {
+export function decodeEntities(text: string): string {
   return text
     .replace(/&#(\d+);/g, (_, code) => String.fromCharCode(Number(code)))
     .replace(/&nbsp;/g, ' ')
     .replace(/&amp;/g, '&')
     .replace(/&quot;/g, '"')
+}
+
+function normalize(text: string): string {
+  return text.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '')
+}
+
+// Kořeny slov z volného popisu ("rybář, miluje kávu" → "rybar", "miluj", "kavu")
+function aboutStems(about: string | undefined): string[] {
+  if (!about) return []
+  const stop = new Set(['ktery', 'ktera', 'ktere', 'hodne', 'velmi', 'strasne', 'hlavne', 'take', 'nebo', 'jeho', 'jeji', 'rada', 'radi', 'neco', 'vsechno', 'protoze', 'kdyz', 'miluje'])
+  return [...new Set(
+    normalize(about).split(/[^a-z0-9]+/).filter(w => w.length >= 4 && !stop.has(w)).map(w => w.slice(0, 5))
+  )]
 }
 
 function passesFilters(p: EngineProduct, answers: QuizAnswers, ignoreGiftType: boolean): boolean {
@@ -61,7 +82,7 @@ function passesFilters(p: EngineProduct, answers: QuizAnswers, ignoreGiftType: b
   return true
 }
 
-function matchScore(p: EngineProduct, answers: QuizAnswers): { score: number; reasons: string[] } {
+function matchScore(p: EngineProduct, answers: QuizAnswers, stems: string[]): { score: number; reasons: string[] } {
   const reasons: string[] = []
   if (p.giftReason) reasons.push(p.giftReason)
 
@@ -86,6 +107,12 @@ function matchScore(p: EngineProduct, answers: QuizAnswers): { score: number; re
   if (answers.style === 'any_style') score += WEIGHTS.style / 2
   else if (answers.style === 'food_drink' ? p.interestTags.includes('food') : p.styleFit.includes(answers.style)) score += WEIGHTS.style
 
+  if (stems.length > 0) {
+    const haystack = normalize(`${p.name} ${p.giftReason || ''}`)
+    const hits = stems.filter(s => haystack.includes(s)).length
+    score += Math.min(ABOUT_MATCH_MAX, hits * ABOUT_MATCH_BONUS)
+  }
+
   if (p.blindBuy === false) score -= NOT_BLIND_PENALTY
 
   if (p.isPersonalizable) reasons.push('Lze personalizovat')
@@ -93,23 +120,69 @@ function matchScore(p: EngineProduct, answers: QuizAnswers): { score: number; re
   return { score, reasons }
 }
 
-export function scoreProducts(answers: QuizAnswers, products: EngineProduct[]): ScoredProduct[] {
+function nameKey(name: string): string {
+  return name.toLowerCase().split(/\s+/).slice(0, 3).join(' ')
+}
+
+function rankAll(answers: QuizAnswers, products: EngineProduct[]): RankedProduct[] {
   let eligible = products.filter(p => passesFilters(p, answers, false))
   // Když pro zvolený typ dárku není dost tipů, doplní se z ostatních
   if (eligible.length < TIPS) eligible = products.filter(p => passesFilters(p, answers, true))
 
-  const ranked = eligible
-    .map(p => ({ p, ...matchScore(p, answers) }))
+  const stems = aboutStems(answers.about)
+  return eligible
+    .map(p => ({ p, ...matchScore(p, answers, stems) }))
     .sort((a, b) => b.score - a.score)
+}
 
-  const picked: typeof ranked = []
+// Nejlepší kandidáti pro výběrčího: bez variant téhož a jen pár kusů z jednoho obchodu,
+// aby měl z čeho skládat pestrou pětici.
+export function rankCandidates(answers: QuizAnswers, products: EngineProduct[], limit: number): RankedProduct[] {
+  const out: RankedProduct[] = []
+  const shopCount: Record<string, number> = {}
+  const seenNames = new Set<string>()
+  const perShop = Math.max(4, Math.ceil(limit / 5))
+
+  for (const c of rankAll(answers, products)) {
+    const key = nameKey(c.p.name)
+    if (seenNames.has(key) || (shopCount[c.p.sourceShop] || 0) >= perShop) continue
+    seenNames.add(key)
+    shopCount[c.p.sourceShop] = (shopCount[c.p.sourceShop] || 0) + 1
+    out.push(c)
+    if (out.length >= limit) break
+  }
+  return out
+}
+
+export function toScoredProduct({ p, score, reasons }: RankedProduct, override?: { reason?: string; role?: string }): ScoredProduct {
+  return {
+    id: p.id,
+    name: decodeEntities(p.name),
+    price: p.price,
+    imageUrl: p.imageUrl,
+    originalUrl: p.originalUrl,
+    affiliateUrl: p.affiliateUrl,
+    sourceShop: p.sourceShop,
+    giftType: p.giftType,
+    isPersonalizable: p.isPersonalizable,
+    isLocal: p.isLocal || false,
+    score,
+    matchPct: Math.round(Math.max(1, Math.min(99, score))),
+    reasons: override?.reason ? [override.reason] : reasons,
+    role: override?.role,
+  }
+}
+
+export function scoreProducts(answers: QuizAnswers, products: EngineProduct[]): ScoredProduct[] {
+  const ranked = rankAll(answers, products)
+
+  const picked: RankedProduct[] = []
   const kindCount: Record<string, number> = {}
   const shopCount: Record<string, number> = {}
   const seenNames = new Set<string>()
-  const nameKey = (name: string) => name.toLowerCase().split(/\s+/).slice(0, 3).join(' ')
 
   while (picked.length < TIPS) {
-    let best: (typeof ranked)[number] | null = null
+    let best: RankedProduct | null = null
     let bestAdjusted = -Infinity
 
     for (const c of ranked) {
@@ -134,19 +207,5 @@ export function scoreProducts(answers: QuizAnswers, products: EngineProduct[]): 
     shopCount[best.p.sourceShop] = (shopCount[best.p.sourceShop] || 0) + 1
   }
 
-  return picked.sort((a, b) => b.score - a.score).map(({ p, score, reasons }) => ({
-    id: p.id,
-    name: decodeEntities(p.name),
-    price: p.price,
-    imageUrl: p.imageUrl,
-    originalUrl: p.originalUrl,
-    affiliateUrl: p.affiliateUrl,
-    sourceShop: p.sourceShop,
-    giftType: p.giftType,
-    isPersonalizable: p.isPersonalizable,
-    isLocal: p.isLocal || false,
-    score,
-    matchPct: Math.round(Math.max(1, Math.min(99, score))),
-    reasons,
-  }))
+  return picked.sort((a, b) => b.score - a.score).map(c => toScoredProduct(c))
 }
