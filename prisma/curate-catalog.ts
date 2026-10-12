@@ -30,10 +30,13 @@ if (!OUT) {
 
 export const RULES_VERSION = 'rules-v1'
 
-// Obchody, jejichž sortiment není dárkový (spotřební zboží, náhradní díly, velikostní obuv a oblečení)
+// Obchody, jejichž sortiment se do dárkového doporučení nehodí
+// (spotřební zboží, náhradní díly, velikostní obuv a oblečení)
 const NON_GIFT_SHOPS = new Set([
   'Obujtese.cz', 'Eleven-sportswear.cz', 'Granulebardog.cz', 'Renovality.cz',
   'ActiMaris.cz', 'Ozonidy.cz', 'Doogee-shop.cz', 'iPhoneMarket.cz',
+  // erotické zboží a nábytkové kování
+  'Willi.cz', 'Loomah.cz',
 ])
 
 const SIZE = /\b(velikost|vel\.|size)\s*:?\s*\S/i

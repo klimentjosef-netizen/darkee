@@ -46,12 +46,10 @@ const EHUB_CAMPAIGNS: Record<string, string> = {
   'Doke.cz': '425bddde',
   'Danfil.cz': 'cbb5cc0e',
   'Brilianty.cz': 'e6e4bc7a',
-  'BJP-store.cz': '6f6c8ab9',
   'Nejlevnějšíprotein.cz': '0377639a',
   'Topalkohol.cz': '3e59749f',
   'BabyMall.cz': '153ce8b7',
   'OK-Hračky.cz': '20372289',
-  'Zdraví-global.cz': '6d4aa7d6',
   'OceněnáVína.cz': 'c887d0ca',
   'Kabelka.cz': '57bf721f',
   'Ozonidy.cz': '07c2ac18',
@@ -78,6 +76,13 @@ const EHUB_CAMPAIGNS: Record<string, string> = {
   'Jabkolevně.cz': '85731c2c',
   'ActiMaris.cz': 'f98c5f62',
   'iPhoneMarket.cz': '2bcd6f9d',
+  'Barman.cz': '6caa871c',
+  'Cafemontana.cz': 'c1a9b174',
+  'Cheesehouse.cz': '333eb4f5',
+  'Kidero.cz': '3b8a6252',
+  'SARAbags.cz': '465abf3e',
+  'Fantomprint.cz': 'd262f0ce',
+  'Světnápojů.cz': '6aa48880',
 }
 
 function buildAffiliateUrl(baseUrl: string, source: string, sourceShop: string): string {

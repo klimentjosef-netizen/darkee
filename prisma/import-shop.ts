@@ -1,9 +1,10 @@
 /**
  * Universal shop importer for Heureka XML feeds
- * Usage: npx tsx prisma/import-shop.ts <feedUrl> <shopName> [--ai]
+ * Usage: npx tsx prisma/import-shop.ts <feedUrl> <shopName> [--ai] [--max-price=N] [--limit=N]
  *
  * --ai flag enables AI tagging via Claude (requires ANTHROPIC_API_KEY)
  * Without --ai, uses heuristic tagging from feed PARAMs
+ * --limit=N takes N products spread evenly across the feed (large catalogs)
  */
 
 import { PrismaClient } from '@prisma/client'
@@ -18,6 +19,8 @@ const shopName = args[1]
 const useAI = args.includes('--ai')
 const maxPriceArg = args.find(a => a.startsWith('--max-price='))
 const MAX_PRICE = maxPriceArg ? Number(maxPriceArg.split('=')[1]) : null
+const limitArg = args.find(a => a.startsWith('--limit='))
+const LIMIT = limitArg ? Number(limitArg.split('=')[1]) : null
 
 if (!feedUrl || !shopName) {
   console.error('Usage: npx tsx prisma/import-shop.ts <feedUrl> <shopName> [--ai]')
@@ -149,6 +152,15 @@ function mapInterests(category: string, giftTypes: string[], hobbies: string[], 
   return tags.size > 0 ? [...tags] : ['home']
 }
 
+function decodeEntities(text: string): string {
+  return text
+    .replace(/&#x([0-9a-f]+);/gi, (_, hex) => String.fromCodePoint(parseInt(hex, 16)))
+    .replace(/&#(\d+);/g, (_, code) => String.fromCodePoint(Number(code)))
+    .replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&apos;/g, "'")
+    .replace(/&nbsp;/g, ' ')
+    .replace(/&amp;/g, '&')
+}
+
 // ── AI tagging ──
 async function aiTag(name: string, description: string, category: string, price: number) {
   const { tagProduct } = await import('../lib/ai-tagger')
@@ -162,7 +174,8 @@ async function main() {
   const xml = await res.text()
   console.log(`Feed downloaded: ${(xml.length / 1024).toFixed(0)} KB`)
 
-  const parser = new XMLParser({ ignoreAttributes: false, parseTagValue: false })
+  // Entity dekódujeme sami: parser má limit 1000 entit na dokument a velké feedy na něm padají
+  const parser = new XMLParser({ ignoreAttributes: false, parseTagValue: false, processEntities: false })
   const parsed = parser.parse(xml)
 
   // Support both Heureka (SHOP > SHOPITEM) and Google Merchant (rss > channel > item)
@@ -181,18 +194,23 @@ async function main() {
     }))
   }
   console.log(`Found ${items.length} products${isGoogle ? ' (Google format)' : ''}`)
+  if (LIMIT && items.length > LIMIT) {
+    const step = items.length / LIMIT
+    items = Array.from({ length: LIMIT }, (_, i) => items[Math.floor(i * step)])
+    console.log(`Limited to ${items.length} products spread across the feed`)
+  }
   if (useAI) console.log('Using AI tagging (Claude) — this will take a while...')
 
   let imported = 0
   let skipped = 0
 
   for (const item of items) {
-    const name = String(item.PRODUCTNAME || item.PRODUCT || '')
+    const name = decodeEntities(String(item.PRODUCTNAME || item.PRODUCT || ''))
     const price = parsePrice(item.PRICE_VAT as string || item.PRICE as string || '0')
-    const url = String(item.URL || '')
-    const imageUrl = String(item.IMGURL || '')
-    const description = stripHtml(String(item.DESCRIPTION || ''))
-    const category = String(item.CATEGORYTEXT || '')
+    const url = decodeEntities(String(item.URL || ''))
+    const imageUrl = decodeEntities(String(item.IMGURL || ''))
+    const description = stripHtml(decodeEntities(String(item.DESCRIPTION || '')))
+    const category = decodeEntities(String(item.CATEGORYTEXT || ''))
 
     if (!name || !price || !url) { skipped++; continue }
     if (MAX_PRICE && price > MAX_PRICE) { skipped++; continue }
@@ -253,15 +271,10 @@ async function main() {
           inStock: true,
           isApproved: true,
         },
+        // Štítky se při aktualizaci nepřepisují, patří posouzení dárkovosti
         update: {
           name, description, price, imageUrl,
           categories,
-          ageRange: tags.ageRange as string[],
-          genderFit: tags.genderFit as string[],
-          occasionFit: tags.occasionFit as string[],
-          interestTags: tags.interestTags as string[],
-          styleFit: tags.styleFit as string[],
-          isPersonalizable: tags.isPersonalizable,
           inStock: true,
         },
       })
