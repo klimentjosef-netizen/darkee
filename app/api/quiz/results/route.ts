@@ -76,6 +76,8 @@ export async function POST(request: NextRequest) {
         if (scored.filter(s => s.sourceShop === c.p.sourceShop).length >= 2) continue
         scored.push(toScoredProduct(c, { role: 'jistota' }))
       }
+      // Uloží se konečná pětice včetně doplněných tipů, aby stránka výsledků ukázala totéž
+      advice.picks = scored.map(s => ({ id: s.id, role: s.role || 'jistota', reason: s.reasons[0] || '' }))
     } else {
       scored = scoreProducts(answers, products)
     }

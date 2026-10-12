@@ -60,6 +60,8 @@ export function decodeEntities(text: string): string {
     .replace(/&nbsp;/g, ' ')
     .replace(/&amp;/g, '&')
     .replace(/&quot;/g, '"')
+    // Dlouhé pomlčky z názvů v e-shopech na webu nepoužíváme
+    .replace(/\s+[–—]\s+/g, ', ')
 }
 
 function normalize(text: string): string {
