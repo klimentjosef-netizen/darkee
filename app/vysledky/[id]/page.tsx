@@ -7,6 +7,7 @@ import Link from 'next/link'
 import { MotionConfig, motion } from 'framer-motion'
 import { ArrowUpRight, RotateCcw } from 'lucide-react'
 import { SiteFooter } from '@/components/SiteFooter'
+import { ReminderForm } from '@/components/ReminderForm'
 import { ROLE_LABELS } from '@/lib/roles'
 import { ScoredProduct, QuizAnswers } from '@/types'
 
@@ -230,6 +231,8 @@ export default function VysledkyPage() {
                 </ul>
               </section>
             )}
+
+            <ReminderForm quizResultId={quizResultId} defaultOccasion={answers?.occasion} />
 
             <div className="mt-14 flex flex-col items-start gap-4 border-t border-[var(--border-subtle)] pt-10 sm:flex-row sm:items-center sm:justify-between">
               <p className="text-base text-[var(--text-secondary)]">Nesedí vám ani jeden? Upravte odpovědi a vybereme znovu.</p>

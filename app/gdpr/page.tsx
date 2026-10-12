@@ -35,6 +35,8 @@ export default function GdprPage() {
               <li><strong>Odpovědi z kvízu</strong> — informace o obdarovaném (věková skupina, pohlaví, zájmy, příležitost, rozpočet). Tyto údaje se ukládají anonymně a nejsou spojeny s vaší identitou.</li>
               <li><strong>Technické údaje</strong> — anonymizovaná IP adresa (SHA-256 hash), typ prohlížeče (user-agent), časové razítko návštěvy. Slouží k prevenci zneužití a k analytice.</li>
               <li><strong>Údaje o kliknutí</strong> — při kliknutí na odkaz produktu zaznamenáváme ID produktu, zdroj návštěvy a anonymizovanou IP adresu pro účely affiliate sledování.</li>
+              <li><strong>Vlastní popis obdarovaného:</strong> pokud v kvízu vyplníte nepovinné pole s popisem, uložíme ho spolu s ostatními odpověďmi. Nepište do něj prosím jména ani jiné údaje, podle kterých by šlo někoho poznat.</li>
+              <li><strong>E-mail pro připomínku:</strong> jen pokud si u výsledku nastavíte připomínku data. Ukládáme e-mailovou adresu, označení obdarovaného (například &quot;táta&quot;), den a měsíc a vaše odpovědi z kvízu. Právní základ: váš souhlas, který potvrzujete odkazem v e-mailu.</li>
               <li><strong>Cookies</strong> — viz naše <Link href="/cookies" className="text-[var(--gold-primary)] no-underline hover:underline">Zásady používání cookies</Link>.</li>
             </ul>
           </section>
@@ -55,6 +57,7 @@ export default function GdprPage() {
               <li>Odpovědi z kvízu a výsledky: 12 měsíců od vytvoření.</li>
               <li>Záznamy o kliknutí (affiliate): 24 měsíců pro účely vyúčtování provizí.</li>
               <li>Technické logy: 90 dní.</li>
+              <li>Připomínky: do zrušení. Zrušit je můžete kdykoli odkazem v každém e-mailu, připomínka se tím celá smaže.</li>
             </ul>
           </section>
 
@@ -63,7 +66,9 @@ export default function GdprPage() {
             <p>Osobní údaje předáváme pouze:</p>
             <ul className="list-disc pl-5 space-y-2 mt-3">
               <li><strong>Affiliate sítě</strong> (eHub.cz) — anonymizované údaje o prokliknutí pro vyúčtování provizí.</li>
-              <li><strong>Poskytovatelé infrastruktury</strong> — Vercel (hosting), Railway (databáze). Servery v EU.</li>
+              <li><strong>Poskytovatelé infrastruktury</strong> — Vercel (hosting), Supabase (databáze). Servery v EU.</li>
+              <li><strong>Výběr dárků pomocí umělé inteligence:</strong> odpovědi z kvízu včetně nepovinného popisu předáváme společnosti Anthropic (USA), jejíž model z nich a z našeho katalogu sestaví doporučení. Nepředáváme e-mail, IP adresu ani jiný identifikátor.</li>
+              <li><strong>Odesílání e-mailů:</strong> pokud si nastavíte připomínku, vaši adresu zpracovává služba Resend, přes kterou e-maily odesíláme.</li>
             </ul>
             <p className="mt-3">Údaje neprodáváme, neposkytujeme pro marketingové účely třetích stran a nepředáváme mimo Evropský hospodářský prostor.</p>
           </section>

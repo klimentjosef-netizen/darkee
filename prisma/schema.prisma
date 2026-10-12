@@ -189,3 +189,22 @@ model GemTransaction {
 
   @@index([userId, createdAt])
 }
+
+// Připomínka data (narozeniny, svátek…): 14 dní předem pošle e-mail s čerstvými tipy.
+// Platí až po potvrzení odkazem z e-mailu, zrušení ji celou smaže.
+model Reminder {
+  id           String    @id @default(cuid())
+  email        String
+  who          String
+  occasion     String
+  day          Int
+  month        Int
+  answers      Json
+  confirmToken String    @unique
+  manageToken  String    @unique
+  confirmedAt  DateTime?
+  lastSentYear Int?
+  createdAt    DateTime  @default(now())
+
+  @@index([month, day])
+}
