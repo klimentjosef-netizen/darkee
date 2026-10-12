@@ -30,10 +30,10 @@ export async function GET(
       select: {
         id: true, name: true, price: true, imageUrl: true,
         originalUrl: true, affiliateUrl: true, sourceShop: true,
-        giftType: true, isPersonalizable: true, isLocal: true, categories: true,
+        giftType: true, isPersonalizable: true, isLocal: true,
         ageRange: true, genderFit: true, occasionFit: true,
-        interestTags: true, styleFit: true, rating: true,
-        popularityScore: true, inStock: true, isPremium: true,
+        interestTags: true, styleFit: true,
+        giftScore: true, giftKind: true, recipients: true, giftReason: true,
       },
     })
 

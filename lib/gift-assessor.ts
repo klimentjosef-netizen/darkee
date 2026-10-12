@@ -15,23 +15,23 @@ const AGES = ['baby', 'preschool', 'school', 'teen', 'young_adult', 'adult', 'se
 const RECIPIENTS = ['partner', 'parent', 'friend', 'sibling', 'colleague', 'child', 'self', 'pet'] as const
 const KINDS = ['jistota', 'originalni', 'zazitek', 'prakticky', 'luxus', 'drobnost', 'neni_darek'] as const
 
-const AssessmentSchema = z.object({
-  items: z.array(z.object({
-    ref: z.number().int(),
-    giftScore: z.number().int(),
-    blindBuy: z.boolean(),
-    kind: z.enum(KINDS),
-    recipients: z.array(z.enum(RECIPIENTS)),
-    genderFit: z.array(z.enum(GENDERS)),
-    ageRange: z.array(z.enum(AGES)),
-    occasionFit: z.array(z.enum(OCCASIONS)),
-    interestTags: z.array(z.enum(INTERESTS)),
-    styleFit: z.array(z.enum(STYLES)),
-    giftType: z.enum(['physical', 'experience']),
-    isPersonalizable: z.boolean(),
-    reason: z.string(),
-  })),
+export const AssessmentItemSchema = z.object({
+  ref: z.number().int(),
+  giftScore: z.number().int(),
+  blindBuy: z.boolean(),
+  kind: z.enum(KINDS),
+  recipients: z.array(z.enum(RECIPIENTS)),
+  genderFit: z.array(z.enum(GENDERS)),
+  ageRange: z.array(z.enum(AGES)),
+  occasionFit: z.array(z.enum(OCCASIONS)),
+  interestTags: z.array(z.enum(INTERESTS)),
+  styleFit: z.array(z.enum(STYLES)),
+  giftType: z.enum(['physical', 'experience']),
+  isPersonalizable: z.boolean(),
+  reason: z.string(),
 })
+
+const AssessmentSchema = z.object({ items: z.array(AssessmentItemSchema) })
 
 export type Assessment = z.infer<typeof AssessmentSchema>['items'][number]
 
@@ -95,7 +95,7 @@ export async function assessProducts(
   model: string = DEFAULT_MODEL,
 ): Promise<{ items: Assessment[]; usage: Anthropic.Usage }> {
   const payload = products.map((p, i) => ({
-    ref: i,
+  ref: i,
     nazev: clean(p.name, 200),
     popis: clean(p.description, 400),
     kategorie: p.category || '',

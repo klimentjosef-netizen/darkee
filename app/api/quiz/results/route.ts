@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { scoreProducts } from '@/lib/scoring'
-import { QuizAnswers } from '@/types'
+import { QuizAnswers, BUDGET_MAP, Budget } from '@/types'
 import { z } from 'zod'
 
 const schema = z.object({
@@ -19,19 +19,32 @@ const schema = z.object({
   origin: z.string().optional(),
 })
 
+// Do doporučení jdou jen produkty, které posouzení označilo jako dobrý dárek
+const MIN_GIFT_SCORE = 50
+
 export async function POST(request: NextRequest) {
   try {
     const answers = schema.parse(await request.json())
 
+    // Rozpočet a dárkovost filtruje už databáze, motor pak pracuje jen s kandidáty
+    const range = answers.budget === 'custom'
+      ? { min: answers.budgetMin || 0, max: answers.budgetMax || null }
+      : BUDGET_MAP[answers.budget as Budget] || { min: 0, max: null }
+
     const products = await prisma.product.findMany({
-      where: { inStock: true, isApproved: true },
+      where: {
+        inStock: true,
+        isApproved: true,
+        giftScore: { gte: MIN_GIFT_SCORE },
+        price: { gte: range.min, ...(range.max !== null ? { lte: range.max } : {}) },
+      },
       select: {
         id: true, name: true, price: true, imageUrl: true,
         originalUrl: true, affiliateUrl: true, sourceShop: true,
-        giftType: true, isPersonalizable: true, isLocal: true, categories: true,
+        giftType: true, isPersonalizable: true, isLocal: true,
         ageRange: true, genderFit: true, occasionFit: true,
-        interestTags: true, styleFit: true, rating: true,
-        popularityScore: true, inStock: true, isPremium: true,
+        interestTags: true, styleFit: true,
+        giftScore: true, giftKind: true, recipients: true, giftReason: true,
       },
     })
 

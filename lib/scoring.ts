@@ -1,6 +1,14 @@
-import { QuizAnswers, ScoredProduct, BUDGET_MAP } from '@/types'
+import { QuizAnswers, ScoredProduct } from '@/types'
 
-type RawProduct = {
+// Motor doporučení. Vybírá jen z produktů, které prošly posouzením dárkovosti
+// (giftScore, role v pětici, komu se hodí, lidský důvod), viz lib/gift-assessor.ts.
+//
+// 1) Tvrdé filtry: věk, pohlaví, typ dárku (rozpočet filtruje už dotaz do databáze).
+// 2) Shoda 0 až 100: dárkovost 35, komu 20, zájmy 25, příležitost 10, osobnost 10.
+// 3) Pětice se skládá jako sestava: nejlepší shoda první, další tipy mají být
+//    jiného druhu, z jiného obchodu a nesmí to být varianta téhož.
+
+export type EngineProduct = {
   id: string
   name: string
   price: number
@@ -11,179 +19,128 @@ type RawProduct = {
   giftType: string
   isPersonalizable: boolean
   isLocal?: boolean
-  categories: string[]
   ageRange: string[]
   genderFit: string[]
   occasionFit: string[]
   interestTags: string[]
   styleFit: string[]
-  rating: number
-  popularityScore: number
-  inStock: boolean
-  isPremium: boolean
+  giftScore: number | null
+  giftKind: string | null
+  recipients: string[]
+  giftReason: string | null
 }
 
-export function scoreProducts(answers: QuizAnswers, products: RawProduct[]): ScoredProduct[] {
-  const budgetRange = answers.budget === 'custom'
-    ? { min: answers.budgetMin || 0, max: answers.budgetMax || null }
-    : BUDGET_MAP[answers.budget]
-  const budgetCap = budgetRange.max
-  const budgetMin = budgetRange.min
-  const month = new Date().getMonth() + 1
+const WEIGHTS = { gift: 35, recipient: 20, interests: 25, occasion: 10, style: 10 }
+const TIPS = 5
+const MAX_PER_SHOP = 2
+const SAME_KIND_PENALTY = 8
+const SAME_SHOP_PENALTY = 5
 
-  const eligible = products.filter(p => {
-    if (!p.inStock) return false
-    if (budgetCap !== null && p.price > budgetCap) return false
-    if (budgetMin > 0 && p.price < budgetMin) return false
-    // "Nevím" (neutral) = show everything, otherwise filter by gender
-    if (answers.gender !== 'neutral' && !p.genderFit.includes(answers.gender) && !p.genderFit.includes('neutral')) return false
-    if (!p.ageRange.includes(answers.ageGroup)) return false
-    if (answers.giftType !== 'both' && p.giftType !== answers.giftType) return false
-    return true
-  })
+const INTEREST_LABELS: Record<string, string> = {
+  tech: 'technologie', sport: 'sport', fashion: 'módu', home: 'domácnost',
+  food: 'jídlo a pití', books: 'knihy', games: 'hry', experiences: 'zážitky',
+  crafts: 'tvoření', wellness: 'wellness', pets: 'zvířata',
+}
 
-  const scored = eligible.map(p => {
-    let score = 0
-    const reasons: string[] = []
+// Názvy z feedů občas obsahují HTML entity (&#039;, &amp;)
+function decodeEntities(text: string): string {
+  return text
+    .replace(/&#(\d+);/g, (_, code) => String.fromCharCode(Number(code)))
+    .replace(/&amp;/g, '&')
+    .replace(/&quot;/g, '"')
+}
 
-    const matchedInterests = answers.interests.filter(i => p.interestTags.includes(i))
-    score += Math.min(30, matchedInterests.length * 12 + (matchedInterests.length > 1 ? 6 : 0))
-    if (matchedInterests.length > 0) {
-      const labels: Record<string, string> = {
-        tech: 'technologie', sport: 'sport', fashion: 'módu', home: 'domácnost',
-        food: 'jídlo a pití', books: 'vzdělávání', games: 'hry', experiences: 'zážitky',
-        crafts: 'tvoření', wellness: 'wellness', pets: 'zvířata',
-      }
-      reasons.push(`Sedí na ${matchedInterests.map(i => labels[i] || i).join(' a ')}`)
-    }
+function passesFilters(p: EngineProduct, answers: QuizAnswers, ignoreGiftType: boolean): boolean {
+  if (!p.ageRange.includes(answers.ageGroup)) return false
+  if (answers.gender !== 'neutral' && !p.genderFit.includes(answers.gender) && !p.genderFit.includes('neutral')) return false
+  if (!ignoreGiftType && answers.giftType !== 'both' && p.giftType !== answers.giftType) return false
+  return true
+}
 
-    // Style matching — food_drink boosts food-tagged products
-    if (answers.style === 'any_style') {
-      score += 20
-    } else if (answers.style === 'food_drink') {
-      if (p.interestTags.includes('food')) {
-        score += 20
-        reasons.push('Něco dobrého k jídlu nebo pití')
-      }
-    } else if (p.styleFit.includes(answers.style)) {
-      score += 20
-      reasons.push(
-        answers.style === 'practical' ? 'Praktický a užitečný dárek' :
-        answers.style === 'aesthetic' ? 'Krásný design' :
-        answers.style === 'adventurous' ? 'Zábavný a originální' :
-        answers.style === 'comfort' ? 'Osobní a na míru' :
-        'Odpovídá osobnosti obdarovaného'
-      )
-    }
+function matchScore(p: EngineProduct, answers: QuizAnswers): { score: number; reasons: string[] } {
+  const reasons: string[] = []
+  if (p.giftReason) reasons.push(p.giftReason)
 
-    // Nameday matches same products as birthday
-    const occasionToMatch = answers.occasion === 'nameday' ? 'birthday' : answers.occasion
-    if (p.occasionFit.includes(occasionToMatch) || p.occasionFit.includes(answers.occasion) || p.occasionFit.includes('any')) score += 20
-    if (answers.occasion === 'christmas' && (month === 11 || month === 12)) score += 5
-    if (answers.occasion === 'valentine' && (month === 1 || month === 2)) score += 5
+  let score = ((p.giftScore ?? 0) / 100) * WEIGHTS.gift
 
-    const relMap: Record<string, string[]> = {
-      partner: ['valentine', 'personal', 'aesthetic', 'fashion'],
-      parent: ['sentimental', 'practical', 'comfort', 'home'],
-      friend: ['fun', 'games', 'experiences', 'food'],
-      sibling: ['games', 'tech', 'fashion', 'experiences'],
-      colleague: ['neutral', 'home', 'food', 'books'],
-      child: ['games', 'crafts', 'sport', 'books'],
-      self: ['tech', 'fashion', 'wellness', 'experiences'],
-      pet: ['pets', 'food', 'home', 'sport'],
-    }
-    const relTags = relMap[answers.relationship] || []
-    if (p.interestTags.some(t => relTags.includes(t)) || p.styleFit.some(t => relTags.includes(t))) {
-      score += 10
-    }
+  if (p.recipients.includes(answers.relationship)) score += WEIGHTS.recipient
 
-    score += (p.popularityScore / 100) * 10
-    if (p.rating >= 4.5) score += 5
-    else if (p.rating >= 4.0) score += 3
-    if (p.isPremium) score += 3
-    if (p.isPersonalizable) reasons.push('Lze personalizovat')
+  const wanted = answers.interests.filter(i => i !== 'unknown')
+  if (wanted.length === 0) {
+    score += WEIGHTS.interests / 2
+  } else {
+    const matched = wanted.filter(i => p.interestTags.includes(i))
+    if (matched.length >= 2) score += WEIGHTS.interests
+    else if (matched.length === 1) score += WEIGHTS.interests * 0.7
+    if (matched.length > 0) reasons.push(`Sedí na ${matched.map(i => INTEREST_LABELS[i] || i).join(' a ')}`)
+  }
 
-    // Budget utilization bonus — up to 10pts
-    if (budgetCap !== null && budgetCap > 0) {
-      const utilization = p.price / budgetCap
-      if (utilization >= 0.6) {
-        score += 10
-      } else if (utilization >= 0.3) {
-        score += Math.round(10 * ((utilization - 0.3) / 0.3))
-      }
-    }
+  // Svátek se bere jako narozeniny
+  const occasion = answers.occasion === 'nameday' ? 'birthday' : answers.occasion
+  if (p.occasionFit.includes(occasion)) score += WEIGHTS.occasion
 
-    // Multi-category match bonus — up to 5pts
-    let matchDimensions = 0
-    if (matchedInterests.length > 0) matchDimensions++
-    if (answers.style === 'any_style' || p.styleFit.includes(answers.style)) matchDimensions++
-    if (p.occasionFit.includes(occasionToMatch) || p.occasionFit.includes(answers.occasion) || p.occasionFit.includes('any')) matchDimensions++
-    if (matchDimensions >= 3) {
-      score += 5
-    } else if (matchDimensions === 2) {
-      score += 2
-    }
+  if (answers.style === 'any_style') score += WEIGHTS.style / 2
+  else if (answers.style === 'food_drink' ? p.interestTags.includes('food') : p.styleFit.includes(answers.style)) score += WEIGHTS.style
 
-    if (reasons.length === 0) reasons.push('Dobře hodnocený produkt v dané kategorii')
+  if (p.isPersonalizable) reasons.push('Lze personalizovat')
 
-    const maxPossible = 118
-    const matchPct = Math.round(Math.min(99, (score / maxPossible) * 100))
+  return { score, reasons }
+}
 
-    return {
-      id: p.id,
-      name: p.name,
-      price: p.price,
-      imageUrl: p.imageUrl,
-      originalUrl: p.originalUrl,
-      affiliateUrl: p.affiliateUrl,
-      sourceShop: p.sourceShop,
-      giftType: p.giftType,
-      isPersonalizable: p.isPersonalizable,
-      isLocal: p.isLocal || false,
-      score,
-      matchPct,
-      reasons,
-    }
-  })
+export function scoreProducts(answers: QuizAnswers, products: EngineProduct[]): ScoredProduct[] {
+  let eligible = products.filter(p => passesFilters(p, answers, false))
+  // Když pro zvolený typ dárku není dost tipů, doplní se z ostatních
+  if (eligible.length < TIPS) eligible = products.filter(p => passesFilters(p, answers, true))
 
-  // Add small random jitter to break ties between shops (same-score products)
-  const sorted = scored
-    .map(p => ({ ...p, score: p.score + (Math.random() * 0.5) }))
+  const ranked = eligible
+    .map(p => ({ p, ...matchScore(p, answers) }))
     .sort((a, b) => b.score - a.score)
 
-  const result: ScoredProduct[] = []
+  const picked: typeof ranked = []
+  const kindCount: Record<string, number> = {}
   const shopCount: Record<string, number> = {}
   const seenNames = new Set<string>()
+  const nameKey = (name: string) => name.toLowerCase().split(/\s+/).slice(0, 3).join(' ')
 
-  // Strict shop diversity: max 2 per shop, forces variety
-  const shopsWithResults = new Set(sorted.map(p => p.sourceShop))
-  const maxPerShop = shopsWithResults.size >= 3 ? 2 : shopsWithResults.size >= 2 ? 3 : 5
+  while (picked.length < TIPS) {
+    let best: (typeof ranked)[number] | null = null
+    let bestAdjusted = -Infinity
 
-  for (const p of sorted) {
-    // Skip near-duplicates (same product name prefix)
-    const nameKey = p.name.toLowerCase().slice(0, 20)
-    if (seenNames.has(nameKey)) continue
-    seenNames.add(nameKey)
-
-    // Shop diversity: strict limit per shop
-    if ((shopCount[p.sourceShop] || 0) >= maxPerShop) continue
-    shopCount[p.sourceShop] = (shopCount[p.sourceShop] || 0) + 1
-
-    result.push(p)
-    if (result.length >= 5) break
-  }
-
-  // If we have less than 5 results, fill from remaining (relax shop limit)
-  if (result.length < 5) {
-    for (const p of sorted) {
-      if (result.some(r => r.id === p.id)) continue
-      const nameKey = p.name.toLowerCase().slice(0, 20)
-      if (seenNames.has(nameKey)) continue
-      seenNames.add(nameKey)
-      result.push(p)
-      if (result.length >= 5) break
+    for (const c of ranked) {
+      if (picked.includes(c) || seenNames.has(nameKey(c.p.name))) continue
+      if ((shopCount[c.p.sourceShop] || 0) >= MAX_PER_SHOP) continue
+      const adjusted = c.score
+        - SAME_KIND_PENALTY * (kindCount[c.p.giftKind || ''] || 0)
+        - SAME_SHOP_PENALTY * (shopCount[c.p.sourceShop] || 0)
+      if (adjusted > bestAdjusted) {
+        best = c
+        bestAdjusted = adjusted
+      }
     }
+
+    // Limit na obchod se uvolní, jen když jinak pětice nejde složit
+    if (!best) best = ranked.find(c => !picked.includes(c) && !seenNames.has(nameKey(c.p.name))) || null
+    if (!best) break
+
+    picked.push(best)
+    seenNames.add(nameKey(best.p.name))
+    kindCount[best.p.giftKind || ''] = (kindCount[best.p.giftKind || ''] || 0) + 1
+    shopCount[best.p.sourceShop] = (shopCount[best.p.sourceShop] || 0) + 1
   }
 
-  return result
+  return picked.sort((a, b) => b.score - a.score).map(({ p, score, reasons }) => ({
+    id: p.id,
+    name: decodeEntities(p.name),
+    price: p.price,
+    imageUrl: p.imageUrl,
+    originalUrl: p.originalUrl,
+    affiliateUrl: p.affiliateUrl,
+    sourceShop: p.sourceShop,
+    giftType: p.giftType,
+    isPersonalizable: p.isPersonalizable,
+    isLocal: p.isLocal || false,
+    score,
+    matchPct: Math.round(Math.min(99, score)),
+    reasons,
+  }))
 }
