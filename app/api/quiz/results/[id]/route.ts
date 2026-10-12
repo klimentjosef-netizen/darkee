@@ -33,7 +33,7 @@ export async function GET(
         giftType: true, isPersonalizable: true, isLocal: true,
         ageRange: true, genderFit: true, occasionFit: true,
         interestTags: true, styleFit: true,
-        giftScore: true, giftKind: true, recipients: true, giftReason: true,
+        giftScore: true, blindBuy: true, giftKind: true, recipients: true, giftReason: true,
       },
     })
 

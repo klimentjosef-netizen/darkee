@@ -4,7 +4,7 @@ import { QuizAnswers, ScoredProduct } from '@/types'
 // (giftScore, role v pětici, komu se hodí, lidský důvod), viz lib/gift-assessor.ts.
 //
 // 1) Tvrdé filtry: věk, pohlaví, typ dárku (rozpočet filtruje už dotaz do databáze).
-// 2) Shoda 0 až 100: dárkovost 35, komu 20, zájmy 25, příležitost 10, osobnost 10.
+// 2) Shoda 0 až 100: dárkovost 30, komu 20, zájmy 25, příležitost 15, osobnost 10.
 // 3) Pětice se skládá jako sestava: nejlepší shoda první, další tipy mají být
 //    jiného druhu, z jiného obchodu a nesmí to být varianta téhož.
 
@@ -25,16 +25,19 @@ export type EngineProduct = {
   interestTags: string[]
   styleFit: string[]
   giftScore: number | null
+  blindBuy: boolean | null
   giftKind: string | null
   recipients: string[]
   giftReason: string | null
 }
 
-const WEIGHTS = { gift: 35, recipient: 20, interests: 25, occasion: 10, style: 10 }
+const WEIGHTS = { gift: 30, recipient: 20, interests: 25, occasion: 15, style: 10 }
 const TIPS = 5
 const MAX_PER_SHOP = 2
 const SAME_KIND_PENALTY = 8
 const SAME_SHOP_PENALTY = 5
+// Dárek, u kterého je potřeba znát velikost nebo vkus obdarovaného (prsten, iniciála)
+const NOT_BLIND_PENALTY = 10
 
 const INTEREST_LABELS: Record<string, string> = {
   tech: 'technologie', sport: 'sport', fashion: 'módu', home: 'domácnost',
@@ -46,6 +49,7 @@ const INTEREST_LABELS: Record<string, string> = {
 function decodeEntities(text: string): string {
   return text
     .replace(/&#(\d+);/g, (_, code) => String.fromCharCode(Number(code)))
+    .replace(/&nbsp;/g, ' ')
     .replace(/&amp;/g, '&')
     .replace(/&quot;/g, '"')
 }
@@ -81,6 +85,8 @@ function matchScore(p: EngineProduct, answers: QuizAnswers): { score: number; re
 
   if (answers.style === 'any_style') score += WEIGHTS.style / 2
   else if (answers.style === 'food_drink' ? p.interestTags.includes('food') : p.styleFit.includes(answers.style)) score += WEIGHTS.style
+
+  if (p.blindBuy === false) score -= NOT_BLIND_PENALTY
 
   if (p.isPersonalizable) reasons.push('Lze personalizovat')
 
@@ -140,7 +146,7 @@ export function scoreProducts(answers: QuizAnswers, products: EngineProduct[]): 
     isPersonalizable: p.isPersonalizable,
     isLocal: p.isLocal || false,
     score,
-    matchPct: Math.round(Math.min(99, score)),
+    matchPct: Math.round(Math.max(1, Math.min(99, score))),
     reasons,
   }))
 }
