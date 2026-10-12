@@ -69,6 +69,13 @@ export async function POST(request: NextRequest) {
         const c = byId.get(pick.id)
         return c ? [toScoredProduct(c, { reason: pick.reason, role: pick.role })] : []
       })
+      // Když výběrčí vrátí méně než pět tipů, doplní se nejlepšími kandidáty z motoru
+      for (const c of candidates) {
+        if (scored.length >= 5) break
+        if (scored.some(s => s.id === c.p.id)) continue
+        if (scored.filter(s => s.sourceShop === c.p.sourceShop).length >= 2) continue
+        scored.push(toScoredProduct(c, { role: 'jistota' }))
+      }
     } else {
       scored = scoreProducts(answers, products)
     }
