@@ -357,7 +357,7 @@ export function QuizContainer({ isModal = false, onClose }: QuizContainerProps) 
             fontFamily: "'Playfair Display', serif",
             fontWeight: 400,
           }}>
-            Hledáme pro vás ideální dárky…
+            Vybíráme pro vás dárky
           </p>
           <p style={{
             color: '#5A5248',
@@ -371,7 +371,7 @@ export function QuizContainer({ isModal = false, onClose }: QuizContainerProps) 
       ) : (
         <>
           {/* Question area */}
-          <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', minHeight: 0, overflow: 'auto' }}>
+          <div style={{ flex: q.type === 'text' ? 'none' : 1, paddingTop: q.type === 'text' ? '12vh' : 0, display: 'flex', flexDirection: 'column', justifyContent: 'center', minHeight: 0, overflow: 'auto' }}>
             <QuizTransition stepKey={q.id} direction={direction}>
               <QuizQuestion
                 question={q}

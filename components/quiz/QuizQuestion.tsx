@@ -27,18 +27,18 @@ export function QuizQuestion({ question, value, onSelect, step, total }: Props) 
   return (
     <div className="flex flex-col items-center px-6 pb-10">
       {/* Step label */}
-      <p className="text-[11px] tracking-[0.3em] uppercase text-[var(--text-muted)] mb-4 font-[family-name:var(--font-body)]">
-        OTÁZKA {step + 1} Z {total}
+      <p className="text-sm text-[var(--text-secondary)] mb-4 font-[family-name:var(--font-body)]">
+        {step + 1} z {total}
       </p>
 
       {/* Title */}
-      <h2 className="font-[family-name:var(--font-display)] text-[clamp(28px,5vw,48px)] font-normal text-[var(--text-primary)] text-center mb-2 tracking-wide leading-[1.15]">
+      <h2 className="font-[family-name:var(--font-body)] text-[clamp(26px,4.4vw,40px)] font-semibold text-[var(--text-primary)] text-center mb-2 tracking-[-0.025em] leading-[1.12]">
         {question.title}
       </h2>
 
       {/* Subtitle */}
       {question.subtitle && (
-        <p className="text-sm text-[var(--text-muted)] mb-8 text-center font-[family-name:var(--font-body)]">
+        <p className="text-base text-[var(--text-secondary)] mb-8 text-center font-[family-name:var(--font-body)]">
           {question.subtitle}
         </p>
       )}

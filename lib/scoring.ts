@@ -157,7 +157,8 @@ export function rankCandidates(answers: QuizAnswers, products: EngineProduct[], 
 export function toScoredProduct({ p, score, reasons }: RankedProduct, override?: { reason?: string; role?: string }): ScoredProduct {
   return {
     id: p.id,
-    name: decodeEntities(p.name),
+    // Feedy lepí na konec názvu parametr varianty ("… Hmotnost: 350g")
+    name: decodeEntities(p.name).replace(/\s+(Hmotnost|Varianty|Varianta|Objem)\s*:\s.*$/i, ''),
     price: p.price,
     imageUrl: p.imageUrl,
     originalUrl: p.originalUrl,

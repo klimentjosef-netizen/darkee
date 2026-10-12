@@ -6,6 +6,7 @@ import Link from 'next/link'
 import { AnimatePresence, MotionConfig, motion, useMotionValueEvent, useScroll } from 'framer-motion'
 import { ArrowRight } from 'lucide-react'
 import { QuizContainer } from '@/components/quiz/QuizContainer'
+import { SiteFooter } from '@/components/SiteFooter'
 import { ShowcaseData, ShowcaseProduct } from '@/lib/showcase'
 
 // Tvary: tlačítka jsou pilulky, karty a dlaždice mají 20px, obrázky uvnitř karet 14px.
@@ -251,24 +252,7 @@ export function LandingPage({ showcase }: { showcase: ShowcaseData }) {
         </div>
       </section>
 
-      {/* Patička */}
-      <footer className="border-t border-[var(--border-subtle)]">
-        <div className="mx-auto flex max-w-6xl flex-col gap-8 px-4 py-12 sm:px-6 md:flex-row md:items-start md:justify-between">
-          <div className="max-w-[44ch]">
-            <p className="font-[family-name:var(--font-display)] text-[22px] tracking-wide text-[var(--gold-primary)]">Dárkee</p>
-            <p className="mt-3 text-sm leading-relaxed text-[var(--text-secondary)]">
-              Dárkee je pro vás zdarma. Když přes nás nakoupíte, dostaneme od obchodu provizi. Cenu dárku to nemění.
-            </p>
-          </div>
-          <div className="flex flex-wrap gap-x-8 gap-y-3 text-sm">
-            <a href="mailto:info@darkee.cz" className="text-[var(--text-secondary)] no-underline transition-colors hover:text-[var(--text-primary)]">info@darkee.cz</a>
-            <Link href="/gdpr" className="text-[var(--text-secondary)] no-underline transition-colors hover:text-[var(--text-primary)]">Ochrana dat</Link>
-            <Link href="/cookies" className="text-[var(--text-secondary)] no-underline transition-colors hover:text-[var(--text-primary)]">Cookies</Link>
-            <Link href="/obchodni-podminky" className="text-[var(--text-secondary)] no-underline transition-colors hover:text-[var(--text-primary)]">Obchodní podmínky</Link>
-          </div>
-        </div>
-        <p className="mx-auto max-w-6xl px-4 pb-10 text-[13px] text-[var(--text-secondary)] sm:px-6">© 2026 Dárkee.cz</p>
-      </footer>
+      <SiteFooter />
 
       {/* Kvíz */}
       <AnimatePresence>{quizOpen && <QuizContainer isModal onClose={() => setQuizOpen(false)} />}</AnimatePresence>

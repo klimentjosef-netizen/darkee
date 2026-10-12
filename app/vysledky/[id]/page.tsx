@@ -1,66 +1,80 @@
 'use client'
 
-import { useState, useEffect, useMemo } from 'react'
+import { useState, useEffect } from 'react'
 import { useParams } from 'next/navigation'
-import { motion } from 'framer-motion'
-import { RotateCcw, Trophy } from 'lucide-react'
-import { Navbar } from '@/components/landing/Navbar'
-import { Footer } from '@/components/landing/Footer'
-import { ProductCard } from '@/components/products/ProductCard'
-import { ScoredProduct, QuizAnswers } from '@/types'
+import Image from 'next/image'
 import Link from 'next/link'
+import { MotionConfig, motion } from 'framer-motion'
+import { ArrowUpRight, RotateCcw } from 'lucide-react'
+import { SiteFooter } from '@/components/SiteFooter'
+import { ROLE_LABELS } from '@/lib/roles'
+import { ScoredProduct, QuizAnswers } from '@/types'
 
-type FilterKey = 'all' | 'best' | 'cheapest'
+// Tvary: tlačítka jsou pilulky, karty 20px, obrázky uvnitř karet 14px.
 
-const filters: { key: FilterKey; label: string }[] = [
-  { key: 'all', label: 'TOP 5' },
-  { key: 'best', label: 'Nejlepší shoda' },
-  { key: 'cheapest', label: 'Nejlevnější' },
-]
+const EASE = [0.16, 1, 0.3, 1] as const
 
-const genderLabels: Record<string, string> = {
-  female: 'ženu', male: 'muže', neutral: 'osobu',
-}
+const genderLabels: Record<string, string> = { female: 'pro ženu', male: 'pro muže' }
 const occasionLabels: Record<string, string> = {
   birthday: 'Narozeniny', christmas: 'Vánoce', nameday: 'Svátek', valentine: 'Valentýn',
   mothers_day: 'Den matek', wedding: 'Svatba', graduation: 'Promoce', just_because: 'Jen tak',
 }
 const ageLabels: Record<string, string> = {
-  baby: '0–2 let', preschool: '3–5 let', school: '6–12 let', teen: '13–18 let',
-  young_adult: '19–30 let', adult: '31–50 let', senior: '51–70 let', elderly: '70+ let',
+  baby: '0 až 2 roky', preschool: '3 až 5 let', school: '6 až 12 let', teen: '13 až 18 let',
+  young_adult: '19 až 30 let', adult: '31 až 50 let', senior: '51 až 70 let', elderly: 'přes 70 let',
 }
 const budgetLabels: Record<string, string> = {
-  max300: 'do 300 Kč', range300_500: '300–500 Kč', range500_1000: '500–1 000 Kč',
-  range1000_2000: '1 000–2 000 Kč', range2000_5000: '2 000–5 000 Kč', unlimited: 'bez omezení',
+  max300: 'do 300 Kč', range300_500: '300 až 500 Kč', range500_1000: '500 až 1 000 Kč',
+  range1000_2000: '1 000 až 2 000 Kč', range2000_5000: '2 000 až 5 000 Kč', unlimited: 'bez omezení',
 }
 
-function SkeletonCard({ index }: { index: number }) {
+function price(value: number) {
+  return `${Math.round(value).toLocaleString('cs-CZ')} Kč`
+}
+
+function GiftPhoto({ product, sizes, priority = false }: { product: ScoredProduct; sizes: string; priority?: boolean }) {
   return (
-    <div
-      className="flex flex-col sm:flex-row gap-0 overflow-hidden rounded-2xl bg-[var(--bg-secondary)] border border-[var(--border-subtle)]"
-      style={{ animation: 'skeletonPulse 1.8s ease-in-out infinite', animationDelay: `${index * 0.15}s` }}
+    <div className="relative h-full w-full overflow-hidden rounded-[14px] bg-[#F3F1EC]">
+      {product.imageUrl && (
+        <Image src={product.imageUrl} alt={product.name} fill sizes={sizes} priority={priority} unoptimized className="object-contain p-4" />
+      )}
+    </div>
+  )
+}
+
+function BuyLink({ product, quizResultId, primary }: { product: ScoredProduct; quizResultId: string; primary: boolean }) {
+  return (
+    <a
+      href={`/go/${product.id}?q=${quizResultId}&src=darkee`}
+      target="_blank"
+      rel="noopener noreferrer sponsored"
+      className={`inline-flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full font-semibold no-underline transition-[transform,background-color,border-color] duration-200 active:scale-[0.98] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--gold-primary)] ${
+        primary
+          ? 'bg-[var(--gold-primary)] px-7 py-3.5 text-base text-[#080806] hover:bg-[var(--gold-light)]'
+          : 'border border-[var(--border-strong)] px-4 py-2 text-sm text-[var(--text-primary)] hover:border-[var(--gold-primary)]'
+      }`}
     >
-      <div className="sm:w-16 py-3 sm:py-0 flex items-center justify-center">
-        <div className="w-9 h-9 rounded-full bg-[var(--bg-tertiary)]" />
-      </div>
-      <div className="sm:w-40 h-32 sm:h-auto bg-[var(--bg-tertiary)]" />
-      <div className="flex-1 p-6 space-y-4">
-        <div className="flex justify-between">
-          <div className="space-y-2 flex-1">
-            <div className="h-3 w-20 bg-[var(--bg-tertiary)] rounded-full" />
-            <div className="h-5 w-48 bg-[var(--bg-tertiary)] rounded-full" />
-          </div>
-          <div className="w-14 h-14 rounded-full bg-[var(--bg-tertiary)]" />
-        </div>
-        <div className="flex gap-2">
-          <div className="h-7 w-32 bg-[var(--bg-tertiary)] rounded-xl" />
-          <div className="h-7 w-40 bg-[var(--bg-tertiary)] rounded-xl" />
-        </div>
-        <div className="flex justify-between pt-3 border-t border-[var(--border-subtle)]">
-          <div className="h-7 w-20 bg-[var(--bg-tertiary)] rounded-full" />
-          <div className="h-10 w-32 bg-[var(--bg-tertiary)] rounded-xl" />
-        </div>
-      </div>
+      {primary ? `Koupit na ${product.sourceShop}` : 'Zobrazit'}
+      <ArrowUpRight size={primary ? 18 : 15} strokeWidth={2} aria-hidden />
+    </a>
+  )
+}
+
+function RoleLabel({ role, fallback }: { role?: string; fallback?: string }) {
+  const label = (role && ROLE_LABELS[role]) || fallback
+  if (!label) return null
+  return <p className="text-[13px] font-semibold text-[var(--gold-primary)]">{label}</p>
+}
+
+function Skeleton() {
+  return (
+    <div className="mx-auto max-w-3xl px-4 pt-28 pb-24 sm:px-6" aria-busy="true" aria-label="Načítáme vaše dárky">
+      <div className="h-8 w-2/3 rounded-full bg-[var(--bg-tertiary)]" style={{ animation: 'skeletonPulse 1.8s ease-in-out infinite' }} />
+      <div className="mt-4 h-4 w-full rounded-full bg-[var(--bg-tertiary)]" style={{ animation: 'skeletonPulse 1.8s ease-in-out infinite' }} />
+      <div className="mt-10 h-[420px] rounded-[20px] bg-[var(--bg-secondary)]" style={{ animation: 'skeletonPulse 1.8s ease-in-out infinite' }} />
+      {[0, 1, 2].map(i => (
+        <div key={i} className="mt-4 h-28 rounded-[20px] bg-[var(--bg-secondary)]" style={{ animation: 'skeletonPulse 1.8s ease-in-out infinite', animationDelay: `${i * 0.15}s` }} />
+      ))}
     </div>
   )
 }
@@ -72,194 +86,166 @@ export default function VysledkyPage() {
   const [products, setProducts] = useState<ScoredProduct[]>([])
   const [answers, setAnswers] = useState<Partial<QuizAnswers> | null>(null)
   const [headline, setHeadline] = useState<string | null>(null)
-  const [activeFilter, setActiveFilter] = useState<FilterKey>('all')
-  const [loading, setLoading] = useState(true)
+  const [status, setStatus] = useState<'loading' | 'ready' | 'error'>('loading')
 
   useEffect(() => {
     async function fetchResults() {
       try {
         const res = await fetch(`/api/quiz/results/${quizResultId}`)
-        if (res.ok) {
-          const data = await res.json()
-          setProducts(data.products || [])
-          setAnswers(data.answers || null)
-          setHeadline(data.headline || null)
-        }
+        if (!res.ok) throw new Error(String(res.status))
+        const data = await res.json()
+        setProducts(data.products || [])
+        setAnswers(data.answers || null)
+        setHeadline(data.headline || null)
+        setStatus('ready')
       } catch {
-        // fallback
-      } finally {
-        setLoading(false)
+        setStatus('error')
       }
     }
     fetchResults()
   }, [quizResultId])
 
-  const filteredProducts = useMemo(() => {
-    const sorted = [...products]
-    switch (activeFilter) {
-      case 'best': return sorted.sort((a, b) => b.matchPct - a.matchPct)
-      case 'cheapest': return sorted.sort((a, b) => a.price - b.price)
-      default: return sorted
-    }
-  }, [products, activeFilter])
-
-  const summaryParts: string[] = []
+  const summary: string[] = []
   if (answers) {
-    if (answers.ageGroup) summaryParts.push(ageLabels[answers.ageGroup] || '')
-    if (answers.gender) summaryParts.push(`pro ${genderLabels[answers.gender] || ''}`)
-    if (answers.occasion) summaryParts.push(occasionLabels[answers.occasion] || '')
+    if (answers.relationship !== 'pet' && answers.ageGroup) summary.push(ageLabels[answers.ageGroup] || '')
+    if (answers.gender && genderLabels[answers.gender]) summary.push(genderLabels[answers.gender])
+    if (answers.occasion) summary.push(occasionLabels[answers.occasion] || '')
     if (answers.budget === 'custom' && (answers.budgetMin || answers.budgetMax)) {
-      const min = answers.budgetMin || 0
-      const max = answers.budgetMax
-      summaryParts.push(max ? `${min}–${max} Kč` : `od ${min} Kč`)
+      summary.push(answers.budgetMax ? `${answers.budgetMin || 0} až ${answers.budgetMax} Kč` : `od ${answers.budgetMin || 0} Kč`)
     } else if (answers.budget) {
-      summaryParts.push(budgetLabels[answers.budget] || '')
+      summary.push(budgetLabels[answers.budget] || '')
     }
   }
 
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-[var(--bg-primary)]">
-        <Navbar />
-        <div className="pt-28 pb-8 px-6">
-          <div className="max-w-3xl mx-auto text-center">
-            <Trophy size={36} className="text-[var(--gold-primary)] mx-auto mb-4 opacity-40" />
-            <div className="flex items-center justify-center gap-2 py-4">
-              {[0, 1, 2].map((i) => (
-                <span
-                  key={i}
-                  className="w-2 h-2 rounded-full bg-[var(--gold-primary)]"
-                  style={{ animation: 'softPulse 1.2s ease-in-out infinite', animationDelay: `${i * 0.2}s` }}
-                />
-              ))}
-            </div>
-            <p className="text-[var(--gold-primary)] text-lg font-[family-name:var(--font-display)] font-normal tracking-wide mb-12">
-              Hledáme nejlepší dárky…
-            </p>
-          </div>
-          <div className="max-w-3xl mx-auto flex flex-col gap-4">
-            {[0, 1, 2].map(i => <SkeletonCard key={i} index={i} />)}
-          </div>
-        </div>
-      </div>
-    )
-  }
+  const [main, ...others] = products
 
   return (
-    <div className="min-h-screen bg-[var(--bg-primary)]">
-      <Navbar />
-
-      {/* Compact header — gifts visible immediately */}
-      <div className="pt-24 pb-2 px-6">
-        <div className="max-w-2xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="flex items-center justify-between flex-wrap gap-3"
-          >
-            <div className="flex items-center gap-3">
-              <Trophy size={22} className="text-[var(--gold-primary)]" />
-              <h1 className="font-[family-name:var(--font-display)] text-2xl font-normal text-[var(--text-primary)]">
-                Top {products.length} dárků
-              </h1>
-            </div>
+    <MotionConfig reducedMotion="user">
+      <div className="min-h-[100dvh] bg-[var(--bg-primary)] font-[family-name:var(--font-body)] text-[var(--text-primary)]">
+        <header className="fixed inset-x-0 top-0 z-40 border-b border-[var(--border-subtle)] bg-[rgba(8,8,6,0.9)] backdrop-blur-md">
+          <nav className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">
+            <Link href="/" className="font-[family-name:var(--font-display)] text-[22px] tracking-wide text-[var(--gold-primary)] no-underline">
+              Dárkee
+            </Link>
             <Link
               href="/pruvodce"
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-[11px] text-[var(--text-muted)] font-[family-name:var(--font-body)] hover:text-[var(--gold-primary)] transition-colors no-underline border border-[var(--border-subtle)] rounded-full"
+              className="inline-flex items-center gap-2 whitespace-nowrap rounded-full border border-[var(--border-strong)] px-4 py-2 text-sm text-[var(--text-primary)] no-underline transition-colors hover:border-[var(--gold-primary)]"
             >
-              <RotateCcw size={10} />
-              Změnit
+              <RotateCcw size={14} strokeWidth={2} aria-hidden />
+              Nový výběr
             </Link>
-          </motion.div>
+          </nav>
+        </header>
 
-          {headline && (
-            <p className="mt-4 text-[15px] leading-relaxed text-[var(--text-secondary)] font-[family-name:var(--font-body)] max-w-[60ch]">
-              {headline}
+        {status === 'loading' && <Skeleton />}
+
+        {status === 'error' && (
+          <div className="mx-auto max-w-3xl px-4 pt-32 pb-24 sm:px-6">
+            <h1 className="text-[32px] font-semibold tracking-[-0.02em]">Výsledek se nepodařilo načíst</h1>
+            <p className="mt-3 text-base leading-relaxed text-[var(--text-secondary)]">
+              Odkaz je možná neplatný, nebo nám chvíli nefunguje server. Zkuste stránku načíst znovu, nebo si nechte vybrat dárky nanovo.
             </p>
-          )}
+            <Link href="/pruvodce" className="mt-6 inline-flex rounded-full bg-[var(--gold-primary)] px-7 py-3.5 font-semibold text-[#080806] no-underline">
+              Vybrat dárky znovu
+            </Link>
+          </div>
+        )}
 
-          {/* Summary + filters in one row */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.4, delay: 0.15 }}
-            className="flex items-center justify-between flex-wrap gap-2 mt-3 mb-5"
-          >
-            <div className="flex flex-wrap gap-1.5">
-              {summaryParts.map((part, i) => (
-                <span
-                  key={i}
-                  className="px-3 py-1 bg-[var(--bg-secondary)] rounded-full text-[11px] text-[var(--text-secondary)] font-[family-name:var(--font-body)]"
-                >
-                  {part}
-                </span>
-              ))}
-            </div>
-            <div className="flex items-center gap-1">
-              {filters.map((f) => (
-                <button
-                  key={f.key}
-                  onClick={() => setActiveFilter(f.key)}
-                  className={`shrink-0 px-3 py-1 text-[11px] font-[family-name:var(--font-body)] rounded-full transition-all duration-200 cursor-pointer border ${
-                    activeFilter === f.key
-                      ? 'text-[var(--gold-primary)] border-[var(--gold-primary)] bg-[rgba(201,168,76,0.06)]'
-                      : 'text-[var(--text-muted)] border-transparent hover:text-[var(--text-secondary)]'
-                  }`}
-                >
-                  {f.label}
-                </button>
-              ))}
-            </div>
-          </motion.div>
-        </div>
-      </div>
+        {status === 'ready' && !main && (
+          <div className="mx-auto max-w-3xl px-4 pt-32 pb-24 sm:px-6">
+            <h1 className="text-[32px] font-semibold tracking-[-0.02em]">V tomhle rozpočtu jsme nic nenašli</h1>
+            <p className="mt-3 text-base leading-relaxed text-[var(--text-secondary)]">
+              Zkuste rozpočet o stupeň zvednout nebo vybrat jiný typ dárku. Katalog průběžně rozšiřujeme.
+            </p>
+            <Link href="/pruvodce" className="mt-6 inline-flex rounded-full bg-[var(--gold-primary)] px-7 py-3.5 font-semibold text-[#080806] no-underline">
+              Upravit odpovědi
+            </Link>
+          </div>
+        )}
 
-      {/* Leaderboard */}
-      <div className="px-6 pb-16">
-        <div className="max-w-2xl mx-auto">
-          {filteredProducts.length > 0 ? (
-            <div className="flex flex-col gap-6">
-              {filteredProducts.map((product, i) => (
-                <div key={product.id}>
-                  <ProductCard
-                    product={product}
-                    quizResultId={quizResultId}
-                    rank={i}
-                  />
-                </div>
-              ))}
-            </div>
-          ) : (
-            <div className="text-center py-16">
-              <p className="text-[var(--text-muted)] text-sm font-[family-name:var(--font-body)]">
-                Žádné produkty v této kategorii.
+        {status === 'ready' && main && (
+          <main className="mx-auto max-w-3xl px-4 pt-24 pb-20 sm:px-6">
+            <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, ease: EASE }}>
+              <h1 className="text-[clamp(28px,5vw,40px)] font-semibold leading-[1.1] tracking-[-0.025em]">Tohle bychom koupili</h1>
+              <p className="mt-3 max-w-[60ch] text-[17px] leading-relaxed text-[var(--text-secondary)]">
+                {headline || 'Vybrali jsme pět dárků podle vašich odpovědí a seřadili je od nejlepší shody.'}
               </p>
-            </div>
-          )}
+              {summary.filter(Boolean).length > 0 && (
+                <p className="mt-3 text-sm text-[var(--text-muted)]">{summary.filter(Boolean).join(', ')}</p>
+              )}
+            </motion.div>
 
-          {/* Retry CTA */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.4, delay: 1 }}
-            className="text-center mt-16 py-10 border-t border-[var(--border-subtle)]"
-          >
-            <p className="text-[var(--text-secondary)] text-sm font-[family-name:var(--font-body)] mb-4">
-              Nenašli jste co hledáte?
-            </p>
-            <Link
-              href="/pruvodce"
-              className="group inline-flex items-center gap-3 px-8 py-3.5 border border-[var(--border-mid)] text-[var(--text-secondary)] font-[family-name:var(--font-body)] text-sm font-medium tracking-wide hover:border-[var(--gold-primary)] hover:text-[var(--gold-primary)] transition-all duration-300 no-underline rounded-xl"
+            {/* Hlavní tip */}
+            <motion.article
+              initial={{ opacity: 0, y: 24 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.1, ease: EASE }}
+              className="mt-8 rounded-[20px] border border-[var(--gold-dark)] bg-[var(--bg-elevated)] p-3 sm:p-4"
             >
-              <RotateCcw size={14} />
-              Zkusit znovu s jinými parametry
-            </Link>
-          </motion.div>
-        </div>
-      </div>
+              <div className="aspect-[4/3] sm:aspect-[16/9]">
+                <GiftPhoto product={main} sizes="(min-width: 768px) 720px, 100vw" priority />
+              </div>
+              <div className="px-1 pt-5 pb-2 sm:px-2">
+                <RoleLabel role={main.role} fallback="Nejlepší shoda" />
+                <h2 className="mt-1 text-[clamp(22px,3.6vw,28px)] font-semibold leading-snug tracking-[-0.015em]">{main.name}</h2>
+                {main.reasons[0] && <p className="mt-3 max-w-[58ch] text-base leading-relaxed text-[var(--text-secondary)]">{main.reasons[0]}</p>}
+                <div className="mt-5 flex flex-wrap items-center justify-between gap-4">
+                  <span className="text-[26px] font-semibold tracking-[-0.01em]">{price(main.price)}</span>
+                  <BuyLink product={main} quizResultId={quizResultId} primary />
+                </div>
+              </div>
+            </motion.article>
 
-      <Footer />
-    </div>
+            {/* Další možnosti */}
+            {others.length > 0 && (
+              <section className="mt-12">
+                <h2 className="text-[22px] font-semibold tracking-[-0.015em]">Kdyby tohle nebylo ono</h2>
+                <ul className="m-0 mt-5 flex list-none flex-col gap-3 p-0">
+                  {others.map((p, i) => (
+                    <motion.li
+                      key={p.id}
+                      initial={{ opacity: 0, y: 20 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true, amount: 0.3 }}
+                      transition={{ duration: 0.5, delay: i * 0.05, ease: EASE }}
+                      className="flex gap-3 rounded-[20px] border border-[var(--border-subtle)] bg-[var(--bg-secondary)] p-3 sm:gap-4"
+                    >
+                      <div className="h-24 w-24 shrink-0 sm:h-32 sm:w-32">
+                        <GiftPhoto product={p} sizes="128px" />
+                      </div>
+                      <div className="flex min-w-0 flex-1 flex-col py-0.5">
+                        <RoleLabel role={p.role} />
+                        <h3 className="mt-0.5 line-clamp-2 text-base font-semibold leading-snug">{p.name}</h3>
+                        {p.reasons[0] && <p className="mt-1.5 text-sm leading-relaxed text-[var(--text-secondary)]">{p.reasons[0]}</p>}
+                        <div className="mt-auto flex flex-wrap items-center justify-between gap-x-4 gap-y-2 pt-3">
+                          <p className="text-sm text-[var(--text-secondary)]">
+                            <span className="mr-2 whitespace-nowrap text-base font-semibold text-[var(--text-primary)]">{price(p.price)}</span>
+                            {p.sourceShop}
+                          </p>
+                          <BuyLink product={p} quizResultId={quizResultId} primary={false} />
+                        </div>
+                      </div>
+                    </motion.li>
+                  ))}
+                </ul>
+              </section>
+            )}
+
+            <div className="mt-14 flex flex-col items-start gap-4 border-t border-[var(--border-subtle)] pt-10 sm:flex-row sm:items-center sm:justify-between">
+              <p className="text-base text-[var(--text-secondary)]">Nesedí vám ani jeden? Upravte odpovědi a vybereme znovu.</p>
+              <Link
+                href="/pruvodce"
+                className="inline-flex items-center gap-2 whitespace-nowrap rounded-full border border-[var(--border-strong)] px-6 py-3 text-base text-[var(--text-primary)] no-underline transition-colors hover:border-[var(--gold-primary)]"
+              >
+                <RotateCcw size={16} strokeWidth={2} aria-hidden />
+                Nový výběr
+              </Link>
+            </div>
+          </main>
+        )}
+
+        <SiteFooter />
+      </div>
+    </MotionConfig>
   )
 }
