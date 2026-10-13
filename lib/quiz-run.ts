@@ -17,7 +17,10 @@ export async function createQuizResult(answers: QuizAnswers): Promise<{ quizResu
   // Rozpočet a dárkovost filtruje už databáze, motor pak pracuje jen s kandidáty
   const range = answers.budget === 'custom'
     ? { min: answers.budgetMin || 0, max: answers.budgetMax || null }
-    : BUDGET_MAP[answers.budget] || { min: 0, max: null }
+    : { ...(BUDGET_MAP[answers.budget] || { min: 0, max: null }) }
+
+  // Dárky pro mazlíčky jsou levné, spodní hranice rozpočtu by je všechny vyřadila
+  if (answers.relationship === 'pet') range.min = 0
 
   const products = await prisma.product.findMany({
     where: {
