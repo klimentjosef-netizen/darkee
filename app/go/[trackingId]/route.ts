@@ -83,6 +83,12 @@ const EHUB_CAMPAIGNS: Record<string, string> = {
   'SARAbags.cz': '465abf3e',
   'Fantomprint.cz': 'd262f0ce',
   'Světnápojů.cz': '6aa48880',
+  'Dobré-knihy.cz': '1ec2df65',
+  'Grilování.cz': '1703277f',
+  'Alpík.cz': 'c911a192',
+  'Holkyztrhu.cz': 'f7379285',
+  'Akinu.cz': 'ea82c940',
+  'Rawbark.cz': '5833ad55',
 }
 
 function buildAffiliateUrl(baseUrl: string, source: string, sourceShop: string): string {

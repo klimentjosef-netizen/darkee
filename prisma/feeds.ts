@@ -21,4 +21,10 @@ export const FEEDS: { shop: string; url: string }[] = [
   { shop: 'JBL.cz', url: 'https://www.jbl.cz/gmerchant-JBL-cz.xml' },
   { shop: 'Bagmaster.cz', url: 'https://www.bagmaster.cz/export/heureka_cs.xml' },
   { shop: 'Báglík.cz', url: 'https://www.baglik.cz/feed-heureka-6pp9xl1wn0.xml' },
+  { shop: 'Dobré-knihy.cz', url: 'https://client.datadepo.cz/api-x/dobre-knihy-cz/feed-custom-google/?password=oydv2zz84kve' },
+  { shop: 'Grilování.cz', url: 'https://www.grilovani.cz/heureka/export/products.xml' },
+  { shop: 'Alpík.cz', url: 'https://feeds.mergado.com/alpik-cz-heureka-cz-beea86aa83ef025bf71513002b53ffab.xml' },
+  { shop: 'Holkyztrhu.cz', url: 'https://www.holkyztrhu.cz/heureka/export/products.xml' },
+  { shop: 'Akinu.cz', url: 'https://www.akinu.cz/heureka/export/products.xml' },
+  { shop: 'Rawbark.cz', url: 'https://rawbark.cz/wp-content/uploads/rawbark-feeds/heureka.xml' },
 ]
