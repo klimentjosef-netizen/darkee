@@ -1,0 +1,19 @@
+// Produktové feedy obchodů, ze kterých Dárkee doporučuje (adresy z pm.ehub.cz/feed).
+// Používá je denní obnova cen a skladu (prisma/sync-catalog.ts).
+export const FEEDS: { shop: string; url: string }[] = [
+  { shop: 'Dárkoviny.cz', url: 'https://www.darkoviny.cz/heureka/export/products.xml?hash=T8rdriZhMtQ7LrVLzW5k8x7s' },
+  { shop: 'Kabelka.cz', url: 'https://feeds.mergado.com/kabelka-cz-heureka-cz-produktovy-cz-4c021c4c529a9422a3b52f2b46b48890.xml' },
+  { shop: 'OK-Hračky.cz', url: 'https://feeds.mergado.com/ok-hracky-cz-heureka-cz-71192e613c724f98808998e7d8ba5cc3.xml' },
+  { shop: 'Kidero.cz', url: 'https://kidero.cz/feeds/ehub-s5kxyh82r6eotgy-products.xml' },
+  { shop: 'Brilianty.cz', url: 'https://www.brilianty.cz/heureka.xml' },
+  { shop: 'OceněnáVína.cz', url: 'https://www.ocenenavina.cz/heureka/export/products.xml' },
+  { shop: 'Světnápojů.cz', url: 'https://www.svetnapoju.cz/heureka.xml' },
+  { shop: 'SARAbags.cz', url: 'https://www.kozenezbozisara.cz/feed-heureka-d0y067sf37.xml' },
+  { shop: 'Topalkohol.cz', url: 'https://www.topalkohol.cz/heureka/export/products.xml?hash=6BCaU3lTlDKy2eGPiNTKLak' },
+  { shop: 'Danfil.cz', url: 'https://www.danfil.cz/heureka.xml' },
+  { shop: 'Doke.cz', url: 'https://www.doke.cz/heureka/export/products.xml?hash=JL4afsKdquie8VL0QTFNs' },
+  { shop: 'Barman.cz', url: 'https://feeds.mergado.com/barman-cz-heureka-cz-cz-950b607197b0b98db134a53dbb4e74f9.xml' },
+  { shop: 'Cheesehouse.cz', url: 'https://www.cheesehouse.cz/cs/43/heureka/export/products.xml' },
+  { shop: 'Cafemontana.cz', url: 'https://www.cafemontana.cz/heureka/export/products.xml' },
+  { shop: 'Fantomprint.cz', url: 'https://www.fantomprint.cz/heureka/export/products.xml' },
+]

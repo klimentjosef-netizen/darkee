@@ -1,0 +1,22 @@
+name: Obnova cen a skladu
+
+# Každý den brzy ráno stáhne feedy obchodů a opraví ceny a dostupnost dárků v databázi.
+on:
+  schedule:
+    - cron: '15 3 * * *'
+  workflow_dispatch:
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npx tsx prisma/sync-catalog.ts
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
