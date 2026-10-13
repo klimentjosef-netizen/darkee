@@ -10,6 +10,7 @@ import { QuizQuestion } from './QuizQuestion'
 import { QuizTransition } from './QuizTransition'
 import { Button } from '@/components/ui/Button'
 import { LoadingDots } from '@/components/ui/LoadingDots'
+import { track } from '@/components/TrackView'
 
 function ExitConfirm({ onStay, onLeave }: { onStay: () => void; onLeave: () => void }) {
   return (
@@ -173,6 +174,8 @@ export function QuizContainer({ isModal = false, onClose }: QuizContainerProps) 
   }, [step, isModal, onClose, answers])
 
   function select(val: string) {
+    // První odpověď znamená začátek kvízu
+    if (Object.keys(answers).length === 0) track('quiz_start')
     if (q.type === 'multi') {
       const cur = (answers[q.id] as string[]) || []
       if (cur.includes(val)) {

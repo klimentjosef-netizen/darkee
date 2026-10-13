@@ -208,3 +208,15 @@ model Reminder {
 
   @@index([month, day])
 }
+
+// Měření bez cookies: zobrazení stránky a začátek kvízu. Dokončené kvízy jsou v QuizResult, prokliky v Click.
+// visitorHash je otisk IP adresy a prohlížeče platný jeden den, neukládá se nic, podle čeho by šel člověk poznat.
+model Event {
+  id          String   @id @default(cuid())
+  type        String
+  path        String
+  visitorHash String
+  createdAt   DateTime @default(now())
+
+  @@index([createdAt, type])
+}
