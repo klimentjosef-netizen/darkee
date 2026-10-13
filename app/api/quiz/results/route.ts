@@ -19,6 +19,7 @@ const schema = z.object({
   budgetMax: z.number().optional(),
   about: z.string().max(300).optional(),
   region: z.string().max(30).optional(),
+  avoid: z.string().max(200).optional(),
   personalized: z.string().optional(),
   origin: z.string().optional(),
 })
@@ -35,6 +36,7 @@ export async function POST(request: NextRequest) {
       ...resolveAge(parsed.ageGroup),
       ...resolveInterests(parsed.interests),
       about: parsed.about?.trim() || undefined,
+      avoid: parsed.avoid?.trim() || undefined,
     } as unknown as QuizAnswers
 
     return NextResponse.json(await createQuizResult(answers))

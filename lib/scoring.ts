@@ -80,6 +80,20 @@ function aboutStems(about: string | undefined): string[] {
   )]
 }
 
+// Kořeny slov z pole "co už má nebo nechce". Kratší než u popisu, aby "kávu" našlo i "kávovar".
+function avoidStems(avoid: string | undefined): string[] {
+  if (!avoid) return []
+  const stop = new Set(['nema', 'nechce', 'nesnasi', 'nepije', 'nenosi', 'zadne', 'zadny', 'zadna', 'rada', 'veci', 'hodne', 'moc', 'uz', 'ma', 'nic'])
+  return [...new Set(
+    normalize(avoid).split(/[^a-z0-9]+/).filter(w => w.length >= 4 && !stop.has(w)).map(w => w.slice(0, Math.min(4, w.length - 1)))
+  )]
+}
+
+// Obdarovaný alkohol nepije
+function noAlcohol(answers: QuizAnswers): boolean {
+  return /alkohol|nepije|abstin/.test(normalize(answers.avoid || ''))
+}
+
 // Lahev alkoholu. Katalog je jimi přesycený, takže se bez zájmu o pití derou do každé pětice.
 const BOTTLE_SHOPS = /Světnápojů|Topalkohol|OceněnáVína/i
 const BOTTLE_WORDS = /\b(vino|vina|sekt|sampansk|champagne|prosecco|whisk|rum\b|gin\b|vodka|liker|konak|cognac|brandy|porto|portske|tequila|slivovice|palenka|bourbon|vermut|chardonnay|sauvignon|ryzlink|merlot|cabernet|frankovka|rulandsk|veltlin|mionetto)/
@@ -98,7 +112,7 @@ export function isBottle(p: Pick<EngineProduct, 'name' | 'sourceShop'>): boolean
 
 // Kolik lahví smí být v pětici: bez zájmu o pití jedna, dětem žádná
 export function maxBottles(answers: QuizAnswers): number {
-  if (['baby', 'preschool', 'school', 'teen'].includes(answers.ageGroup)) return 0
+  if (['baby', 'preschool', 'school', 'teen'].includes(answers.ageGroup) || noAlcohol(answers)) return 0
   const about = normalize(answers.about || '')
   const wantsDrinks = (answers.hobbies || []).some(h => /pití/i.test(h)) || BOTTLE_WORDS.test(about) || /\bpiv/.test(about)
   if (wantsDrinks) return 3
@@ -207,6 +221,12 @@ function passesFilters(p: EngineProduct, answers: QuizAnswers, ignoreGiftType: b
   }
   if (forPet && p.recipients.length === 1) return false
   if (!regionFits(p.regions, answers.region)) return false
+  // Co obdarovaný už má nebo nechce, se nenabízí vůbec
+  if (answers.avoid) {
+    if (noAlcohol(answers) && isBottle(p)) return false
+    const haystack = normalize(`${p.name} ${p.giftReason || ''}`)
+    if (avoidStems(answers.avoid).some(s => new RegExp(`\\b${s}`).test(haystack))) return false
+  }
   if (!p.ageRange.includes(answers.ageGroup)) return false
   if (answers.gender !== 'neutral' && !p.genderFit.includes(answers.gender) && !p.genderFit.includes('neutral')) return false
   if (!ignoreGiftType && answers.giftType !== 'both' && p.giftType !== answers.giftType) return false

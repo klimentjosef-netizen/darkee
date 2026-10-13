@@ -235,6 +235,7 @@ export function QuizContainer({ isModal = false, onClose }: QuizContainerProps) 
         budget: a.budget,
       }
       if (typeof a.region === 'string') payload.region = a.region
+      if (typeof a.avoid === 'string' && a.avoid.trim()) payload.avoid = a.avoid.trim().slice(0, 200)
       if (typeof a.about === 'string' && a.about.trim()) payload.about = a.about.trim().slice(0, 300)
       if (a.budget === 'custom') {
         payload.budgetMin = Number(a.budgetMin) || 0
@@ -549,6 +550,34 @@ export function QuizContainer({ isModal = false, onClose }: QuizContainerProps) 
                   resize: 'none',
                 }}
               />
+              <label
+                htmlFor="quiz-avoid"
+                style={{ display: 'block', maxWidth: 520, margin: '0 auto 8px', textAlign: 'left', fontSize: 14, color: '#8A8070', fontFamily: "'Plus Jakarta Sans', sans-serif" }}
+              >
+                Co už má nebo co nechce (nepovinné)
+              </label>
+              <input
+                id="quiz-avoid"
+                type="text"
+                maxLength={200}
+                placeholder="Například: alkohol, hrnky, svíčky"
+                value={(answers.avoid as string) || ''}
+                onChange={e => setAnswers({ ...answers, avoid: e.target.value })}
+                style={{
+                  display: 'block',
+                  width: '100%',
+                  maxWidth: 520,
+                  margin: '0 auto 20px',
+                  padding: '12px 16px',
+                  fontSize: 16,
+                  fontFamily: "'Plus Jakarta Sans', sans-serif",
+                  border: '1px solid rgba(201,168,76,0.3)',
+                  borderRadius: 12,
+                  background: '#141310',
+                  color: '#F0EBE0',
+                  outline: 'none',
+                }}
+              />
               <button
                 onClick={() => advance()}
                 style={{
@@ -566,7 +595,7 @@ export function QuizContainer({ isModal = false, onClose }: QuizContainerProps) 
                   cursor: 'pointer',
                 }}
               >
-                {(answers.about as string)?.trim() ? 'Najít dárky' : 'Přeskočit a najít dárky'}
+                {((answers.about as string)?.trim() || (answers.avoid as string)?.trim()) ? 'Najít dárky' : 'Přeskočit a najít dárky'}
               </button>
             </div>
           )}

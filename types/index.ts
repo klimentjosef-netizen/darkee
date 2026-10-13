@@ -22,6 +22,8 @@ export interface QuizAnswers {
   budgetMax?: number
   // Nepovinný vlastní popis obdarovaného
   about?: string
+  // Co obdarovaný už má nebo nechce, takové dárky se nenabídnou
+  avoid?: string
   // Kraj obdarovaného, podle něj se vybírají zážitky (lib/regions.ts)
   region?: string
   // Dárky z předchozích výběrů, které se při "Ukázat jiných pět" už nenabídnou
