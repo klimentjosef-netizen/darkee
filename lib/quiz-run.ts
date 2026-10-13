@@ -16,7 +16,10 @@ const AI_DAILY_LIMIT = Number(process.env.DARKEE_AI_DAILY_LIMIT || 800)
 // Tři další výběry po pěti dárcích, víc už "Ukázat jiných pět" nenabídne
 export const MAX_EXCLUDED = 15
 
-export async function createQuizResult(answers: QuizAnswers, excluded: string[] = []): Promise<{ quizResultId: string; products: ScoredProduct[]; headline: string | null }> {
+export async function createQuizResult(answers: QuizAnswers, excluded: string[] = []): Promise<{ quizResultId: string; products: ScoredProduct[]; headline: string | null; ms: Record<string, number> }> {
+  // Měření, kde se při výběru tráví čas (databáze, poradce, uložení)
+  const t0 = Date.now()
+  const ms: Record<string, number> = {}
   // Rozpočet a dárkovost filtruje už databáze, motor pak pracuje jen s kandidáty
   const range = answers.budget === 'custom'
     ? { min: answers.budgetMin || 0, max: answers.budgetMax || null }
@@ -24,6 +27,11 @@ export async function createQuizResult(answers: QuizAnswers, excluded: string[] 
 
   // Dárky pro mazlíčky jsou levné, spodní hranice rozpočtu by je všechny vyřadila
   if (answers.relationship === 'pet') range.min = 0
+
+  const startOfDay = new Date()
+  startOfDay.setHours(0, 0, 0, 0)
+  // Počet dnešních výběrů s poradcem se zjišťuje souběžně s načtením dárků
+  const advisedTodayQuery = prisma.quizResult.count({ where: { createdAt: { gte: startOfDay }, adviceModel: { not: null } } })
 
   const found = await prisma.product.findMany({
     where: {
@@ -49,12 +57,14 @@ export async function createQuizResult(answers: QuizAnswers, excluded: string[] 
     : null
   const products = seen ? found.filter(p => !seen.has(nameKey(p.name))) : found
 
+  ms.db = Date.now() - t0
   const candidates = rankCandidates(answers, products, CANDIDATES)
+  ms.motor = Date.now() - t0 - ms.db
 
-  const startOfDay = new Date()
-  startOfDay.setHours(0, 0, 0, 0)
-  const advisedToday = await prisma.quizResult.count({ where: { createdAt: { gte: startOfDay }, adviceModel: { not: null } } })
+  const advisedToday = await advisedTodayQuery
+  const tAi = Date.now()
   const advice = advisedToday < AI_DAILY_LIMIT ? await advise(answers, candidates) : null
+  ms.poradce = Date.now() - tAi
 
   let scored: ScoredProduct[]
   if (advice) {
@@ -96,5 +106,6 @@ export async function createQuizResult(answers: QuizAnswers, excluded: string[] 
     },
   })
 
-  return { quizResultId: quizResult.id, products: scored, headline: advice?.headline ?? null }
+  ms.celkem = Date.now() - t0
+  return { quizResultId: quizResult.id, products: scored, headline: advice?.headline ?? null, ms }
 }
