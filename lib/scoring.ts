@@ -105,6 +105,7 @@ export function maxBottles(answers: QuizAnswers): number {
 // Druh zboží poznaný z názvu. Slouží jen k pestrosti: v pětici nemají být dvě peněženky ani dva hrnky.
 // Na pořadí záleží, platí první shoda ("sklenice na víno" je sklenice, ne lahev).
 const TYPES: [string, RegExp][] = [
+  ['zazitek', /zazitek|zazitk/],
   ['penezenka', /penezenk|dokladovk|pouzdro na karty/],
   ['kabelka', /kabelk|crossbody|shopper|psanick/],
   ['zavazadlo', /batoh|aktovk|\btask|kufr|ledvink/],
