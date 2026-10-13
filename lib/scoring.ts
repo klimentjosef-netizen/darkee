@@ -113,7 +113,7 @@ const TYPES: [string, RegExp][] = [
   ['hrnek', /hrnek|hrnk|salek|salk/],
   ['sklo', /sklenic|sklenk|pohar|karaf/],
   ['svicka', /svick|svicen|vonn[ay] /],
-  ['puzzle', /puzzle/],
+  ['puzzle', /puzzle|\d+ ?(dilku|dilky|pc\b)/],
   ['stavebnice', /lego|stavebnic/],
   ['kniha', /\bkniha|\bknizk/],
   ['plysak', /plys/],
