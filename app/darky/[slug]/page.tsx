@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { ArrowRight } from 'lucide-react'
 import { SiteFooter } from '@/components/SiteFooter'
-import { GIFT_PAGES, getGiftPage, relatedPages } from '@/lib/gift-pages'
+import { ALL_GIFT_PAGES, getGiftPage, relatedPages, pageTitle } from '@/lib/gift-pages'
 import { getPageGifts } from '@/lib/gift-page-data'
 
 // Tvary: tlačítka jsou pilulky, karty 20px, obrázky uvnitř karet 14px.
@@ -18,7 +18,7 @@ export const dynamicParams = false
 const MIN_GIFTS = 6
 
 export function generateStaticParams() {
-  return GIFT_PAGES.map(p => ({ slug: p.slug }))
+  return ALL_GIFT_PAGES.map(p => ({ slug: p.slug }))
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
@@ -26,8 +26,8 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const page = getGiftPage(slug)
   if (!page) return {}
   return {
-    title: `Dárky ${page.label}: tipy s cenou a odkazem ke koupi | Dárkee`,
-    description: `Vybrané dárky ${page.label} z českých e-shopů. U každého cena, obchod a důvod, proč se hodí. ${page.hint}`.slice(0, 158),
+    title: `${pageTitle(page)}: tipy s cenou a odkazem ke koupi | Dárkee`,
+    description: `${pageTitle(page)}: výběr z českých e-shopů. U každého cena, obchod a důvod, proč se hodí. ${page.hint}`.slice(0, 158),
     alternates: { canonical: `/darky/${page.slug}` },
   }
 }
@@ -48,7 +48,7 @@ export default async function GiftPageRoute({ params }: { params: Promise<{ slug
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'ItemList',
-    name: `Dárky ${page.label}`,
+    name: pageTitle(page),
     itemListElement: gifts.map((g, i) => ({ '@type': 'ListItem', position: i + 1, name: g.name })),
   }
 
@@ -71,10 +71,10 @@ export default async function GiftPageRoute({ params }: { params: Promise<{ slug
 
       <main className="mx-auto max-w-6xl px-4 pt-12 pb-20 sm:px-6 lg:pt-16">
         <p className="text-sm text-[var(--text-secondary)]">
-          <Link href="/darky" className="text-[var(--text-secondary)] underline">Dárky podle obdarovaného</Link>
+          <Link href="/darky" className="text-[var(--text-secondary)] underline">Všechny výběry dárků</Link>
         </p>
         <h1 className="mt-3 max-w-[20ch] text-[clamp(32px,5.4vw,52px)] font-semibold leading-[1.06] tracking-[-0.03em]">
-          Dárky {page.label}
+          {pageTitle(page)}
         </h1>
         <p className="mt-5 max-w-[62ch] text-[17px] leading-relaxed text-[var(--text-secondary)]">
           {page.hint} Všech {gifts.length} tipů je z ověřeného katalogu českých e-shopů, s aktuální cenou a přímým odkazem ke koupi.
@@ -123,7 +123,7 @@ export default async function GiftPageRoute({ params }: { params: Promise<{ slug
 
         {related.length > 0 && (
           <nav aria-label="Další výběry" className="mt-14">
-            <h2 className="text-[22px] font-semibold tracking-[-0.015em]">Zúžit výběr</h2>
+            <h2 className="text-[22px] font-semibold tracking-[-0.015em]">{page.hobby || page.experienceRegion ? 'Další výběry' : 'Zúžit výběr'}</h2>
             <ul className="m-0 mt-4 flex list-none flex-wrap gap-2 p-0">
               {related.map(r => (
                 <li key={r.slug}>
@@ -131,7 +131,7 @@ export default async function GiftPageRoute({ params }: { params: Promise<{ slug
                     href={`/darky/${r.slug}`}
                     className="inline-flex whitespace-nowrap rounded-full border border-[var(--border-strong)] px-4 py-2 text-sm text-[var(--text-primary)] no-underline transition-colors hover:border-[var(--gold-primary)]"
                   >
-                    Dárky {r.label}
+                    {pageTitle(r)}
                   </Link>
                 </li>
               ))}

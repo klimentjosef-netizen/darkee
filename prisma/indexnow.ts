@@ -6,7 +6,7 @@
  * Usage: npx tsx prisma/indexnow.ts [--dry-run]
  */
 
-import { GIFT_PAGES } from '../lib/gift-pages'
+import { ALL_GIFT_PAGES } from '../lib/gift-pages'
 
 const HOST = 'www.darkee.cz'
 const KEY = '86d3502a1da9a9a796419c587c84ea81'
@@ -14,7 +14,7 @@ const ENDPOINTS = ['https://api.indexnow.org/indexnow', 'https://search.seznam.c
 const DRY_RUN = process.argv.includes('--dry-run')
 
 async function main() {
-  const urlList = ['', '/pruvodce', '/darky', ...GIFT_PAGES.map(p => `/darky/${p.slug}`)].map(path => `https://${HOST}${path}`)
+  const urlList = ['', '/pruvodce', '/darky', ...ALL_GIFT_PAGES.map(p => `/darky/${p.slug}`)].map(path => `https://${HOST}${path}`)
   console.log(`Adres k oznámení: ${urlList.length}`)
   if (DRY_RUN) return
 

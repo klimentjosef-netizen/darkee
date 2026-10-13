@@ -294,7 +294,7 @@ function rankAll(answers: QuizAnswers, products: EngineProduct[]): RankedProduct
 
 // Nejlepší kandidáti pro výběrčího: bez variant téhož a jen pár kusů z jednoho obchodu,
 // aby měl z čeho skládat pestrou pětici.
-export function rankCandidates(answers: QuizAnswers, products: EngineProduct[], limit: number): RankedProduct[] {
+export function rankCandidates(answers: QuizAnswers, products: EngineProduct[], limit: number, opts: { anyType?: boolean } = {}): RankedProduct[] {
   const out: RankedProduct[] = []
   const shopCount: Record<string, number> = {}
   const seenNames = new Set<string>()
@@ -310,7 +310,8 @@ export function rankCandidates(answers: QuizAnswers, products: EngineProduct[], 
     if (seenNames.has(key) || (shopCount[c.p.sourceShop] || 0) >= perShop) continue
     if (isBottle(c.p) && ++bottles > bottleCap) continue
     const type = productType(c.p)
-    if (type && type !== 'lahev' && (typeCount[type] = (typeCount[type] || 0) + 1) > 4) continue
+    // Stránka samých zážitků strop na druh nepotřebuje
+    if (!opts.anyType && type && type !== 'lahev' && (typeCount[type] = (typeCount[type] || 0) + 1) > 4) continue
     seenNames.add(key)
     shopCount[c.p.sourceShop] = (shopCount[c.p.sourceShop] || 0) + 1
     out.push(c)

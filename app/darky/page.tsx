@@ -3,7 +3,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { ArrowRight } from 'lucide-react'
 import { SiteFooter } from '@/components/SiteFooter'
-import { RECIPIENT_PAGES } from '@/lib/gift-pages'
+import { RECIPIENT_PAGES, HOBBY_PAGES, EXPERIENCE_PAGES, pageTitle } from '@/lib/gift-pages'
 
 export const metadata: Metadata = {
   title: 'Dárky podle obdarovaného | Dárkee',
@@ -32,14 +32,43 @@ export default function GiftIndexPage() {
         <p className="mt-5 max-w-[60ch] text-[17px] leading-relaxed text-[var(--text-secondary)]">
           Vyberte obdarovaného a ukážeme vám dárky, které jsme pro něj v českých e-shopech našli a posoudili.
         </p>
-        <ul className="m-0 mt-10 grid list-none gap-3 p-0 sm:grid-cols-2 lg:grid-cols-3">
+        <h2 className="mt-12 text-[24px] font-semibold tracking-[-0.02em]">Podle obdarovaného</h2>
+        <ul className="m-0 mt-5 grid list-none gap-3 p-0 sm:grid-cols-2 lg:grid-cols-3">
           {RECIPIENT_PAGES.map(p => (
             <li key={p.slug}>
               <Link
                 href={`/darky/${p.slug}`}
                 className="flex h-full items-center justify-between gap-4 rounded-[20px] border border-[var(--border-subtle)] bg-[var(--bg-secondary)] px-5 py-5 text-lg font-semibold text-[var(--text-primary)] no-underline transition-colors hover:border-[var(--gold-primary)]"
               >
-                Dárky {p.label}
+                {pageTitle(p)}
+                <ArrowRight size={18} strokeWidth={2} className="shrink-0 text-[var(--gold-primary)]" aria-hidden />
+              </Link>
+            </li>
+          ))}
+        </ul>
+        <h2 className="mt-14 text-[24px] font-semibold tracking-[-0.02em]">Podle toho, co ho baví</h2>
+        <ul className="m-0 mt-5 grid list-none gap-3 p-0 sm:grid-cols-2 lg:grid-cols-3">
+          {HOBBY_PAGES.map(p => (
+            <li key={p.slug}>
+              <Link
+                href={`/darky/${p.slug}`}
+                className="flex h-full items-center justify-between gap-4 rounded-[20px] border border-[var(--border-subtle)] bg-[var(--bg-secondary)] px-5 py-5 text-lg font-semibold text-[var(--text-primary)] no-underline transition-colors hover:border-[var(--gold-primary)]"
+              >
+                {pageTitle(p)}
+                <ArrowRight size={18} strokeWidth={2} className="shrink-0 text-[var(--gold-primary)]" aria-hidden />
+              </Link>
+            </li>
+          ))}
+        </ul>
+        <h2 className="mt-14 text-[24px] font-semibold tracking-[-0.02em]">Zážitky podle kraje</h2>
+        <ul className="m-0 mt-5 grid list-none gap-3 p-0 sm:grid-cols-2 lg:grid-cols-3">
+          {EXPERIENCE_PAGES.map(p => (
+            <li key={p.slug}>
+              <Link
+                href={`/darky/${p.slug}`}
+                className="flex h-full items-center justify-between gap-4 rounded-[20px] border border-[var(--border-subtle)] bg-[var(--bg-secondary)] px-5 py-5 text-lg font-semibold text-[var(--text-primary)] no-underline transition-colors hover:border-[var(--gold-primary)]"
+              >
+                {pageTitle(p)}
                 <ArrowRight size={18} strokeWidth={2} className="shrink-0 text-[var(--gold-primary)]" aria-hidden />
               </Link>
             </li>

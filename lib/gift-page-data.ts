@@ -10,7 +10,8 @@ export async function getPageGifts(page: GiftPage, count = 12): Promise<ScoredPr
       inStock: true,
       isApproved: true,
       giftScore: { gte: 55 },
-      blindBuy: true,
+      // Zážitky jsou "ne naslepo" kvůli místu, na stránce jednoho kraje to nevadí
+      ...(page.experienceRegion ? { giftType: 'experience', regions: { has: page.experienceRegion } } : { blindBuy: true }),
       imageUrl: { startsWith: 'https://' },
       price: { gte: page.price.min, ...(page.price.max !== null ? { lte: page.price.max } : {}) },
     },
@@ -20,13 +21,21 @@ export async function getPageGifts(page: GiftPage, count = 12): Promise<ScoredPr
       giftType: true, isPersonalizable: true, isLocal: true,
       ageRange: true, genderFit: true, occasionFit: true,
       interestTags: true, styleFit: true,
-      giftScore: true, blindBuy: true, giftKind: true, recipients: true, giftReason: true,
+      giftScore: true, blindBuy: true, giftKind: true, recipients: true, giftReason: true, regions: true,
     },
   })
 
-  const ranked = rankCandidates(page.answers, products, count * 5)
-    // Na stránku patří jen dárky, které posouzení určilo právě tomuto obdarovanému
-    .filter(c => c.p.recipients.includes(page.answers.relationship))
+  const ranked = rankCandidates(page.answers, products, count * 5, { anyType: !!page.experienceRegion })
+    .filter(c => {
+      if (page.experienceRegion) return true
+      // Stránka záliby: slovo záliby musí být přímo v názvu nebo popisu dárku
+      if (page.hobby) {
+        const text = `${c.p.name} ${c.p.giftReason || ''}`.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+        return (page.answers.hobbyWords || []).some(w => text.includes(w.trim()))
+      }
+      // Na stránku patří jen dárky, které posouzení určilo právě tomuto obdarovanému
+      return c.p.recipients.includes(page.answers.relationship)
+    })
 
   // Pestrost: stránka nemá být samé lahve ani samé zboží z jednoho obchodu
   const maxPerShop = Math.ceil(count / 4)
@@ -37,6 +46,7 @@ export async function getPageGifts(page: GiftPage, count = 12): Promise<ScoredPr
   const typeCount: Record<string, number> = {}
   for (const c of ranked) {
     const isFood = c.p.interestTags.includes('food')
+    if (page.experienceRegion) { picked.push(c); if (picked.length >= count) break; continue }
     if ((shopCount[c.p.sourceShop] || 0) >= maxPerShop || (isFood && food >= maxFood)) continue
     // Od jednoho druhu zboží (lahev, dárkový box, svíčka) nejvýš dva kusy
     const type = productType(c.p)
