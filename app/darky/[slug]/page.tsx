@@ -90,7 +90,7 @@ export default async function GiftPageRoute({ params }: { params: Promise<{ slug
                 className="group flex w-full flex-col rounded-[20px] border border-[var(--border-subtle)] bg-[var(--bg-elevated)] p-3 no-underline transition-colors hover:border-[var(--border-strong)]"
               >
                 <div className="relative aspect-square isolate overflow-hidden rounded-[14px] bg-[#F3F1EC]">
-                  <Image src={g.imageUrl} alt={g.name} fill sizes="(min-width: 1024px) 270px, 50vw" priority={i < 4} unoptimized className="object-contain p-4 mix-blend-multiply" />
+                  <Image src={g.imageUrl} alt={g.name} fill sizes="(min-width: 1024px) 270px, 50vw" priority={i < 4} unoptimized className={g.giftType === 'experience' ? 'object-cover' : 'object-contain p-4 mix-blend-multiply'} />
                 </div>
                 <div className="flex flex-1 flex-col px-1 pt-3 pb-1">
                   <h2 className="line-clamp-2 text-[15px] font-semibold leading-snug text-[var(--text-primary)]">{g.name}</h2>

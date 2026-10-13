@@ -38,7 +38,7 @@ function GiftPhoto({ product, sizes, priority = false }: { product: ScoredProduc
   return (
     <div className="relative h-full w-full isolate overflow-hidden rounded-[14px] bg-[#F3F1EC]">
       {product.imageUrl && (
-        <Image src={product.imageUrl} alt={product.name} fill sizes={sizes} priority={priority} unoptimized className="object-contain p-4 mix-blend-multiply" />
+        <Image src={product.imageUrl} alt={product.name} fill sizes={sizes} priority={priority} unoptimized className={product.giftType === 'experience' ? 'object-cover' : 'object-contain p-4 mix-blend-multiply'} />
       )}
     </div>
   )
