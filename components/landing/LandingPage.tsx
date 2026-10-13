@@ -34,7 +34,7 @@ function PrimaryButton({ onClick, large = false }: { onClick: () => void; large?
 
 function GiftPhoto({ product, sizes, priority = false }: { product: ShowcaseProduct; sizes: string; priority?: boolean }) {
   return (
-    <div className="relative h-full w-full overflow-hidden rounded-[14px] bg-[#F3F1EC]">
+    <div className="relative h-full w-full isolate overflow-hidden rounded-[14px] bg-[#F3F1EC]">
       <Image
         src={product.imageUrl}
         alt={product.name}
@@ -42,7 +42,7 @@ function GiftPhoto({ product, sizes, priority = false }: { product: ShowcaseProd
         sizes={sizes}
         priority={priority}
         unoptimized
-        className="object-contain p-4"
+        className="object-contain p-4 mix-blend-multiply"
       />
     </div>
   )
