@@ -1,5 +1,5 @@
 import { prisma } from './prisma'
-import { decodeEntities } from './scoring'
+import { decodeEntities, productType } from './scoring'
 
 export type ShowcaseProduct = {
   id: string
@@ -24,7 +24,7 @@ export async function getShowcase(count: number): Promise<ShowcaseData> {
   const [pool, giftCount, shops] = await Promise.all([
     prisma.product.findMany({
       where: { ...where, giftScore: { gte: 72 }, blindBuy: true, imageUrl: { startsWith: 'https://' }, price: { gte: 250, lte: 3000 } },
-      select: { id: true, name: true, price: true, imageUrl: true, sourceShop: true, giftReason: true, giftKind: true, giftScore: true },
+      select: { id: true, name: true, price: true, imageUrl: true, sourceShop: true, giftReason: true, giftKind: true, giftScore: true, giftType: true },
       orderBy: { giftScore: 'desc' },
       take: 300,
     }),
@@ -35,10 +35,16 @@ export async function getShowcase(count: number): Promise<ShowcaseData> {
   const products: ShowcaseProduct[] = []
   const usedShops = new Set<string>()
   const usedKinds: Record<string, number> = {}
+  // Od každého druhu zboží jeden kus a nejvýš jedna lahev, zážitky mají reklamní fotky, do ukázky nejdou
+  const usedTypes = new Set<string>()
 
   for (const p of pool) {
     if (!p.giftReason || usedShops.has(p.sourceShop)) continue
     if ((usedKinds[p.giftKind || ''] || 0) >= 2) continue
+    if (p.giftType === 'experience') continue
+    const type = productType(p)
+    if (type && usedTypes.has(type)) continue
+    if (type) usedTypes.add(type)
     usedShops.add(p.sourceShop)
     usedKinds[p.giftKind || ''] = (usedKinds[p.giftKind || ''] || 0) + 1
     products.push({
