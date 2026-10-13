@@ -2,7 +2,7 @@ import Anthropic from '@anthropic-ai/sdk'
 import { zodOutputFormat } from '@anthropic-ai/sdk/helpers/zod'
 import { z } from 'zod'
 import { QuizAnswers } from '@/types'
-import { RankedProduct, decodeEntities, isBottle, maxBottles } from './scoring'
+import { RankedProduct, decodeEntities, maxBottles, tooSimilar } from './scoring'
 import { ROLES } from './roles'
 
 // Výběrčí: z kandidátů, které vybral motor (lib/scoring.ts), složí pětici pro konkrétního
@@ -70,6 +70,7 @@ Jak psát:
 - "shrnuti": jedna věta do 25 slov, která kupujícímu vyká a řekne, kterým směrem výběr šel a proč. Mluv za Dárkee v množném čísle ("vybrali jsme", "vsadili jsme").
 - Shrnutí popisuje směr výběru, nevyjmenovává jednotlivé dárky ani jejich počet.
 - Když vlastní popis zjevně odporuje zvolenému věku, pohlaví nebo vztahu, vybírej podle zvolených odpovědí a z popisu vezmi jen to, co s nimi jde dohromady.
+- Nedávej do výběru dva dárky stejného druhu (dvě peněženky, dva hrnky, dvě svíčky), pokud o ten druh obdarovaný výslovně nestojí.
 - Piš bezchybnou češtinou a před odesláním zkontroluj skloňování (správně "o jejích zálibách", ne "o její zálibách").
 - Žádné pomlčky, žádné vykřičníky, žádné fráze typu "skvělý dárek" nebo "určitě potěší".
 
@@ -121,8 +122,7 @@ export async function advise(answers: QuizAnswers, candidates: RankedProduct[]):
 
     const seen = new Set<number>()
     const shopCount: Record<string, number> = {}
-    const bottleLimit = maxBottles(answers)
-    let bottles = 0
+    const kept: RankedProduct['p'][] = []
     const picks = parsed.tipy
       .filter(t => t.ref >= 0 && t.ref < candidates.length && !seen.has(t.ref) && seen.add(t.ref))
       // Nejvýš dva tipy z jednoho obchodu, i kdyby to model nedodržel
@@ -131,8 +131,13 @@ export async function advise(answers: QuizAnswers, candidates: RankedProduct[]):
         shopCount[shop] = (shopCount[shop] || 0) + 1
         return shopCount[shop] <= 2
       })
-      // Lahví jen tolik, kolik odpovídá zájmu obdarovaného o pití
-      .filter(t => !isBottle(candidates[t.ref].p) || ++bottles <= bottleLimit)
+      // Pestrost: lahví jen podle zájmu o pití a od každého druhu zboží jeden kus
+      .filter(t => {
+        const p = candidates[t.ref].p
+        if (tooSimilar(answers, p, kept)) return false
+        kept.push(p)
+        return true
+      })
       .slice(0, 5)
       .map(t => ({ id: candidates[t.ref].p.id, role: t.role, reason: clean(t.duvod) }))
 

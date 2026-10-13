@@ -81,7 +81,7 @@ function aboutStems(about: string | undefined): string[] {
 const BOTTLE_SHOPS = /Světnápojů|Topalkohol|OceněnáVína/i
 const BOTTLE_WORDS = /\b(vino|vina|sekt|sampansk|champagne|prosecco|whisk|rum\b|gin\b|vodka|liker|konak|cognac|brandy|porto|portske|tequila|slivovice|palenka|bourbon|vermut|chardonnay|sauvignon|ryzlink|merlot|cabernet|frankovka|rulandsk|veltlin|mionetto)/
 // Příslušenství a věci, které mají alkohol jen v názvu (barva Cognac, gel s vůní whisky)
-const NOT_BOTTLE = /(sklenic|sklenk|pohar|karaf|drzak|stojan|mydlo|\bgel\b|ponozk|kviz|tack|set na vino|otvirak|vyvrtk|pumpa|cokolad|\bkav[aoy]|coffee|\bcaj|kniha|hrnek|sirup|penezenk|kabelk|\bjbl\b)/
+const NOT_BOTTLE = /(sklenic|sklenk|pohar|karaf|drzak|stojan|mydlo|\bgel\b|ponozk|kviz|tack|set na vino|otvirak|vyvrtk|pumpa|cokolad|\bkav[aoy]|coffee|\bcaj|kniha|hrnek|sirup|penezenk|kabelk|destnik|\bjbl\b)/
 // Údaj o obsahu alkoholu ("12,5%") je jistý znak lahve
 const ABV = /\d{1,2}([.,]\d)?\s?%/
 
@@ -100,6 +100,54 @@ export function maxBottles(answers: QuizAnswers): number {
   const wantsDrinks = (answers.hobbies || []).some(h => /pití/i.test(h)) || BOTTLE_WORDS.test(about) || /\bpiv/.test(about)
   if (wantsDrinks) return 3
   return answers.style === 'food_drink' ? 2 : 1
+}
+
+// Druh zboží poznaný z názvu. Slouží jen k pestrosti: v pětici nemají být dvě peněženky ani dva hrnky.
+// Na pořadí záleží, platí první shoda ("sklenice na víno" je sklenice, ne lahev).
+const TYPES: [string, RegExp][] = [
+  ['penezenka', /penezenk|dokladovk|pouzdro na karty/],
+  ['kabelka', /kabelk|crossbody|shopper|psanick/],
+  ['zavazadlo', /batoh|aktovk|\btask|kufr|ledvink/],
+  ['sperk', /prsten|nausnic|naramek|nahrdelnik|privesek(?! na klic)|retizek|brizur|sperk(?!ovnic)/],
+  ['hodinky', /hodink/],
+  ['hrnek', /hrnek|hrnk|salek|salk/],
+  ['sklo', /sklenic|sklenk|pohar|karaf/],
+  ['svicka', /svick|svicen|vonn[ay] /],
+  ['puzzle', /puzzle/],
+  ['stavebnice', /lego|stavebnic/],
+  ['kniha', /\bkniha|\bknizk/],
+  ['plysak', /plys/],
+  ['panenka', /panenk|barbie/],
+  ['model', /maisto|bruder|\bmodel|vozidl/],
+  ['audio', /sluchatk|reproduktor|soundbar|\bjbl\b/],
+  ['poukaz', /poukaz/],
+  ['kosmetika', /kosmet|koupel|mydl|peeling|\bkrem|sprchov/],
+  ['obleceni', /cepic|\bsala\b|satek|rukavic|ponozk|tricko|zupan/],
+  ['kava', /\bkav[aoy]|\bcaj|espresso|coffee/],
+  ['sladkosti', /cokolad|pralin|bonbon/],
+  ['vaza', /\bvaz[ay]\b/],
+  ['textil', /polstar|\bdeka\b|\bpled/],
+  ['box', /\bbox\b|darkovy kos|darkova sada|darkovy set|darkove baleni/],
+]
+
+export function productType(p: Pick<EngineProduct, 'name' | 'sourceShop'>): string | null {
+  if (isBottle(p)) return 'lahev'
+  const name = normalize(p.name)
+  return TYPES.find(([, re]) => re.test(name))?.[0] ?? null
+}
+
+type Named = Pick<EngineProduct, 'name' | 'sourceShop'>
+
+// Hlídá pestrost pětice: lahví jen podle zájmu o pití a od každého druhu zboží jeden kus.
+// Dva kusy téhož druhu projdou jen tomu, kdo si ten druh sám vybral v zálibách nebo ho popsal.
+export function tooSimilar(answers: QuizAnswers, p: Named, picked: Named[]): boolean {
+  const type = productType(p)
+  if (!type) return false
+  const same = picked.filter(x => productType(x) === type).length
+  if (type === 'lahev') return same >= maxBottles(answers)
+  const wanted = [...(answers.hobbyWords || []), ...aboutStems(answers.about)]
+  const re = TYPES.find(([key]) => key === type)![1]
+  return same >= (wanted.some(w => re.test(w.trim())) ? 2 : 1)
 }
 
 function passesFilters(p: EngineProduct, answers: QuizAnswers, ignoreGiftType: boolean): boolean {
@@ -179,11 +227,15 @@ export function rankCandidates(answers: QuizAnswers, products: EngineProduct[], 
   // Výběrčí dostane o pár lahví víc, než smí použít, aby měl z čeho vybrat tu nejlepší
   const bottleCap = maxBottles(answers) === 0 ? 0 : maxBottles(answers) + 2
   let bottles = 0
+  // Od jednoho druhu zboží jen pár kusů, jinak by třicítku kandidátů zabraly samé peněženky
+  const typeCount: Record<string, number> = {}
 
   for (const c of rankAll(answers, products)) {
     const key = nameKey(c.p.name)
     if (seenNames.has(key) || (shopCount[c.p.sourceShop] || 0) >= perShop) continue
     if (isBottle(c.p) && ++bottles > bottleCap) continue
+    const type = productType(c.p)
+    if (type && type !== 'lahev' && (typeCount[type] = (typeCount[type] || 0) + 1) > 4) continue
     seenNames.add(key)
     shopCount[c.p.sourceShop] = (shopCount[c.p.sourceShop] || 0) + 1
     out.push(c)
@@ -219,8 +271,7 @@ export function scoreProducts(answers: QuizAnswers, products: EngineProduct[]): 
   const kindCount: Record<string, number> = {}
   const shopCount: Record<string, number> = {}
   const seenNames = new Set<string>()
-  const bottleLimit = maxBottles(answers)
-  const bottlesPicked = () => picked.filter(c => isBottle(c.p)).length
+  const similar = (c: RankedProduct) => tooSimilar(answers, c.p, picked.map(x => x.p))
 
   while (picked.length < TIPS) {
     let best: RankedProduct | null = null
@@ -229,7 +280,7 @@ export function scoreProducts(answers: QuizAnswers, products: EngineProduct[]): 
     for (const c of ranked) {
       if (picked.includes(c) || seenNames.has(nameKey(c.p.name))) continue
       if ((shopCount[c.p.sourceShop] || 0) >= MAX_PER_SHOP) continue
-      if (isBottle(c.p) && bottlesPicked() >= bottleLimit) continue
+      if (similar(c)) continue
       const adjusted = c.score
         - SAME_KIND_PENALTY * (kindCount[c.p.giftKind || ''] || 0)
         - SAME_SHOP_PENALTY * (shopCount[c.p.sourceShop] || 0)
@@ -240,7 +291,7 @@ export function scoreProducts(answers: QuizAnswers, products: EngineProduct[]): 
     }
 
     // Limit na obchod se uvolní, jen když jinak pětice nejde složit
-    if (!best) best = ranked.find(c => !picked.includes(c) && !seenNames.has(nameKey(c.p.name)) && !(isBottle(c.p) && bottlesPicked() >= bottleLimit)) || null
+    if (!best) best = ranked.find(c => !picked.includes(c) && !seenNames.has(nameKey(c.p.name)) && !similar(c)) || null
     if (!best) break
 
     picked.push(best)
