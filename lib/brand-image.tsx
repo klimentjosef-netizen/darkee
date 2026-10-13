@@ -1,7 +1,7 @@
 import { ImageResponse } from 'next/og'
 import { readFile } from 'fs/promises'
 import { join } from 'path'
-import { MARK_D, MARK_BOW } from '@/components/Logo'
+import { MARK_PATHS } from '@/components/Logo'
 
 // Obrázky značky generované kódem: ikona na plochu telefonu a náhled odkazu při sdílení.
 
@@ -15,8 +15,7 @@ export const OG_SIZE = { width: 1200, height: 630 }
 function Mark({ size, strokeWidth }: { size: number; strokeWidth: number }) {
   return (
     <svg width={size} height={size} viewBox="14 14 72 72" fill="none" stroke={GOLD} strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round">
-      <path d={MARK_D} />
-      <path d={MARK_BOW} />
+      {MARK_PATHS.map(d => <path key={d} d={d} />)}
     </svg>
   )
 }
