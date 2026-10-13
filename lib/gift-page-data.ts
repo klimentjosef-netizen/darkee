@@ -1,5 +1,5 @@
 import { prisma } from './prisma'
-import { rankCandidates, toScoredProduct } from './scoring'
+import { rankCandidates, toScoredProduct, productType } from './scoring'
 import { GiftPage } from './gift-pages'
 import { ScoredProduct } from '@/types'
 
@@ -34,9 +34,14 @@ export async function getPageGifts(page: GiftPage, count = 12): Promise<ScoredPr
   const picked: typeof ranked = []
   const shopCount: Record<string, number> = {}
   let food = 0
+  const typeCount: Record<string, number> = {}
   for (const c of ranked) {
     const isFood = c.p.interestTags.includes('food')
     if ((shopCount[c.p.sourceShop] || 0) >= maxPerShop || (isFood && food >= maxFood)) continue
+    // Od jednoho druhu zboží (lahev, dárkový box, svíčka) nejvýš dva kusy
+    const type = productType(c.p)
+    if (type && (typeCount[type] || 0) >= 2) continue
+    if (type) typeCount[type] = (typeCount[type] || 0) + 1
     shopCount[c.p.sourceShop] = (shopCount[c.p.sourceShop] || 0) + 1
     if (isFood) food++
     picked.push(c)
