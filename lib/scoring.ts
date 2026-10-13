@@ -246,7 +246,9 @@ function matchScore(p: EngineProduct, answers: QuizAnswers, stems: string[]): { 
     score += Math.min(ABOUT_MATCH_MAX, hits * ABOUT_MATCH_BONUS)
   }
 
-  if (p.blindBuy === false) score -= NOT_BLIND_PENALTY
+  // U zážitku je důvodem 'ne naslepo' hlavně místo konání. Když kupující kraj zadal a sedí, srážka odpadá.
+  const placeKnown = (p.regions?.length ?? 0) > 0 && !!answers.region && answers.region !== 'any'
+  if (p.blindBuy === false && !placeKnown) score -= NOT_BLIND_PENALTY
 
   if (p.isPersonalizable) reasons.push('Lze personalizovat')
 
