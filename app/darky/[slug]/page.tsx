@@ -96,7 +96,7 @@ export default async function GiftPageRoute({ params }: { params: Promise<{ slug
                   <h2 className="line-clamp-2 text-[15px] font-semibold leading-snug text-[var(--text-primary)]">{g.name}</h2>
                   {g.reasons[0] && <p className="mt-1.5 line-clamp-3 text-[13px] leading-relaxed text-[var(--text-secondary)]">{g.reasons[0]}</p>}
                   <div className="mt-auto flex items-baseline justify-between gap-3 pt-3">
-                    <span className="shrink-0 whitespace-nowrap text-[15px] font-semibold text-[var(--gold-primary)]">{price(g.price)}</span>
+                    <span className="shrink-0 whitespace-nowrap text-[15px] font-semibold text-[var(--gold-primary)]">{g.giftType === 'experience' ? 'od ' : ''}{price(g.price)}</span>
                     <span className="truncate text-[12px] text-[var(--text-secondary)]">{g.sourceShop}</span>
                   </div>
                 </div>
