@@ -5,6 +5,7 @@
  * --ai flag enables AI tagging via Claude (requires ANTHROPIC_API_KEY)
  * Without --ai, uses heuristic tagging from feed PARAMs
  * --limit=N takes N products spread evenly across the feed (large catalogs)
+ * --gift-type=experience marks everything as an experience (voucher shops such as Zážitky.cz)
  */
 
 import { PrismaClient } from '@prisma/client'
@@ -21,6 +22,16 @@ const maxPriceArg = args.find(a => a.startsWith('--max-price='))
 const MAX_PRICE = maxPriceArg ? Number(maxPriceArg.split('=')[1]) : null
 const limitArg = args.find(a => a.startsWith('--limit='))
 const LIMIT = limitArg ? Number(limitArg.split('=')[1]) : null
+const giftTypeArg = args.find(a => a.startsWith('--gift-type='))
+const GIFT_TYPE = giftTypeArg?.split('=')[1] === 'experience' ? 'experience' as const : 'physical' as const
+
+// Zážitkové feedy nemají cenu u položky, ale u variant (15, 30, 45 minut). Bere se nejnižší, tedy cena "od".
+function variantPrice(item: Record<string, unknown>): number {
+  const raw = item.VARIANT
+  const variants = (Array.isArray(raw) ? raw : raw ? [raw] : []) as Record<string, unknown>[]
+  const prices = variants.map(v => parsePrice((v.PRICE_VAT ?? v.PRICE ?? '0') as string)).filter(p => p > 0)
+  return prices.length ? Math.min(...prices) : 0
+}
 
 if (!feedUrl || !shopName) {
   console.error('Usage: npx tsx prisma/import-shop.ts <feedUrl> <shopName> [--ai]')
@@ -206,11 +217,13 @@ async function main() {
 
   for (const item of items) {
     const name = decodeEntities(String(item.PRODUCTNAME || item.PRODUCT || ''))
-    const price = parsePrice(item.PRICE_VAT as string || item.PRICE as string || '0')
+    const price = parsePrice(item.PRICE_VAT as string || item.PRICE as string || '0') || variantPrice(item)
     const url = decodeEntities(String(item.URL || ''))
     const imageUrl = decodeEntities(String(item.IMGURL || ''))
     const description = stripHtml(decodeEntities(String(item.DESCRIPTION || '')))
-    const category = decodeEntities(String(item.CATEGORYTEXT || ''))
+    // Některé feedy mají kategorií desítky, stačí první dvě konkrétní
+    const rawCategory = Array.isArray(item.CATEGORYTEXT) ? (item.CATEGORYTEXT as unknown[]).map(String).filter(c => !/^(Všechny|Dárky do|Cena do)/.test(c)).slice(0, 2).join(' | ') : item.CATEGORYTEXT
+    const category = decodeEntities(String(rawCategory || ''))
 
     if (!name || !price || !url) { skipped++; continue }
     if (MAX_PRICE && price > MAX_PRICE) { skipped++; continue }
@@ -237,7 +250,7 @@ async function main() {
         occasionFit: h.occasionFit,
         genderFit: h.genderFit,
         ageRange: h.ageRange,
-        giftType: 'physical' as const,
+        giftType: GIFT_TYPE,
         isPersonalizable: h.isPersonalizable,
         isLocal: false,
       }

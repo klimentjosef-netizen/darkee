@@ -131,6 +131,8 @@ const TYPES: [string, RegExp][] = [
 ]
 
 export function productType(p: Pick<EngineProduct, 'name' | 'sourceShop'>): string | null {
+  // Zážitkové obchody: v pětici jeden zážitek, ať zbude místo na věci
+  if (/^(Zážitky|Adrop).cz$/.test(p.sourceShop)) return 'zazitek'
   if (isBottle(p)) return 'lahev'
   const name = normalize(p.name)
   return TYPES.find(([, re]) => re.test(name))?.[0] ?? null

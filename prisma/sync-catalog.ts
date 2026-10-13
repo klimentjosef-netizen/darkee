@@ -56,8 +56,10 @@ async function loadFeed(url: string): Promise<Map<string, number>> {
   const prices = new Map<string, number>()
   for (const it of items) {
     const itemUrl = decodeEntities(String(it.URL || ''))
-    const price = parsePrice(it.PRICE_VAT ?? it.PRICE)
-    if (itemUrl && price > 0) prices.set(itemUrl, price)
+    // Zážitky mají cenu u variant, bere se nejnižší
+    const variants = (Array.isArray(it.VARIANT) ? it.VARIANT : it.VARIANT ? [it.VARIANT] : []) as Record<string, unknown>[]
+    const price = parsePrice(it.PRICE_VAT ?? it.PRICE) || Math.min(...variants.map(v => parsePrice(v.PRICE_VAT ?? v.PRICE)).filter(p => p > 0), Infinity)
+    if (itemUrl && price > 0 && Number.isFinite(price)) prices.set(itemUrl, price)
   }
   return prices
 }
