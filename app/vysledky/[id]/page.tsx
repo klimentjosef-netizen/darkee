@@ -109,7 +109,7 @@ export default function VysledkyPage() {
 
   const summary: string[] = []
   if (answers) {
-    if (answers.relationship !== 'pet' && answers.ageGroup) summary.push(ageLabels[answers.ageGroup] || '')
+    if (answers.relationship !== 'pet' && answers.ageGroup) summary.push(answers.ageLabel || ageLabels[answers.ageGroup] || '')
     if (answers.gender && genderLabels[answers.gender]) summary.push(genderLabels[answers.gender])
     if (answers.occasion) summary.push(occasionLabels[answers.occasion] || '')
     if (answers.budget === 'custom' && (answers.budgetMin || answers.budgetMax)) {

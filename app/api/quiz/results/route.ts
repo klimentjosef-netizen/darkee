@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createQuizResult } from '@/lib/quiz-run'
 import { resolveInterests } from '@/lib/hobbies'
+import { resolveAge } from '@/lib/ages'
 import { QuizAnswers } from '@/types'
 import { z } from 'zod'
 
@@ -25,6 +26,7 @@ export async function POST(request: NextRequest) {
     const parsed = schema.parse(await request.json())
     const answers = {
       ...parsed,
+      ...resolveAge(parsed.ageGroup),
       ...resolveInterests(parsed.interests),
       about: parsed.about?.trim() || undefined,
     } as unknown as QuizAnswers

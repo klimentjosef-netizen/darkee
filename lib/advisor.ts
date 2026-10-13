@@ -76,7 +76,7 @@ function describe(answers: QuizAnswers): string {
   const interests = answers.interests.filter(i => i !== 'unknown').map(i => INTEREST[i] || i)
   const lines = [
     `Komu: ${RELATIONSHIP[answers.relationship] || answers.relationship}`,
-    answers.relationship === 'pet' ? null : `Věk: ${AGE[answers.ageGroup] || answers.ageGroup}`,
+    answers.relationship === 'pet' ? null : `Věk: ${answers.ageLabel || AGE[answers.ageGroup] || answers.ageGroup}`,
     answers.relationship === 'pet' ? null : `Pohlaví: ${GENDER[answers.gender] || answers.gender}`,
     `Příležitost: ${OCCASION[answers.occasion] || answers.occasion}`,
     `Co ho nebo ji baví: ${answers.hobbies?.length ? answers.hobbies.join(', ') : interests.length ? interests.join(', ') : 'kupující neví'}`,

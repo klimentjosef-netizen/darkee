@@ -10,6 +10,8 @@ export type Budget = 'max300' | 'range300_500' | 'range500_1000' | 'range1000_20
 export interface QuizAnswers {
   relationship: Relationship
   ageGroup: AgeGroup
+  // Přesnější věk z kvízu ("41 až 50 let"), jen pro výběrčího a shrnutí
+  ageLabel?: string
   gender: Gender
   occasion: Occasion
   interests: Interest[]

@@ -1,4 +1,5 @@
 import { QuizQuestion } from '@/types'
+import { AGES } from './ages'
 import { HOBBIES } from './hobbies'
 
 export const QUIZ_QUESTIONS: QuizQuestion[] = [
@@ -24,16 +25,7 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     title: 'Kolik je obdarovanému let?',
     subtitle: 'Věk je klíčový filtr',
     type: 'single',
-    options: [
-      { value: 'baby',        label: '0 až 2 roky',    emoji: '👶' },
-      { value: 'preschool',   label: '3 až 5 let',     emoji: '🎨' },
-      { value: 'school',      label: '6 až 12 let',    emoji: '📚' },
-      { value: 'teen',        label: '13 až 18 let',   emoji: '🎮' },
-      { value: 'young_adult', label: '19 až 30 let',   emoji: '🚀' },
-      { value: 'adult',       label: '31 až 50 let',   emoji: '💎' },
-      { value: 'senior',      label: '51 až 70 let',   emoji: '🌿' },
-      { value: 'elderly',     label: '70+ let',     emoji: '☕' },
-    ],
+    options: AGES.map(({ value, label, emoji }) => ({ value, label, emoji })),
   },
   {
     id: 'gender',
