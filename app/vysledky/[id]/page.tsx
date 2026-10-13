@@ -6,7 +6,7 @@ import { useParams } from 'next/navigation'
 import Image from 'next/image'
 import Link from 'next/link'
 import { MotionConfig, motion } from 'framer-motion'
-import { ArrowUpRight, RotateCcw } from 'lucide-react'
+import { ArrowUpRight, RotateCcw, Share2, Check } from 'lucide-react'
 import { SiteFooter } from '@/components/SiteFooter'
 import { ReminderForm } from '@/components/ReminderForm'
 import { ROLE_LABELS } from '@/lib/roles'
@@ -90,6 +90,22 @@ export default function VysledkyPage() {
   const [headline, setHeadline] = useState<string | null>(null)
   const [status, setStatus] = useState<'loading' | 'ready' | 'error'>('loading')
   const [again, setAgain] = useState<{ busy: boolean; error: string | null }>({ busy: false, error: null })
+  const [shared, setShared] = useState(false)
+
+  // Odkaz na tyto tipy: v telefonu nabídne sdílení, jinde se zkopíruje do schránky
+  async function share() {
+    const url = window.location.href
+    try {
+      if (navigator.share) await navigator.share({ title: 'Tipy na dárek z Dárkee', url })
+      else {
+        await navigator.clipboard.writeText(url)
+        setShared(true)
+        setTimeout(() => setShared(false), 2500)
+      }
+    } catch {
+      // sdílení zrušené uživatelem
+    }
+  }
 
   // Stejné odpovědi, jiné dárky. Server si pamatuje, co už kupující viděl.
   async function showOthers() {
@@ -217,7 +233,7 @@ export default function VysledkyPage() {
                 <h2 className="mt-1 text-[clamp(22px,3.6vw,28px)] font-semibold leading-snug tracking-[-0.015em]">{main.name}</h2>
                 {main.reasons[0] && <p className="mt-3 max-w-[58ch] text-base leading-relaxed text-[var(--text-secondary)]">{main.reasons[0]}</p>}
                 <div className="mt-5 flex flex-wrap items-center justify-between gap-4">
-                  <span className="text-[26px] font-semibold tracking-[-0.01em]">{price(main.price)}</span>
+                  <span className="text-[26px] font-semibold tracking-[-0.01em]">{main.giftType === 'experience' ? 'od ' : ''}{price(main.price)}</span>
                   <BuyLink product={main} quizResultId={quizResultId} primary />
                 </div>
               </div>
@@ -246,7 +262,7 @@ export default function VysledkyPage() {
                         {p.reasons[0] && <p className="mt-1.5 text-sm leading-relaxed text-[var(--text-secondary)]">{p.reasons[0]}</p>}
                         <div className="mt-auto flex flex-wrap items-center justify-between gap-x-4 gap-y-2 pt-3">
                           <p className="text-sm text-[var(--text-secondary)]">
-                            <span className="mr-2 whitespace-nowrap text-base font-semibold text-[var(--text-primary)]">{price(p.price)}</span>
+                            <span className="mr-2 whitespace-nowrap text-base font-semibold text-[var(--text-primary)]">{p.giftType === 'experience' ? 'od ' : ''}{price(p.price)}</span>
                             {p.sourceShop}
                           </p>
                           <BuyLink product={p} quizResultId={quizResultId} primary={false} />
@@ -257,6 +273,20 @@ export default function VysledkyPage() {
                 </ul>
               </section>
             )}
+
+            <div className="mt-10 flex flex-col items-start gap-3 sm:flex-row sm:items-center sm:justify-between">
+              <p className="text-base text-[var(--text-secondary)]" aria-live="polite">
+                {shared ? 'Odkaz je zkopírovaný, stačí ho vložit do zprávy.' : 'Vybíráte s někým dalším? Pošlete mu tyhle tipy.'}
+              </p>
+              <button
+                type="button"
+                onClick={share}
+                className="inline-flex cursor-pointer items-center gap-2 whitespace-nowrap rounded-full border border-[var(--border-strong)] bg-transparent px-6 py-3 text-base text-[var(--text-primary)] transition-colors hover:border-[var(--gold-primary)]"
+              >
+                {shared ? <Check size={16} strokeWidth={2} aria-hidden /> : <Share2 size={16} strokeWidth={2} aria-hidden />}
+                Poslat tipy
+              </button>
+            </div>
 
             {(answers?.excluded?.length ?? 0) < 15 && (
               <div className="mt-8 flex flex-col items-start gap-3 sm:flex-row sm:items-center sm:justify-between">
