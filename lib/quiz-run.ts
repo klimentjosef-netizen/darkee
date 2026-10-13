@@ -1,5 +1,5 @@
 import { prisma } from './prisma'
-import { rankCandidates, scoreProducts, toScoredProduct } from './scoring'
+import { rankCandidates, scoreProducts, toScoredProduct, isBottle, maxBottles } from './scoring'
 import { advise } from './advisor'
 import { QuizAnswers, BUDGET_MAP, ScoredProduct } from '@/types'
 
@@ -53,17 +53,19 @@ export async function createQuizResult(answers: QuizAnswers): Promise<{ quizResu
       const c = byId.get(pick.id)
       return c ? [toScoredProduct(c, { reason: pick.reason, role: pick.role })] : []
     })
+    const bottleLimit = maxBottles(answers)
+    const tooManyBottles = (c: (typeof candidates)[number]) => isBottle(c.p) && scored.filter(isBottle).length >= bottleLimit
     // Když výběrčí vrátí méně než pět tipů, doplní se nejlepšími kandidáty z motoru
     for (const c of candidates) {
       if (scored.length >= 5) break
       if (scored.some(s => s.id === c.p.id)) continue
-      if (scored.filter(s => s.sourceShop === c.p.sourceShop).length >= 2) continue
+      if (scored.filter(s => s.sourceShop === c.p.sourceShop).length >= 2 || tooManyBottles(c)) continue
       scored.push(toScoredProduct(c, { role: 'jistota' }))
     }
     // Když je v daném rozpočtu málo obchodů, limit dvou tipů na obchod se uvolní
     for (const c of candidates) {
       if (scored.length >= 5) break
-      if (!scored.some(s => s.id === c.p.id)) scored.push(toScoredProduct(c, { role: 'jistota' }))
+      if (!scored.some(s => s.id === c.p.id) && !tooManyBottles(c)) scored.push(toScoredProduct(c, { role: 'jistota' }))
     }
     // Uloží se konečná pětice včetně doplněných tipů, aby stránka výsledků ukázala totéž
     advice.picks = scored.map(s => ({ id: s.id, role: s.role || 'jistota', reason: s.reasons[0] || '' }))

@@ -77,6 +77,31 @@ function aboutStems(about: string | undefined): string[] {
   )]
 }
 
+// Lahev alkoholu. Katalog je jimi přesycený, takže se bez zájmu o pití derou do každé pětice.
+const BOTTLE_SHOPS = /Světnápojů|Topalkohol|OceněnáVína/i
+const BOTTLE_WORDS = /\b(vino|vina|sekt|sampansk|champagne|prosecco|whisk|rumb|ginb|vodka|liker|konak|cognac|brandy|porto|portske|tequila|slivovice|palenka|bourbon|vermut)/
+// Příslušenství a věci, které mají alkohol jen v názvu (barva Cognac, gel s vůní whisky)
+const NOT_BOTTLE = /(sklenic|sklenk|pohar|karaf|drzak|stojan|mydlo|\bgel\b|ponozk|kviz|tack|set na vino|otvirak|vyvrtk|pumpa|cokolad|\bkav[aoy]|coffee|\bcaj|kniha|hrnek|sirup|penezenk|kabelk|\bjbl\b)/
+// Údaj o obsahu alkoholu ("12,5%") je jistý znak lahve
+const ABV = /\d{1,2}([.,]\d)?\s?%/
+
+export function isBottle(p: Pick<EngineProduct, 'name' | 'sourceShop'>): boolean {
+  const name = normalize(p.name)
+  if (/cokolad|kakao/.test(name)) return false
+  if (ABV.test(name)) return true
+  if (NOT_BOTTLE.test(name)) return false
+  return BOTTLE_WORDS.test(name) || BOTTLE_SHOPS.test(p.sourceShop)
+}
+
+// Kolik lahví smí být v pětici: bez zájmu o pití jedna, dětem žádná
+export function maxBottles(answers: QuizAnswers): number {
+  if (['baby', 'preschool', 'school', 'teen'].includes(answers.ageGroup)) return 0
+  const about = normalize(answers.about || '')
+  const wantsDrinks = (answers.hobbies || []).some(h => /pití/i.test(h)) || BOTTLE_WORDS.test(about) || /\bpiv/.test(about)
+  if (wantsDrinks) return 3
+  return answers.style === 'food_drink' ? 2 : 1
+}
+
 function passesFilters(p: EngineProduct, answers: QuizAnswers, ignoreGiftType: boolean): boolean {
   // Mazlíčkovi se nabízejí jen věci určené přímo pro zvíře a naopak
   const forPet = p.recipients.includes('pet')
@@ -151,10 +176,14 @@ export function rankCandidates(answers: QuizAnswers, products: EngineProduct[], 
   const shopCount: Record<string, number> = {}
   const seenNames = new Set<string>()
   const perShop = Math.max(4, Math.ceil(limit / 5))
+  // Výběrčí dostane o pár lahví víc, než smí použít, aby měl z čeho vybrat tu nejlepší
+  const bottleCap = maxBottles(answers) === 0 ? 0 : maxBottles(answers) + 2
+  let bottles = 0
 
   for (const c of rankAll(answers, products)) {
     const key = nameKey(c.p.name)
     if (seenNames.has(key) || (shopCount[c.p.sourceShop] || 0) >= perShop) continue
+    if (isBottle(c.p) && ++bottles > bottleCap) continue
     seenNames.add(key)
     shopCount[c.p.sourceShop] = (shopCount[c.p.sourceShop] || 0) + 1
     out.push(c)
@@ -190,6 +219,8 @@ export function scoreProducts(answers: QuizAnswers, products: EngineProduct[]): 
   const kindCount: Record<string, number> = {}
   const shopCount: Record<string, number> = {}
   const seenNames = new Set<string>()
+  const bottleLimit = maxBottles(answers)
+  const bottlesPicked = () => picked.filter(c => isBottle(c.p)).length
 
   while (picked.length < TIPS) {
     let best: RankedProduct | null = null
@@ -198,6 +229,7 @@ export function scoreProducts(answers: QuizAnswers, products: EngineProduct[]): 
     for (const c of ranked) {
       if (picked.includes(c) || seenNames.has(nameKey(c.p.name))) continue
       if ((shopCount[c.p.sourceShop] || 0) >= MAX_PER_SHOP) continue
+      if (isBottle(c.p) && bottlesPicked() >= bottleLimit) continue
       const adjusted = c.score
         - SAME_KIND_PENALTY * (kindCount[c.p.giftKind || ''] || 0)
         - SAME_SHOP_PENALTY * (shopCount[c.p.sourceShop] || 0)
@@ -208,7 +240,7 @@ export function scoreProducts(answers: QuizAnswers, products: EngineProduct[]): 
     }
 
     // Limit na obchod se uvolní, jen když jinak pětice nejde složit
-    if (!best) best = ranked.find(c => !picked.includes(c) && !seenNames.has(nameKey(c.p.name))) || null
+    if (!best) best = ranked.find(c => !picked.includes(c) && !seenNames.has(nameKey(c.p.name)) && !(isBottle(c.p) && bottlesPicked() >= bottleLimit)) || null
     if (!best) break
 
     picked.push(best)
