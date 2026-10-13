@@ -98,7 +98,7 @@ function noAlcohol(answers: QuizAnswers): boolean {
 
 // Lahev alkoholu. Katalog je jimi přesycený, takže se bez zájmu o pití derou do každé pětice.
 const BOTTLE_SHOPS = /Světnápojů|Topalkohol|OceněnáVína/i
-const BOTTLE_WORDS = /\b(vino|vina|sekt|sampansk|champagne|prosecco|whisk|rum\b|gin\b|vodka|liker|konak|cognac|brandy|porto|portske|tequila|slivovice|palenka|bourbon|vermut|chardonnay|sauvignon|ryzlink|merlot|cabernet|frankovka|rulandsk|veltlin|mionetto)/
+const BOTTLE_WORDS = /\b(vino|vina|vin\b|vinny|sekt|sampansk|champagne|prosecco|whisk|rum\b|gin\b|vodka|liker|konak|cognac|brandy|porto|portske|tequila|slivovice|palenka|bourbon|vermut|chardonnay|sauvignon|ryzlink|merlot|cabernet|frankovka|rulandsk|veltlin|mionetto)/
 // Příslušenství a věci, které mají alkohol jen v názvu (barva Cognac, gel s vůní whisky)
 const NOT_BOTTLE = /(sklenic|sklenk|pohar|karaf|drzak|stojan|mydlo|\bgel\b|ponozk|kviz|tack|set na vino|otvirak|vyvrtk|pumpa|cokolad|\bkav[aoy]|coffee|\bcaj|kniha|hrnek|sirup|penezenk|kabelk|destnik|\bjbl\b)/
 // Údaj o obsahu alkoholu ("12,5%") je jistý znak lahve
@@ -323,7 +323,7 @@ export function toScoredProduct({ p, score, reasons }: RankedProduct, override?:
   return {
     id: p.id,
     // Feedy lepí na konec názvu parametr varianty ("… Hmotnost: 350g")
-    name: decodeEntities(p.name).replace(/\s+(Hmotnost|Varianty|Varianta|Objem)\s*:\s.*$/i, ''),
+    name: decodeEntities(p.name).replace(/\s+(Hmotnost|Varianty|Varianta|Objem)\s*:\s.*$/i, '').replace(/^Zážitek\s*-\s*/, ''),
     price: p.price,
     imageUrl: p.imageUrl,
     originalUrl: p.originalUrl,

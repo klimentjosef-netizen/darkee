@@ -109,7 +109,7 @@ function describe(answers: QuizAnswers): string {
 export async function advise(answers: QuizAnswers, candidates: RankedProduct[]): Promise<Advice | null> {
   if (!process.env.ANTHROPIC_API_KEY || candidates.length < 5) return null
 
-  const client = new Anthropic({ timeout: TIMEOUT_MS, maxRetries: 0 })
+  const client = new Anthropic({ timeout: TIMEOUT_MS, maxRetries: 1 })
   const list = candidates.map((c, i) => ({
     ref: i,
     nazev: decodeEntities(c.p.name).slice(0, 110),
@@ -137,6 +137,8 @@ export async function advise(answers: QuizAnswers, candidates: RankedProduct[]):
 
     const seen = new Set<number>()
     const shopCount: Record<string, number> = {}
+    // Limit dvou tipů na obchod platí jen tam, kde je z čeho vybírat (dárky pro psa jsou z jednoho obchodu)
+    const shopLimit = new Set(candidates.map(c => c.p.sourceShop)).size >= 4 ? 2 : 5
     const kept: RankedProduct['p'][] = []
     const picks = parsed.tipy
       .filter(t => t.ref >= 0 && t.ref < candidates.length && !seen.has(t.ref) && seen.add(t.ref))
@@ -144,7 +146,7 @@ export async function advise(answers: QuizAnswers, candidates: RankedProduct[]):
       .filter(t => {
         const shop = candidates[t.ref].p.sourceShop
         shopCount[shop] = (shopCount[shop] || 0) + 1
-        return shopCount[shop] <= 2
+        return shopCount[shop] <= shopLimit
       })
       // Pestrost: lahví jen podle zájmu o pití a od každého druhu zboží jeden kus
       .filter(t => {
