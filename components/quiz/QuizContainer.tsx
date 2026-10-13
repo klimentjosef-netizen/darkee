@@ -266,6 +266,7 @@ export function QuizContainer({ isModal = false, onClose }: QuizContainerProps) 
       if (data.quizResultId) {
         try {
           window.localStorage.setItem(SAVED_KEY, JSON.stringify(a))
+          window.sessionStorage.setItem(`darkee-vysledek-${data.quizResultId}`, JSON.stringify({ products: data.products, headline: data.headline, answers: data.answers }))
         } catch {
           // úložiště může být vypnuté, výsledek to neovlivní
         }

@@ -16,7 +16,7 @@ const AI_DAILY_LIMIT = Number(process.env.DARKEE_AI_DAILY_LIMIT || 800)
 // Tři další výběry po pěti dárcích, víc už "Ukázat jiných pět" nenabídne
 export const MAX_EXCLUDED = 15
 
-export async function createQuizResult(answers: QuizAnswers, excluded: string[] = []): Promise<{ quizResultId: string; products: ScoredProduct[]; headline: string | null; ms: Record<string, number> }> {
+export async function createQuizResult(answers: QuizAnswers, excluded: string[] = []): Promise<{ quizResultId: string; products: ScoredProduct[]; headline: string | null; answers: QuizAnswers; ms: Record<string, number> }> {
   // Měření, kde se při výběru tráví čas (databáze, poradce, uložení)
   const t0 = Date.now()
   const ms: Record<string, number> = {}
@@ -71,7 +71,7 @@ export async function createQuizResult(answers: QuizAnswers, excluded: string[] 
     const byId = new Map(candidates.map(c => [c.p.id, c]))
     scored = advice.picks.flatMap(pick => {
       const c = byId.get(pick.id)
-      return c ? [toScoredProduct(c, { reason: pick.reason, role: pick.role })] : []
+      return c ? [toScoredProduct(c, { reason: pick.reason || undefined, role: pick.role })] : []
     })
     const similar = (c: (typeof candidates)[number]) => tooSimilar(answers, c.p, scored)
     // Když výběrčí vrátí méně než pět tipů, doplní se nejlepšími kandidáty z motoru
@@ -107,5 +107,5 @@ export async function createQuizResult(answers: QuizAnswers, excluded: string[] 
   })
 
   ms.celkem = Date.now() - t0
-  return { quizResultId: quizResult.id, products: scored, headline: advice?.headline ?? null, ms }
+  return { quizResultId: quizResult.id, products: scored, headline: advice?.headline ?? null, answers: { ...answers, excluded: excluded.length ? excluded : undefined }, ms }
 }

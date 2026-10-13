@@ -15,12 +15,14 @@ import { regionLabel } from './regions'
 const MODEL = process.env.DARKEE_ADVISOR_MODEL || 'claude-sonnet-5-5'
 const TIMEOUT_MS = 12_000
 
+// Výběrčí píše vlastní zdůvodnění jen k hlavnímu tipu. Ostatní tipy ukazují důvod z katalogu,
+// který prošel kontrolou. Psaní šesti vět trvalo 4 až 6 sekund, takhle je odpověď zhruba poloviční.
 const AdviceSchema = z.object({
   shrnuti: z.string(),
+  hlavni_duvod: z.string(),
   tipy: z.array(z.object({
     ref: z.number().int(),
     role: z.enum(ROLES),
-    duvod: z.string(),
   })),
 })
 
@@ -77,7 +79,7 @@ Vztah určuje charakter celého výběru, dva různé vztahy nemají dostat stej
 Ve shrnutí ať je vztah poznat.
 
 Jak psát:
-- "duvod": jedna česká věta do 20 slov. Řekni, proč se to hodí k tomu, co o obdarovaném víme. Opírej se jen o název a popis kandidáta, nepřidávej vlastnosti, které tam nejsou.
+- "hlavni_duvod": jedna česká věta do 20 slov o prvním tipu. Řekni, proč se hodí právě k tomu, co o obdarovaném víme. Opírej se jen o název a popis kandidáta, nepřidávej vlastnosti, které tam nejsou.
 - "shrnuti": jedna věta do 25 slov, která kupujícímu vyká a řekne, kterým směrem výběr šel a proč. Mluv za Dárkee v množném čísle ("vybrali jsme", "vsadili jsme").
 - Shrnutí popisuje směr výběru, nevyjmenovává jednotlivé dárky ani jejich počet.
 - Když vlastní popis zjevně odporuje zvolenému věku, pohlaví nebo vztahu, vybírej podle zvolených odpovědí a z popisu vezmi jen to, co s nimi jde dohromady.
@@ -120,7 +122,7 @@ export async function advise(answers: QuizAnswers, candidates: RankedProduct[]):
   try {
     const response = await client.messages.parse({
       model: MODEL,
-      max_tokens: 1200,
+      max_tokens: 600,
       system: SYSTEM,
       messages: [{ role: 'user', content: `Obdarovaný:\n${describe(answers)}\n\nKandidáti:\n${JSON.stringify(list)}` }],
       output_config: {
@@ -152,9 +154,12 @@ export async function advise(answers: QuizAnswers, candidates: RankedProduct[]):
         return true
       })
       .slice(0, 5)
-      .map(t => ({ id: candidates[t.ref].p.id, role: t.role, reason: clean(t.duvod) }))
+      .map(t => ({ id: candidates[t.ref].p.id, role: t.role, reason: '' }))
 
     if (picks.length < 3) return null
+    // Vlastní zdůvodnění patří tipu, který výběrčí dal na první místo
+    const first = parsed.tipy[0]
+    if (first && candidates[first.ref]?.p.id === picks[0].id) picks[0].reason = clean(parsed.hlavni_duvod)
     fixPriceRoles(picks, candidates)
     return { headline: clean(parsed.shrnuti), picks, model: MODEL }
   } catch (error) {

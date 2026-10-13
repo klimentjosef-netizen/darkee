@@ -106,6 +106,19 @@ export default function VysledkyPage() {
 
   useEffect(() => {
     async function fetchResults() {
+      // Příchod přímo z kvízu: výsledek už je v prohlížeči, není potřeba ho načítat znovu
+      try {
+        const handed = JSON.parse(window.sessionStorage.getItem(`darkee-vysledek-${quizResultId}`) || 'null')
+        if (handed?.products?.length) {
+          setProducts(handed.products)
+          setAnswers(handed.answers || null)
+          setHeadline(handed.headline || null)
+          setStatus('ready')
+          return
+        }
+      } catch {
+        // úložiště nemusí být dostupné, načte se ze serveru
+      }
       try {
         const res = await fetch(`/api/quiz/results/${quizResultId}`)
         if (!res.ok) throw new Error(String(res.status))
