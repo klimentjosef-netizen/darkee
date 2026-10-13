@@ -202,7 +202,7 @@ function matchScore(p: EngineProduct, answers: QuizAnswers, stems: string[]): { 
   return { score, reasons }
 }
 
-function nameKey(name: string): string {
+export function nameKey(name: string): string {
   return name.toLowerCase().split(/\s+/).slice(0, 3).join(' ')
 }
 

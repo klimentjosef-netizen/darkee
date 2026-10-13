@@ -1,5 +1,5 @@
 import { prisma } from './prisma'
-import { rankCandidates, scoreProducts, toScoredProduct, tooSimilar } from './scoring'
+import { rankCandidates, scoreProducts, toScoredProduct, tooSimilar, nameKey } from './scoring'
 import { advise } from './advisor'
 import { QuizAnswers, BUDGET_MAP, ScoredProduct } from '@/types'
 
@@ -25,7 +25,7 @@ export async function createQuizResult(answers: QuizAnswers, excluded: string[] 
   // Dárky pro mazlíčky jsou levné, spodní hranice rozpočtu by je všechny vyřadila
   if (answers.relationship === 'pet') range.min = 0
 
-  const products = await prisma.product.findMany({
+  const found = await prisma.product.findMany({
     where: {
       inStock: true,
       isApproved: true,
@@ -42,6 +42,12 @@ export async function createQuizResult(answers: QuizAnswers, excluded: string[] 
       giftScore: true, blindBuy: true, giftKind: true, recipients: true, giftReason: true,
     },
   })
+
+  // Z už viděných dárků se vyřadí i jejich varianty (jiná barva, jiná hodnota poukazu)
+  const seen = excluded.length
+    ? new Set((await prisma.product.findMany({ where: { id: { in: excluded } }, select: { name: true } })).map(p => nameKey(p.name)))
+    : null
+  const products = seen ? found.filter(p => !seen.has(nameKey(p.name))) : found
 
   const candidates = rankCandidates(answers, products, CANDIDATES)
 
