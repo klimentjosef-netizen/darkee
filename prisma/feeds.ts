@@ -29,5 +29,6 @@ export const FEEDS: { shop: string; url: string }[] = [
   { shop: 'Ariete.cz', url: 'https://www.edsi.sk/api/v1/export/heureka?lang=cz&ext=xml&domain_id=3' },
   { shop: 'Volumizer.cz', url: 'https://www.edsi.sk/api/v1/export/heureka?lang=cz&ext=xml&domain_id=8' },
   { shop: 'Harmanshop.cz', url: 'https://www.harmanshop.cz/gmerchant-HARMAN-cz.xml' },
+  { shop: 'Sablio.cz', url: 'https://www.sablio.cz/xml/heureka' },
   { shop: 'Rawbark.cz', url: 'https://rawbark.cz/wp-content/uploads/rawbark-feeds/heureka.xml' },
 ]

@@ -6,7 +6,7 @@
  * 2) Varianty téhož produktu se sloučí do jedné skupiny, posuzuje se jen jeden zástupce.
  * 3) Kandidáti se zapíšou po dávkách do složky --out, kde je posoudí Claude.
  *
- * Usage: npx tsx prisma/curate-catalog.ts --out=<složka> [--chunk=250] [--shops=A.cz,B.cz] [--dry-run] [--force]
+ * Usage: npx tsx prisma/curate-catalog.ts --out=<složka> [--chunk=250] [--shops=A.cz,B.cz] [--match=regex] [--dry-run] [--force]
  */
 
 import 'dotenv/config'
@@ -24,6 +24,8 @@ const DRY_RUN = args.includes('--dry-run')
 const FORCE = args.includes('--force')
 // Posuzovat jen vybrané obchody (ostatní kandidáti zůstanou neposouzení na příště)
 const SHOPS = arg('shops') ? new Set(arg('shops')!.split(',')) : null
+// Zúžení podle obchodu nebo kategorie, regulární výraz nad textem "obchod kategorie"
+const MATCH = arg('match') ? new RegExp(arg('match')!, 'i') : null
 
 if (!OUT) {
   console.error('Usage: npx tsx prisma/curate-catalog.ts --out=<složka> [--chunk=250] [--dry-run] [--force]')
@@ -106,6 +108,7 @@ async function main() {
   }
 
   const candidates = [...groups.values()].filter(g => !SHOPS || SHOPS.has(g[0].sourceShop))
+    .filter(g => !MATCH || MATCH.test(`${g[0].sourceShop} ${g[0].categories.join(' ')}`))
   console.log(`Kandidátů k posouzení: ${candidates.length} skupin (${products.length - rejectedCount} položek)`)
   const byShop: Record<string, number> = {}
   for (const g of candidates) byShop[g[0].sourceShop] = (byShop[g[0].sourceShop] || 0) + 1
