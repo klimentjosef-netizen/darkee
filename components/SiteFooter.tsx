@@ -12,6 +12,7 @@ export function SiteFooter() {
           </p>
         </div>
         <div className="flex flex-wrap gap-x-8 gap-y-3 text-sm">
+          <Link href="/darky" className={link}>Dárky podle obdarovaného</Link>
           <a href="mailto:info@darkee.cz" className={link}>info@darkee.cz</a>
           <Link href="/gdpr" className={link}>Ochrana dat</Link>
           <Link href="/cookies" className={link}>Cookies</Link>

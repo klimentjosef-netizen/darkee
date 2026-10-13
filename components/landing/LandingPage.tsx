@@ -111,6 +111,9 @@ export function LandingPage({ showcase }: { showcase: ShowcaseData }) {
             Dárkee
           </Link>
           <div className="flex items-center gap-6">
+            <Link href="/darky" className="hidden text-sm text-[var(--text-secondary)] no-underline transition-colors hover:text-[var(--text-primary)] sm:inline">
+              Tipy na dárky
+            </Link>
             <a href="#jak-to-funguje" className="hidden text-sm text-[var(--text-secondary)] no-underline transition-colors hover:text-[var(--text-primary)] sm:inline">
               Jak to funguje
             </a>

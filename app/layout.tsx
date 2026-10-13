@@ -19,6 +19,7 @@ const jakarta = Plus_Jakarta_Sans({
 })
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://www.darkee.cz'),
   title: 'Dárkee: dárek, který opravdu sedí',
   description: 'Odpovíte na pár otázek a dostanete pět konkrétních dárků z českých e-shopů, se zdůvodněním a přímým odkazem ke koupi.',
 }
