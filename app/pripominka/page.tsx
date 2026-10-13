@@ -1,3 +1,4 @@
+import { Logo } from '@/components/Logo'
 import Link from 'next/link'
 import { SiteFooter } from '@/components/SiteFooter'
 
@@ -28,9 +29,7 @@ export default async function PripominkaPage({ searchParams }: { searchParams: P
     <div className="flex min-h-[100dvh] flex-col bg-[var(--bg-primary)] font-[family-name:var(--font-body)] text-[var(--text-primary)]">
       <header className="border-b border-[var(--border-subtle)]">
         <nav className="mx-auto flex h-16 max-w-6xl items-center px-4 sm:px-6">
-          <Link href="/" className="font-[family-name:var(--font-display)] text-[22px] tracking-wide text-[var(--gold-primary)] no-underline">
-            Dárkee
-          </Link>
+          <Logo />
         </nav>
       </header>
       <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-20 sm:px-6">

@@ -1,5 +1,6 @@
 'use client'
 
+import { Logo } from '@/components/Logo'
 import { useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -107,9 +108,7 @@ export function LandingPage({ showcase }: { showcase: ShowcaseData }) {
         }`}
       >
         <nav className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">
-          <Link href="/" className="font-[family-name:var(--font-display)] text-[22px] tracking-wide text-[var(--gold-primary)] no-underline">
-            Dárkee
-          </Link>
+          <Logo />
           <div className="flex items-center gap-6">
             <Link href="/darky" className="hidden text-sm text-[var(--text-secondary)] no-underline transition-colors hover:text-[var(--text-primary)] sm:inline">
               Tipy na dárky

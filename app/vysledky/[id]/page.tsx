@@ -1,5 +1,6 @@
 'use client'
 
+import { Logo } from '@/components/Logo'
 import { useState, useEffect } from 'react'
 import { useParams } from 'next/navigation'
 import Image from 'next/image'
@@ -125,9 +126,7 @@ export default function VysledkyPage() {
       <div className="min-h-[100dvh] bg-[var(--bg-primary)] font-[family-name:var(--font-body)] text-[var(--text-primary)]">
         <header className="fixed inset-x-0 top-0 z-40 border-b border-[var(--border-subtle)] bg-[rgba(8,8,6,0.9)] backdrop-blur-md">
           <nav className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">
-            <Link href="/" className="font-[family-name:var(--font-display)] text-[22px] tracking-wide text-[var(--gold-primary)] no-underline">
-              Dárkee
-            </Link>
+            <Logo />
             <Link
               href="/pruvodce"
               className="inline-flex items-center gap-2 whitespace-nowrap rounded-full border border-[var(--border-strong)] px-4 py-2 text-sm text-[var(--text-primary)] no-underline transition-colors hover:border-[var(--gold-primary)]"

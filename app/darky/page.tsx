@@ -1,3 +1,4 @@
+import { Logo } from '@/components/Logo'
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { ArrowRight } from 'lucide-react'
@@ -15,9 +16,7 @@ export default function GiftIndexPage() {
     <div className="flex min-h-[100dvh] flex-col bg-[var(--bg-primary)] font-[family-name:var(--font-body)] text-[var(--text-primary)]">
       <header className="border-b border-[var(--border-subtle)]">
         <nav className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">
-          <Link href="/" className="font-[family-name:var(--font-display)] text-[22px] tracking-wide text-[var(--gold-primary)] no-underline">
-            Dárkee
-          </Link>
+          <Logo />
           <Link
             href="/pruvodce"
             className="inline-flex items-center gap-2 whitespace-nowrap rounded-full bg-[var(--gold-primary)] px-5 py-2.5 text-sm font-semibold text-[#080806] no-underline transition-colors hover:bg-[var(--gold-light)]"

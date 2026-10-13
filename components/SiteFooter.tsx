@@ -1,3 +1,4 @@
+import { LogoMark } from '@/components/Logo'
 import Link from 'next/link'
 
 export function SiteFooter() {
@@ -6,7 +7,7 @@ export function SiteFooter() {
     <footer className="border-t border-[var(--border-subtle)] font-[family-name:var(--font-body)]">
       <div className="mx-auto flex max-w-6xl flex-col gap-8 px-4 py-12 sm:px-6 md:flex-row md:items-start md:justify-between">
         <div className="max-w-[44ch]">
-          <p className="font-[family-name:var(--font-display)] text-[22px] tracking-wide text-[var(--gold-primary)]">Dárkee</p>
+          <p className="inline-flex items-center gap-2 font-[family-name:var(--font-display)] text-[22px] tracking-wide text-[var(--gold-primary)]"><LogoMark />Dárkee</p>
           <p className="mt-3 text-sm leading-relaxed text-[var(--text-secondary)]">
             Dárkee je pro vás zdarma. Když přes nás nakoupíte, dostaneme od obchodu provizi. Cenu dárku to nemění.
           </p>
