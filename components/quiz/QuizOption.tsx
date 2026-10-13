@@ -4,6 +4,7 @@ import { motion } from 'framer-motion'
 import { Check } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { QuizOption as QuizOptionType } from '@/types'
+import { OPTION_ICONS } from './option-icons'
 
 interface QuizOptionProps {
   option: QuizOptionType
@@ -15,6 +16,7 @@ interface QuizOptionProps {
 }
 
 export function QuizOption({ option, selected, onSelect, index, compact = false }: QuizOptionProps) {
+  const Icon = OPTION_ICONS[option.value]
   return (
     <motion.button
       initial={{ opacity: 0, y: 12 }}
@@ -35,14 +37,20 @@ export function QuizOption({ option, selected, onSelect, index, compact = false 
           : undefined
       }
     >
-      {/* Emoji */}
-      <span className={cn('leading-none shrink-0', compact ? 'text-[20px]' : 'text-[32px]')}>{option.emoji}</span>
+      {Icon && (
+        <Icon
+          size={compact ? 20 : 26}
+          strokeWidth={1.5}
+          aria-hidden
+          className={cn('shrink-0', selected ? 'text-[var(--gold-primary)]' : 'text-[var(--text-secondary)]')}
+        />
+      )}
 
       {/* Text */}
       <div className="flex-1 min-w-0">
         <span
           className={cn(
-            'block font-[family-name:var(--font-body)] font-medium',
+            'block break-words font-[family-name:var(--font-body)] font-medium',
             compact ? 'text-sm leading-snug' : 'text-base',
             selected ? 'text-[var(--gold-primary)]' : 'text-[var(--text-primary)]'
           )}

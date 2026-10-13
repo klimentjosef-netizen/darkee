@@ -98,8 +98,9 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     subtitle: 'Zážitky nabídneme jen tam, kam to má blízko',
     type: 'single',
     options: [
-      ...REGIONS.map(r => ({ value: r.value, label: r.label, emoji: '📍' })),
-      { value: ANY_REGION, label: 'Je to jedno', emoji: '🗺️' },
+      // V dlaždici stačí "Středočeský", slovo kraj by se na telefonu nevešlo
+      ...REGIONS.map(r => ({ value: r.value, label: r.label.replace(/ kraj$|^Kraj /, ''), emoji: '' })),
+      { value: ANY_REGION, label: 'Je to jedno', emoji: '' },
     ],
   },
   {

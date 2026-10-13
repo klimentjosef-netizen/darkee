@@ -102,6 +102,22 @@ function ExitConfirm({ onStay, onLeave, title = 'Opravdu chcete skončit?', text
 // Poslední odpovědi zůstávají v prohlížeči, aby je šlo z výsledků jen upravit a nevyplňovat znovu
 const SAVED_KEY = 'darkee-kviz'
 
+// Čekání na výsledek trvá několik sekund, tak ať je vidět, co se děje
+const LOADING_STEPS = ['Procházíme tisíce dárků', 'Vybíráme pět nejlepších', 'Píšeme, proč se hodí']
+
+function LoadingSteps() {
+  const [i, setI] = useState(0)
+  useEffect(() => {
+    const timer = setInterval(() => setI(v => Math.min(v + 1, LOADING_STEPS.length - 1)), 2000)
+    return () => clearInterval(timer)
+  }, [])
+  return (
+    <p aria-live="polite" style={{ color: '#C9A84C', marginTop: 16, fontSize: 18, fontFamily: "'Playfair Display', serif", fontWeight: 400, textAlign: 'center', padding: '0 24px' }}>
+      {LOADING_STEPS[i]}
+    </p>
+  )
+}
+
 interface QuizContainerProps {
   isModal?: boolean
   onClose?: () => void
@@ -278,9 +294,9 @@ export function QuizContainer({ isModal = false, onClose }: QuizContainerProps) 
         position: 'relative',
         display: 'flex',
         flexDirection: 'column',
-        height: isModal ? '85vh' : '100vh',
+        height: isModal ? '85vh' : '100dvh',
         maxHeight: isModal ? '720px' : undefined,
-        width: isModal ? '100%' : undefined,
+        width: '100%',
         maxWidth: isModal ? '640px' : undefined,
         background: '#0E0D09',
         borderRadius: isModal ? 24 : 0,
@@ -408,15 +424,7 @@ export function QuizContainer({ isModal = false, onClose }: QuizContainerProps) 
           justifyContent: 'center',
         }}>
           <LoadingDots />
-          <p style={{
-            color: '#C9A84C',
-            marginTop: 16,
-            fontSize: 18,
-            fontFamily: "'Playfair Display', serif",
-            fontWeight: 400,
-          }}>
-            Vybíráme pro vás dárky
-          </p>
+          <LoadingSteps />
           <p style={{
             color: '#5A5248',
             marginTop: 8,
@@ -429,7 +437,7 @@ export function QuizContainer({ isModal = false, onClose }: QuizContainerProps) 
       ) : (
         <>
           {/* Question area */}
-          <div style={{ flex: q.type === 'text' ? 'none' : 1, paddingTop: q.type === 'text' ? '12vh' : 0, display: 'flex', flexDirection: 'column', justifyContent: q.options.length > 12 ? 'flex-start' : 'center', minHeight: 0, overflow: 'auto' }}>
+          <div style={{ flex: q.type === 'text' ? 'none' : 1, paddingTop: q.type === 'text' ? '12vh' : 0, display: 'flex', flexDirection: 'column', justifyContent: q.options.length > 12 ? 'flex-start' : 'center', minHeight: 0, overflowY: 'auto', overflowX: 'hidden', scrollbarWidth: 'none' }}>
             <QuizTransition stepKey={q.id} direction={direction}>
               <QuizQuestion
                 question={q}
@@ -697,7 +705,7 @@ export function QuizContainer({ isModal = false, onClose }: QuizContainerProps) 
 
   // Fullscreen fallback (for /pruvodce page)
   return (
-    <div style={{ background: '#080806', minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24 }}>
+    <div style={{ background: '#0E0D09', height: '100dvh', overflow: 'hidden' }}>
       {quizContent}
     </div>
   )

@@ -47,7 +47,7 @@ body {
 ::selection { background: rgba(201,168,76,0.25); color: #F0EBE0; }
 ::-webkit-scrollbar { width: 4px; }
 ::-webkit-scrollbar-track { background: #1A1814; }
-::-webkit-scrollbar-thumb { background: #C9A84C; border-radius: 2px; }
+::-webkit-scrollbar-thumb { background: #3A362E; border-radius: 2px; }
 
 /* Luxury animations */
 @keyframes shimmer {
