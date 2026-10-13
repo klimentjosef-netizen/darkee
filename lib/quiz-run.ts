@@ -57,6 +57,11 @@ export async function createQuizResult(answers: QuizAnswers): Promise<{ quizResu
       if (scored.filter(s => s.sourceShop === c.p.sourceShop).length >= 2) continue
       scored.push(toScoredProduct(c, { role: 'jistota' }))
     }
+    // Když je v daném rozpočtu málo obchodů, limit dvou tipů na obchod se uvolní
+    for (const c of candidates) {
+      if (scored.length >= 5) break
+      if (!scored.some(s => s.id === c.p.id)) scored.push(toScoredProduct(c, { role: 'jistota' }))
+    }
     // Uloží se konečná pětice včetně doplněných tipů, aby stránka výsledků ukázala totéž
     advice.picks = scored.map(s => ({ id: s.id, role: s.role || 'jistota', reason: s.reasons[0] || '' }))
   } else {
