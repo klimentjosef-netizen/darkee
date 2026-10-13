@@ -83,7 +83,7 @@ function describe(answers: QuizAnswers): string {
     `Příležitost: ${OCCASION[answers.occasion] || answers.occasion}`,
     `Co ho nebo ji baví: ${answers.hobbies?.length ? answers.hobbies.join(', ') : interests.length ? interests.join(', ') : 'kupující neví'}`,
     STYLE[answers.style] ? `Nejvíc potěší: ${STYLE[answers.style]}` : null,
-    maxBottles(answers) <= 1 ? `Alkohol: ${maxBottles(answers) === 0 ? 'žádný alkohol do výběru nedávej' : 'do výběru dej nejvýš jednu lahev alkoholu'}` : null,
+    maxBottles(answers) <= 1 ? `Alkohol: ${maxBottles(answers) === 0 ? 'žádný alkohol do výběru nedávej' : 'do výběru dej nejvýš jednu lahev alkoholu'}, ve shrnutí to nezmiňuj` : null,
     answers.about ? `Vlastní popis od kupujícího: "${answers.about}"` : null,
   ]
   return lines.filter(Boolean).join('\n')
