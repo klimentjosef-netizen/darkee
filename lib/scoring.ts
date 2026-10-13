@@ -1,4 +1,5 @@
 import { QuizAnswers, ScoredProduct } from '@/types'
+import { regionFits } from './regions'
 
 // Motor doporučení. Vybírá jen z produktů, které prošly posouzením dárkovosti
 // (giftScore, role v pětici, komu se hodí, lidský důvod), viz lib/gift-assessor.ts.
@@ -32,6 +33,8 @@ export type EngineProduct = {
   giftKind: string | null
   recipients: string[]
   giftReason: string | null
+  // Kraje, kde se zážitek koná, prázdné u věcí
+  regions?: string[]
 }
 
 export type RankedProduct = { p: EngineProduct; score: number; reasons: string[] }
@@ -203,6 +206,7 @@ function passesFilters(p: EngineProduct, answers: QuizAnswers, ignoreGiftType: b
     return forPet
   }
   if (forPet && p.recipients.length === 1) return false
+  if (!regionFits(p.regions, answers.region)) return false
   if (!p.ageRange.includes(answers.ageGroup)) return false
   if (answers.gender !== 'neutral' && !p.genderFit.includes(answers.gender) && !p.genderFit.includes('neutral')) return false
   if (!ignoreGiftType && answers.giftType !== 'both' && p.giftType !== answers.giftType) return false

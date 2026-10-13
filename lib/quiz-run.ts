@@ -39,7 +39,7 @@ export async function createQuizResult(answers: QuizAnswers, excluded: string[] 
       giftType: true, isPersonalizable: true, isLocal: true,
       ageRange: true, genderFit: true, occasionFit: true,
       interestTags: true, styleFit: true,
-      giftScore: true, blindBuy: true, giftKind: true, recipients: true, giftReason: true,
+      giftScore: true, blindBuy: true, giftKind: true, recipients: true, giftReason: true, regions: true,
     },
   })
 

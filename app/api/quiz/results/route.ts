@@ -18,6 +18,7 @@ const schema = z.object({
   budgetMin: z.number().optional(),
   budgetMax: z.number().optional(),
   about: z.string().max(300).optional(),
+  region: z.string().max(30).optional(),
   personalized: z.string().optional(),
   origin: z.string().optional(),
 })

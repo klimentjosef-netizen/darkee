@@ -4,6 +4,7 @@ import { z } from 'zod'
 import { QuizAnswers } from '@/types'
 import { RankedProduct, decodeEntities, maxBottles, tooSimilar } from './scoring'
 import { ROLES } from './roles'
+import { regionLabel } from './regions'
 
 // Výběrčí: z kandidátů, které vybral motor (lib/scoring.ts), složí pětici pro konkrétního
 // člověka a ke každému tipu napíše, proč sedí právě na něj. Vybírá jen z ověřeného katalogu,
@@ -96,6 +97,7 @@ function describe(answers: QuizAnswers): string {
     `Co ho nebo ji baví: ${answers.hobbies?.length ? answers.hobbies.join(', ') : interests.length ? interests.join(', ') : 'kupující neví'}`,
     STYLE[answers.style] ? `Nejvíc potěší: ${STYLE[answers.style]}` : null,
     maxBottles(answers) <= 1 ? `Alkohol: ${maxBottles(answers) === 0 ? 'žádný alkohol do výběru nedávej' : 'do výběru dej nejvýš jednu lahev alkoholu'}, ve shrnutí to nezmiňuj` : null,
+    regionLabel(answers.region) ? `Bydlí: ${regionLabel(answers.region)} (zážitky v seznamu jsou v dojezdu)` : null,
     answers.about ? `Vlastní popis od kupujícího: "${answers.about}"` : null,
   ]
   return lines.filter(Boolean).join('\n')

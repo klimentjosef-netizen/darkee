@@ -44,6 +44,8 @@ model Product {
   giftKind         String?
   recipients       String[]
   giftReason       String?
+  // Kraje, kde se zážitek koná (lib/regions.ts). Prázdné znamená, že dárek není vázaný na místo.
+  regions          String[] @default([])
   aiVersion        String?
   aiAssessedAt     DateTime?
 

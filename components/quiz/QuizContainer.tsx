@@ -120,7 +120,10 @@ export function QuizContainer({ isModal = false, onClose }: QuizContainerProps) 
   // Skip ageGroup and gender for pets — check answers directly, not stale state
   function shouldSkip(idx: number, a: Record<string, string | string[]> = answers): boolean {
     const qId = QUIZ_QUESTIONS[idx]?.id
-    return a.relationship === 'pet' && (qId === 'ageGroup' || qId === 'gender')
+    if (a.relationship === 'pet') return qId === 'ageGroup' || qId === 'gender' || qId === 'region'
+    // Na kraj se ptáme jen tam, kde přicházejí v úvahu zážitky, ty pod tisíc korun skoro nejsou
+    if (qId === 'region') return ['max300', 'range300_500', 'range500_1000'].includes(a.budget as string)
+    return false
   }
 
   // Příchod z výsledků přes "Upravit odpovědi": kvíz se předvyplní posledními odpověďmi
@@ -231,6 +234,7 @@ export function QuizContainer({ isModal = false, onClose }: QuizContainerProps) 
         style: a.style,
         budget: a.budget,
       }
+      if (typeof a.region === 'string') payload.region = a.region
       if (typeof a.about === 'string' && a.about.trim()) payload.about = a.about.trim().slice(0, 300)
       if (a.budget === 'custom') {
         payload.budgetMin = Number(a.budgetMin) || 0

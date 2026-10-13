@@ -1,5 +1,6 @@
 import { QuizQuestion } from '@/types'
 import { AGES } from './ages'
+import { REGIONS, ANY_REGION } from './regions'
 import { HOBBIES } from './hobbies'
 
 export const QUIZ_QUESTIONS: QuizQuestion[] = [
@@ -89,6 +90,16 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
       { value: 'range2000_5000',  label: '2 000 až 5 000 Kč',   emoji: '💎' },
       { value: 'unlimited',       label: 'Bez omezení',      emoji: '👑' },
       { value: 'custom',          label: 'Vlastní rozsah',   emoji: '✏️', description: 'Nastavte si min a max cenu' },
+    ],
+  },
+  {
+    id: 'region',
+    title: 'Kde obdarovaný bydlí?',
+    subtitle: 'Zážitky nabídneme jen tam, kam to má blízko',
+    type: 'single',
+    options: [
+      ...REGIONS.map(r => ({ value: r.value, label: r.label, emoji: '📍' })),
+      { value: ANY_REGION, label: 'Je to jedno', emoji: '🗺️' },
     ],
   },
   {
