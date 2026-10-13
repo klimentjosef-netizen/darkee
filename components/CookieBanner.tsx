@@ -45,8 +45,8 @@ export function CookieBanner() {
             style={{ background: 'linear-gradient(90deg, transparent, var(--gold-primary), transparent)' }}
           />
 
-          <div className="max-w-5xl mx-auto px-6 py-4 flex flex-col sm:flex-row items-center justify-between gap-4">
-            <p className="text-sm text-[var(--text-secondary)] font-[family-name:var(--font-body)] text-center sm:text-left">
+          <div className="max-w-5xl mx-auto px-4 py-2.5 sm:px-6 sm:py-3 flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
+            <p className="text-[13px] leading-snug text-[var(--text-secondary)] font-[family-name:var(--font-body)]">
               Používáme cookies pro zlepšení vašeho zážitku.{' '}
               <Link
                 href="/cookies"
@@ -55,16 +55,16 @@ export function CookieBanner() {
                 Více informací
               </Link>
             </p>
-            <div className="flex items-center gap-3 shrink-0">
+            <div className="flex items-center gap-2 shrink-0">
               <button
                 onClick={settings}
-                className="px-4 py-2 text-xs text-[var(--text-muted)] font-[family-name:var(--font-body)] bg-transparent border border-[var(--border-subtle)] rounded-sm hover:border-[var(--border-mid)] hover:text-[var(--text-secondary)] transition-all cursor-pointer"
+                className="px-3.5 py-1.5 text-[13px] text-[var(--text-secondary)] font-[family-name:var(--font-body)] bg-transparent border border-[var(--border-strong)] rounded-full hover:text-[var(--text-primary)] transition-colors cursor-pointer whitespace-nowrap"
               >
                 Nastavení
               </button>
               <button
                 onClick={accept}
-                className="px-5 py-2 text-xs text-white font-[family-name:var(--font-body)] font-medium bg-[var(--gold-primary)] rounded-sm hover:bg-[var(--gold-light)] transition-colors cursor-pointer border-none"
+                className="px-4 py-1.5 text-[13px] text-[#080806] font-[family-name:var(--font-body)] font-semibold bg-[var(--gold-primary)] rounded-full hover:bg-[var(--gold-light)] transition-colors cursor-pointer border-none whitespace-nowrap"
               >
                 Přijmout vše
               </button>

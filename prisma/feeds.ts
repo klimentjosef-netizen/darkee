@@ -16,4 +16,9 @@ export const FEEDS: { shop: string; url: string }[] = [
   { shop: 'Cheesehouse.cz', url: 'https://www.cheesehouse.cz/cs/43/heureka/export/products.xml' },
   { shop: 'Cafemontana.cz', url: 'https://www.cafemontana.cz/heureka/export/products.xml' },
   { shop: 'Fantomprint.cz', url: 'https://www.fantomprint.cz/heureka/export/products.xml' },
+  { shop: 'Homein.cz', url: 'https://www.homein.cz/heureka/export/products.xml' },
+  { shop: 'Bagin.cz', url: 'https://www.bagin.cz/heureka/export/products.xml' },
+  { shop: 'JBL.cz', url: 'https://www.jbl.cz/gmerchant-JBL-cz.xml' },
+  { shop: 'Bagmaster.cz', url: 'https://www.bagmaster.cz/export/heureka_cs.xml' },
+  { shop: 'Báglík.cz', url: 'https://www.baglik.cz/feed-heureka-6pp9xl1wn0.xml' },
 ]
