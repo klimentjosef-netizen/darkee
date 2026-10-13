@@ -86,6 +86,8 @@ function avoidStems(avoid: string | undefined): string[] {
   const stop = new Set(['nema', 'nechce', 'nesnasi', 'nepije', 'nenosi', 'zadne', 'zadny', 'zadna', 'rada', 'veci', 'hodne', 'moc', 'uz', 'ma', 'nic'])
   return [...new Set(
     normalize(avoid).split(/[^a-z0-9]+/).filter(w => w.length >= 4 && !stop.has(w)).map(w => w.slice(0, Math.min(4, w.length - 1)))
+      // Pohyblivé e: "hrnky" má najít i "hrnek"
+      .flatMap(st => /[^aeiouy]{2}$/.test(st) ? [st, st.slice(0, -1) + "e" + st.slice(-1)] : [st])
   )]
 }
 
