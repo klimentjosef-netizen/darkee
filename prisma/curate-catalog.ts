@@ -6,7 +6,7 @@
  * 2) Varianty téhož produktu se sloučí do jedné skupiny, posuzuje se jen jeden zástupce.
  * 3) Kandidáti se zapíšou po dávkách do složky --out, kde je posoudí Claude.
  *
- * Usage: npx tsx prisma/curate-catalog.ts --out=<složka> [--chunk=250] [--dry-run] [--force]
+ * Usage: npx tsx prisma/curate-catalog.ts --out=<složka> [--chunk=250] [--shops=A.cz,B.cz] [--dry-run] [--force]
  */
 
 import 'dotenv/config'
@@ -22,6 +22,8 @@ const OUT = arg('out')
 const CHUNK = arg('chunk') ? Number(arg('chunk')) : 250
 const DRY_RUN = args.includes('--dry-run')
 const FORCE = args.includes('--force')
+// Posuzovat jen vybrané obchody (ostatní kandidáti zůstanou neposouzení na příště)
+const SHOPS = arg('shops') ? new Set(arg('shops')!.split(',')) : null
 
 if (!OUT) {
   console.error('Usage: npx tsx prisma/curate-catalog.ts --out=<složka> [--chunk=250] [--dry-run] [--force]')
@@ -37,6 +39,8 @@ const NON_GIFT_SHOPS = new Set([
   'ActiMaris.cz', 'Ozonidy.cz', 'Doogee-shop.cz', 'iPhoneMarket.cz',
   // erotické zboží a nábytkové kování
   'Willi.cz', 'Loomah.cz',
+  // náhradní díly ke spotřebičům, velikostní obuv, matrace a lůžkoviny, běžné potraviny
+  'Ame.cz', 'Nadeta.cz', 'PeterLegwood.cz', 'Relaxin.cz', 'Asiafood.cz',
 ])
 
 const SIZE = /\b(velikost|vel\.|size)\s*:?\s*\S/i
@@ -101,7 +105,7 @@ async function main() {
     console.log(`  ${String(ids.length).padStart(6)}  ${reason}`)
   }
 
-  const candidates = [...groups.values()]
+  const candidates = [...groups.values()].filter(g => !SHOPS || SHOPS.has(g[0].sourceShop))
   console.log(`Kandidátů k posouzení: ${candidates.length} skupin (${products.length - rejectedCount} položek)`)
   const byShop: Record<string, number> = {}
   for (const g of candidates) byShop[g[0].sourceShop] = (byShop[g[0].sourceShop] || 0) + 1

@@ -26,5 +26,8 @@ export const FEEDS: { shop: string; url: string }[] = [
   { shop: 'Alpík.cz', url: 'https://feeds.mergado.com/alpik-cz-heureka-cz-beea86aa83ef025bf71513002b53ffab.xml' },
   { shop: 'Holkyztrhu.cz', url: 'https://www.holkyztrhu.cz/heureka/export/products.xml' },
   { shop: 'Akinu.cz', url: 'https://www.akinu.cz/heureka/export/products.xml' },
+  { shop: 'Ariete.cz', url: 'https://www.edsi.sk/api/v1/export/heureka?lang=cz&ext=xml&domain_id=3' },
+  { shop: 'Volumizer.cz', url: 'https://www.edsi.sk/api/v1/export/heureka?lang=cz&ext=xml&domain_id=8' },
+  { shop: 'Harmanshop.cz', url: 'https://www.harmanshop.cz/gmerchant-HARMAN-cz.xml' },
   { shop: 'Rawbark.cz', url: 'https://rawbark.cz/wp-content/uploads/rawbark-feeds/heureka.xml' },
 ]
