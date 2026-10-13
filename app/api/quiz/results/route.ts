@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createQuizResult } from '@/lib/quiz-run'
 import { resolveInterests } from '@/lib/hobbies'
 import { resolveAge } from '@/lib/ages'
+import { ageFitsRelationship } from '@/lib/sanity'
 import { QuizAnswers } from '@/types'
 import { z } from 'zod'
 
@@ -24,6 +25,10 @@ const schema = z.object({
 export async function POST(request: NextRequest) {
   try {
     const parsed = schema.parse(await request.json())
+    // Kvíz takovou kombinaci nenabídne, sem se dostane jen ručně poslaný nesmysl
+    if (parsed.relationship !== 'pet' && !ageFitsRelationship(parsed.relationship, parsed.ageGroup)) {
+      return NextResponse.json({ error: 'Věk neodpovídá zvolenému vztahu' }, { status: 400 })
+    }
     const answers = {
       ...parsed,
       ...resolveAge(parsed.ageGroup),

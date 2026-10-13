@@ -11,8 +11,9 @@ import { QuizTransition } from './QuizTransition'
 import { Button } from '@/components/ui/Button'
 import { LoadingDots } from '@/components/ui/LoadingDots'
 import { track } from '@/components/TrackView'
+import { ageOptionsFor, findConflict, type Conflict } from '@/lib/sanity'
 
-function ExitConfirm({ onStay, onLeave }: { onStay: () => void; onLeave: () => void }) {
+function ExitConfirm({ onStay, onLeave, title = 'Opravdu chcete skončit?', text = 'Odpovědi se neuloží a kvíz byste museli projít znovu.', stayLabel = 'Pokračovat', leaveLabel = 'Odejít' }: { onStay: () => void; onLeave: () => void; title?: string; text?: string; stayLabel?: string; leaveLabel?: string }) {
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -47,7 +48,7 @@ function ExitConfirm({ onStay, onLeave }: { onStay: () => void; onLeave: () => v
           color: '#F0EBE0',
           marginBottom: 8,
         }}>
-          Opravdu chceš skončit?
+          {title}
         </h3>
         <p style={{
           fontSize: 14,
@@ -56,7 +57,7 @@ function ExitConfirm({ onStay, onLeave }: { onStay: () => void; onLeave: () => v
           marginBottom: 24,
           lineHeight: 1.6,
         }}>
-          Tvoje odpovědi se neuloží a budeš muset začít znovu.
+          {text}
         </p>
         <div style={{ display: 'flex', gap: 10, justifyContent: 'center' }}>
           <button
@@ -73,7 +74,7 @@ function ExitConfirm({ onStay, onLeave }: { onStay: () => void; onLeave: () => v
               transition: 'all 0.2s',
             }}
           >
-            Odejít
+            {leaveLabel}
           </button>
           <button
             onClick={onStay}
@@ -90,7 +91,7 @@ function ExitConfirm({ onStay, onLeave }: { onStay: () => void; onLeave: () => v
               transition: 'all 0.2s',
             }}
           >
-            Pokračovat
+            {stayLabel}
           </button>
         </div>
       </motion.div>
@@ -110,6 +111,8 @@ export function QuizContainer({ isModal = false, onClose }: QuizContainerProps) 
   const [direction, setDirection] = useState(1)
   const [loading, setLoading] = useState(false)
   const [showExit, setShowExit] = useState(false)
+  // Rozpor mezi vlastním popisem a zvoleným věkem nebo pohlavím, čeká na rozhodnutí kupujícího
+  const [conflict, setConflict] = useState<Conflict | null>(null)
 
   // Skip ageGroup and gender for pets — check answers directly, not stale state
   function shouldSkip(idx: number, a: Record<string, string | string[]> = answers): boolean {
@@ -117,7 +120,11 @@ export function QuizContainer({ isModal = false, onClose }: QuizContainerProps) 
     return a.relationship === 'pet' && (qId === 'ageGroup' || qId === 'gender')
   }
 
-  const q = QUIZ_QUESTIONS[step]
+  const base = QUIZ_QUESTIONS[step]
+  // Věk se nabízí jen takový, jaký ke zvolenému vztahu může patřit
+  const q = base.id === 'ageGroup'
+    ? { ...base, options: base.options.filter(o => ageOptionsFor(answers.relationship as string).some(a => a.value === o.value)) }
+    : base
   const total = QUIZ_QUESTIONS.length
 
   useEffect(() => {
@@ -152,7 +159,9 @@ export function QuizContainer({ isModal = false, onClose }: QuizContainerProps) 
           a.ageGroup = a.ageGroup || 'adult'
           a.gender = a.gender || 'neutral'
         }
-        computeResults(a)
+        const found = findConflict(a as Record<string, string>)
+        if (found) setConflict(found)
+        else computeResults(a)
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -188,6 +197,8 @@ export function QuizContainer({ isModal = false, onClose }: QuizContainerProps) 
       setAnswers({ ...answers, [q.id]: val })
     } else {
       const updated = { ...answers, [q.id]: val }
+      // Po změně vztahu se zahodí věk, který k němu už nesedí
+      if (q.id === 'relationship' && typeof updated.ageGroup === 'string' && !ageOptionsFor(val).some(a => a.value === updated.ageGroup)) delete updated.ageGroup
       setAnswers(updated)
       setTimeout(() => advance(updated), 300)
     }
@@ -260,6 +271,26 @@ export function QuizContainer({ isModal = false, onClose }: QuizContainerProps) 
           <ExitConfirm
             onStay={() => setShowExit(false)}
             onLeave={handleClose}
+          />
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {conflict && (
+          <ExitConfirm
+            title="Sedí to takhle?"
+            text={conflict.message}
+            stayLabel={conflict.fixLabel}
+            leaveLabel="Je to správně"
+            onStay={() => {
+              setDirection(-1)
+              setStep(QUIZ_QUESTIONS.findIndex(x => x.id === conflict.fix))
+              setConflict(null)
+            }}
+            onLeave={() => {
+              setConflict(null)
+              computeResults(answers)
+            }}
           />
         )}
       </AnimatePresence>

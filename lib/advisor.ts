@@ -69,6 +69,7 @@ Jak psát:
 - "duvod": jedna česká věta do 20 slov. Řekni, proč se to hodí k tomu, co o obdarovaném víme. Opírej se jen o název a popis kandidáta, nepřidávej vlastnosti, které tam nejsou.
 - "shrnuti": jedna věta do 25 slov, která kupujícímu vyká a řekne, kterým směrem výběr šel a proč. Mluv za Dárkee v množném čísle ("vybrali jsme", "vsadili jsme").
 - Shrnutí popisuje směr výběru, nevyjmenovává jednotlivé dárky ani jejich počet.
+- Když vlastní popis zjevně odporuje zvolenému věku, pohlaví nebo vztahu, vybírej podle zvolených odpovědí a z popisu vezmi jen to, co s nimi jde dohromady.
 - Piš bezchybnou češtinou a před odesláním zkontroluj skloňování (správně "o jejích zálibách", ne "o její zálibách").
 - Žádné pomlčky, žádné vykřičníky, žádné fráze typu "skvělý dárek" nebo "určitě potěší".
 
