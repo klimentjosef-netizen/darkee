@@ -437,7 +437,9 @@ export function QuizContainer({ isModal = false, onClose }: QuizContainerProps) 
       ) : (
         <>
           {/* Question area */}
-          <div style={{ flex: q.type === 'text' ? 'none' : 1, paddingTop: q.type === 'text' ? '12vh' : 0, display: 'flex', flexDirection: 'column', justifyContent: q.options.length > 12 ? 'flex-start' : 'center', minHeight: 0, overflowY: 'auto', overflowX: 'hidden', scrollbarWidth: 'none' }}>
+          <div style={{ flex: q.type === 'text' ? 'none' : 1, paddingTop: q.type === 'text' ? '12vh' : 0, display: 'flex', flexDirection: 'column', minHeight: 0, overflowY: 'auto', overflowX: 'hidden', scrollbarWidth: 'none' }}>
+            {/* Krátká otázka se vystředí, dlouhá začíná nahoře a dá se posouvat (margin auto místo justify-content, které by ořízlo nadpis) */}
+            <div style={{ margin: q.type === 'text' || q.options.length > 12 ? '0' : 'auto 0', paddingTop: 8, width: '100%' }}>
             <QuizTransition stepKey={q.id} direction={direction}>
               <QuizQuestion
                 question={q}
@@ -447,6 +449,7 @@ export function QuizContainer({ isModal = false, onClose }: QuizContainerProps) 
                 total={total}
               />
             </QuizTransition>
+            </div>
           </div>
 
           {/* Custom budget inputs */}

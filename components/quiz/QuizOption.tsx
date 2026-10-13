@@ -47,7 +47,7 @@ export function QuizOption({ option, selected, onSelect, index, compact = false 
       )}
 
       {/* Text */}
-      <div className="flex-1 min-w-0">
+      <div className={cn('flex-1 min-w-0', selected && 'pr-6')}>
         <span
           className={cn(
             'block break-words font-[family-name:var(--font-body)] font-medium',
