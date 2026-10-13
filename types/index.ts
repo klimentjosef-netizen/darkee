@@ -22,6 +22,8 @@ export interface QuizAnswers {
   budgetMax?: number
   // Nepovinný vlastní popis obdarovaného
   about?: string
+  // Dárky z předchozích výběrů, které se při "Ukázat jiných pět" už nenabídnou
+  excluded?: string[]
   // Konkrétní záliby z kvízu (popisky) a slova, podle kterých je motor hledá v dárcích
   hobbies?: string[]
   hobbyWords?: string[]

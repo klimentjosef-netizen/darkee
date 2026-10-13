@@ -13,7 +13,10 @@ const CANDIDATES = 30
 // Pojistka proti nečekanému účtu za AI: po překročení denního počtu radí jen motor
 const AI_DAILY_LIMIT = Number(process.env.DARKEE_AI_DAILY_LIMIT || 800)
 
-export async function createQuizResult(answers: QuizAnswers): Promise<{ quizResultId: string; products: ScoredProduct[]; headline: string | null }> {
+// Tři další výběry po pěti dárcích, víc už "Ukázat jiných pět" nenabídne
+export const MAX_EXCLUDED = 15
+
+export async function createQuizResult(answers: QuizAnswers, excluded: string[] = []): Promise<{ quizResultId: string; products: ScoredProduct[]; headline: string | null }> {
   // Rozpočet a dárkovost filtruje už databáze, motor pak pracuje jen s kandidáty
   const range = answers.budget === 'custom'
     ? { min: answers.budgetMin || 0, max: answers.budgetMax || null }
@@ -26,6 +29,7 @@ export async function createQuizResult(answers: QuizAnswers): Promise<{ quizResu
     where: {
       inStock: true,
       isApproved: true,
+      ...(excluded.length ? { id: { notIn: excluded } } : {}),
       giftScore: { gte: MIN_GIFT_SCORE },
       price: { gte: range.min, ...(range.max !== null ? { lte: range.max } : {}) },
     },
@@ -79,7 +83,7 @@ export async function createQuizResult(answers: QuizAnswers): Promise<{ quizResu
 
   const quizResult = await prisma.quizResult.create({
     data: {
-      answers: JSON.parse(JSON.stringify(answers)),
+      answers: JSON.parse(JSON.stringify({ ...answers, excluded: excluded.length ? excluded : undefined })),
       productIds: scored.map(p => p.id),
       scores: JSON.parse(JSON.stringify(scored.reduce((acc, p) => ({ ...acc, [p.id]: p.score }), {}))),
       ...(advice ? { advice: JSON.parse(JSON.stringify(advice)), adviceModel: advice.model } : {}),

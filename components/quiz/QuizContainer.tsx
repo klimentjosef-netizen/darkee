@@ -99,6 +99,9 @@ function ExitConfirm({ onStay, onLeave, title = 'Opravdu chcete skončit?', text
   )
 }
 
+// Poslední odpovědi zůstávají v prohlížeči, aby je šlo z výsledků jen upravit a nevyplňovat znovu
+const SAVED_KEY = 'darkee-kviz'
+
 interface QuizContainerProps {
   isModal?: boolean
   onClose?: () => void
@@ -119,6 +122,17 @@ export function QuizContainer({ isModal = false, onClose }: QuizContainerProps) 
     const qId = QUIZ_QUESTIONS[idx]?.id
     return a.relationship === 'pet' && (qId === 'ageGroup' || qId === 'gender')
   }
+
+  // Příchod z výsledků přes "Upravit odpovědi": kvíz se předvyplní posledními odpověďmi
+  useEffect(() => {
+    try {
+      if (!new URLSearchParams(window.location.search).has('upravit')) return
+      const saved = JSON.parse(window.localStorage.getItem(SAVED_KEY) || 'null')
+      if (saved && typeof saved === 'object') setAnswers(saved)
+    } catch {
+      // bez uložených odpovědí se kvíz vyplní od začátku
+    }
+  }, [])
 
   const base = QUIZ_QUESTIONS[step]
   // Věk se nabízí jen takový, jaký ke zvolenému vztahu může patřit
@@ -229,6 +243,11 @@ export function QuizContainer({ isModal = false, onClose }: QuizContainerProps) 
       })
       const data = await res.json()
       if (data.quizResultId) {
+        try {
+          window.localStorage.setItem(SAVED_KEY, JSON.stringify(a))
+        } catch {
+          // úložiště může být vypnuté, výsledek to neovlivní
+        }
         router.push(`/vysledky/${data.quizResultId}`)
       } else {
         setLoading(false)
@@ -544,6 +563,28 @@ export function QuizContainer({ isModal = false, onClose }: QuizContainerProps) 
                 }}
               >
                 {(answers.about as string)?.trim() ? 'Najít dárky' : 'Přeskočit a najít dárky'}
+              </button>
+            </div>
+          )}
+
+          {/* Otázka s jednou odpovědí, která už je vyplněná (návrat zpět nebo předvyplněný kvíz) */}
+          {q.type === 'single' && canContinue && !(q.id === 'budget' && answers.budget === 'custom') && (
+            <div style={{ textAlign: 'center', paddingBottom: 28, flexShrink: 0 }}>
+              <button
+                onClick={() => advance()}
+                style={{
+                  padding: '12px 32px',
+                  background: 'transparent',
+                  color: '#C9A84C',
+                  fontSize: 15,
+                  fontWeight: 500,
+                  fontFamily: "'Plus Jakarta Sans', sans-serif",
+                  border: '1px solid rgba(201,168,76,0.5)',
+                  borderRadius: 100,
+                  cursor: 'pointer',
+                }}
+              >
+                Nechat a pokračovat →
               </button>
             </div>
           )}

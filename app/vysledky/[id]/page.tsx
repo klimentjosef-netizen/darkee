@@ -89,6 +89,20 @@ export default function VysledkyPage() {
   const [answers, setAnswers] = useState<Partial<QuizAnswers> | null>(null)
   const [headline, setHeadline] = useState<string | null>(null)
   const [status, setStatus] = useState<'loading' | 'ready' | 'error'>('loading')
+  const [again, setAgain] = useState<{ busy: boolean; error: string | null }>({ busy: false, error: null })
+
+  // Stejné odpovědi, jiné dárky. Server si pamatuje, co už kupující viděl.
+  async function showOthers() {
+    setAgain({ busy: true, error: null })
+    try {
+      const res = await fetch(`/api/quiz/results/${quizResultId}/again`, { method: 'POST' })
+      const data = await res.json()
+      if (!res.ok || !data.quizResultId) throw new Error(data.error || 'Nepodařilo se vybrat jiné dárky.')
+      window.location.assign(`/vysledky/${data.quizResultId}`)
+    } catch (error) {
+      setAgain({ busy: false, error: error instanceof Error ? error.message : 'Nepodařilo se vybrat jiné dárky.' })
+    }
+  }
 
   useEffect(() => {
     async function fetchResults() {
@@ -231,16 +245,33 @@ export default function VysledkyPage() {
               </section>
             )}
 
+            {(answers?.excluded?.length ?? 0) < 15 && (
+              <div className="mt-8 flex flex-col items-start gap-3 sm:flex-row sm:items-center sm:justify-between">
+                <p className="text-base text-[var(--text-secondary)]" aria-live="polite">
+                  {again.error || 'Netrefili jsme se? Ke stejným odpovědím vybereme pět jiných dárků.'}
+                </p>
+                <button
+                  type="button"
+                  onClick={showOthers}
+                  disabled={again.busy}
+                  className="inline-flex cursor-pointer items-center gap-2 whitespace-nowrap rounded-full border border-[var(--gold-primary)] bg-transparent px-6 py-3 text-base text-[var(--gold-primary)] transition-colors hover:bg-[var(--gold-glow)] disabled:cursor-wait disabled:opacity-60"
+                >
+                  <RotateCcw size={16} strokeWidth={2} aria-hidden className={again.busy ? 'animate-spin' : ''} />
+                  {again.busy ? 'Vybíráme jiné dárky' : 'Ukázat jiných pět'}
+                </button>
+              </div>
+            )}
+
             <ReminderForm quizResultId={quizResultId} defaultOccasion={answers?.occasion} />
 
             <div className="mt-14 flex flex-col items-start gap-4 border-t border-[var(--border-subtle)] pt-10 sm:flex-row sm:items-center sm:justify-between">
-              <p className="text-base text-[var(--text-secondary)]">Nesedí vám ani jeden? Upravte odpovědi a vybereme znovu.</p>
+              <p className="text-base text-[var(--text-secondary)]">Chcete zadání změnit? Odpovědi zůstanou předvyplněné, upravíte jen to, co nesedí.</p>
               <Link
-                href="/pruvodce"
+                href="/pruvodce?upravit=1"
                 className="inline-flex items-center gap-2 whitespace-nowrap rounded-full border border-[var(--border-strong)] px-6 py-3 text-base text-[var(--text-primary)] no-underline transition-colors hover:border-[var(--gold-primary)]"
               >
                 <RotateCcw size={16} strokeWidth={2} aria-hidden />
-                Nový výběr
+                Upravit odpovědi
               </Link>
             </div>
           </main>
