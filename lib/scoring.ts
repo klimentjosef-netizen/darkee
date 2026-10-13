@@ -150,6 +150,48 @@ export function tooSimilar(answers: QuizAnswers, p: Named, picked: Named[]): boo
   return same >= (wanted.some(w => re.test(w.trim())) ? 2 : 1)
 }
 
+// Charakter dárku podle vztahu: partnerce se kupuje něco osobního, kolegovi neutrální drobnost.
+// Body se přičítají ke shodě podle druhu zboží (productType) a role dárku (giftKind).
+// Bez toho vycházely všem dospělým skoro stejné tipy.
+const RELATION_PROFILE: Record<string, { type?: Record<string, number>; kind?: Record<string, number> }> = {
+  partner: {
+    type: { sperk: 10, kabelka: 6, kosmetika: 4, hodinky: 5, hrnek: -6, poukaz: -8, kava: -3 },
+    kind: { luxus: 6, zazitek: 6, prakticky: -4, drobnost: -5 },
+  },
+  parent: {
+    type: { box: 4, textil: 4, kava: 3, sklo: 3, poukaz: -4 },
+    kind: { jistota: 3, luxus: 3 },
+  },
+  grandparent: {
+    type: { kava: 6, sladkosti: 6, textil: 6, svicka: 4, box: 4, audio: -8, kabelka: -6, zavazadlo: -6 },
+    kind: { jistota: 4, originalni: -4 },
+  },
+  friend: {
+    type: { hrnek: 4, box: 4, puzzle: 3, sperk: -4, penezenka: -3 },
+    kind: { originalni: 8, drobnost: 3, luxus: -5 },
+  },
+  sibling: {
+    type: { audio: 4, hrnek: 3, puzzle: 3, sperk: -6 },
+    kind: { originalni: 6, prakticky: 3, luxus: -3 },
+  },
+  colleague: {
+    type: { kava: 8, sladkosti: 8, hrnek: 5, poukaz: 3, sperk: -15, kabelka: -12, kosmetika: -10, obleceni: -8, penezenka: -6, hodinky: -8 },
+    kind: { prakticky: 5, drobnost: 5, jistota: 3, luxus: -8 },
+  },
+  self: {
+    kind: { luxus: 5, prakticky: 4, zazitek: 4 },
+  },
+}
+// Dárek, který posouzení pro tento vztah neoznačilo
+const WRONG_RECIPIENT_PENALTY = 10
+
+function relationScore(p: EngineProduct, relationship: string): number {
+  const profile = RELATION_PROFILE[relationship]
+  if (!profile) return 0
+  const type = productType(p)
+  return (type ? profile.type?.[type] ?? 0 : 0) + (p.giftKind ? profile.kind?.[p.giftKind] ?? 0 : 0)
+}
+
 function passesFilters(p: EngineProduct, answers: QuizAnswers, ignoreGiftType: boolean): boolean {
   // Mazlíčkovi se nabízejí jen věci určené přímo pro zvíře a naopak
   const forPet = p.recipients.includes('pet')
@@ -171,6 +213,8 @@ function matchScore(p: EngineProduct, answers: QuizAnswers, stems: string[]): { 
   let score = ((p.giftScore ?? 0) / 100) * WEIGHTS.gift
 
   if (p.recipients.includes(answers.relationship)) score += WEIGHTS.recipient
+  else if (p.recipients.length > 0) score -= WRONG_RECIPIENT_PENALTY
+  score += relationScore(p, answers.relationship)
 
   const wanted = answers.interests.filter(i => i !== 'unknown')
   if (wanted.length === 0) {
