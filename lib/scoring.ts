@@ -118,7 +118,7 @@ const TYPES: [string, RegExp][] = [
   ['kniha', /\bkniha|\bknizk/],
   ['plysak', /plys/],
   ['panenka', /panenk|barbie/],
-  ['model', /maisto|bruder|\bmodel|vozidl/],
+  ['model', /maisto|bruder|\bmodel|vozidl|\brc\b|na dalkove ovladani/],
   ['audio', /sluchatk|reproduktor|soundbar|\bjbl\b/],
   ['poukaz', /poukaz/],
   ['kosmetika', /kosmet|koupel|mydl|peeling|\bkrem|sprchov/],
