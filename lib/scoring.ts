@@ -79,7 +79,7 @@ function aboutStems(about: string | undefined): string[] {
 
 // Lahev alkoholu. Katalog je jimi přesycený, takže se bez zájmu o pití derou do každé pětice.
 const BOTTLE_SHOPS = /Světnápojů|Topalkohol|OceněnáVína/i
-const BOTTLE_WORDS = /\b(vino|vina|sekt|sampansk|champagne|prosecco|whisk|rumb|ginb|vodka|liker|konak|cognac|brandy|porto|portske|tequila|slivovice|palenka|bourbon|vermut)/
+const BOTTLE_WORDS = /\b(vino|vina|sekt|sampansk|champagne|prosecco|whisk|rum\b|gin\b|vodka|liker|konak|cognac|brandy|porto|portske|tequila|slivovice|palenka|bourbon|vermut)/
 // Příslušenství a věci, které mají alkohol jen v názvu (barva Cognac, gel s vůní whisky)
 const NOT_BOTTLE = /(sklenic|sklenk|pohar|karaf|drzak|stojan|mydlo|\bgel\b|ponozk|kviz|tack|set na vino|otvirak|vyvrtk|pumpa|cokolad|\bkav[aoy]|coffee|\bcaj|kniha|hrnek|sirup|penezenk|kabelk|\bjbl\b)/
 // Údaj o obsahu alkoholu ("12,5%") je jistý znak lahve
