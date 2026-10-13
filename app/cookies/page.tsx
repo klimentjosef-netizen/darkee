@@ -33,9 +33,6 @@ export default function CookiesPage() {
               <li>
                 <strong className="text-[var(--text-primary)]">Poslední odpovědi z kvízu.</strong> Zůstávají jen ve vašem prohlížeči, aby je šlo z výsledků upravit a nevyplňovat znovu. Smažete je vymazáním dat webu v prohlížeči.
               </li>
-              <li>
-                <strong className="text-[var(--text-primary)]">Přihlášení.</strong> Cookie relace vzniká jen tehdy, když se přihlásíte k účtu. Bez ní by přihlášení nefungovalo.
-              </li>
             </ul>
           </section>
 
