@@ -216,7 +216,16 @@ async function main() {
   let skipped = 0
 
   for (const item of items) {
-    const name = decodeEntities(String(item.PRODUCTNAME || item.PRODUCT || ''))
+    let name = decodeEntities(String(item.PRODUCTNAME || item.PRODUCT || ''))
+    // Zážitkové feedy lepí za název reklamní text o kraji (parametr Lokalita). Ten pryč, město naopak přidat.
+    const rawParams = (Array.isArray(item.PARAM) ? item.PARAM : item.PARAM ? [item.PARAM] : []) as Record<string, unknown>[]
+    const param = (key: string) => decodeEntities(String(rawParams.find(p => p.PARAM_NAME === key)?.VAL ?? '')).trim()
+    const region = param('Lokalita')
+    if (region && name.endsWith(region)) {
+      name = name.slice(0, -region.length).replace(/^Zážitek\s*-\s*/, '').trim()
+      const city = param('Město')
+      if (city && !name.includes(city)) name = `${name}, ${city}`
+    }
     const price = parsePrice(item.PRICE_VAT as string || item.PRICE as string || '0') || variantPrice(item)
     const url = decodeEntities(String(item.URL || ''))
     const imageUrl = decodeEntities(String(item.IMGURL || ''))
