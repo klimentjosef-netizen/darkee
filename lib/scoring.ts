@@ -79,7 +79,12 @@ function aboutStems(about: string | undefined): string[] {
 
 function passesFilters(p: EngineProduct, answers: QuizAnswers, ignoreGiftType: boolean): boolean {
   // Mazlíčkovi se nabízejí jen věci určené přímo pro zvíře a naopak
-  if (p.recipients.includes('pet') !== (answers.relationship === 'pet')) return p.recipients.length > 1 && answers.relationship !== 'pet'
+  const forPet = p.recipients.includes('pet')
+  if (answers.relationship === 'pet') {
+    // U zvířete se věk ani pohlaví neřeší
+    return forPet
+  }
+  if (forPet && p.recipients.length === 1) return false
   if (!p.ageRange.includes(answers.ageGroup)) return false
   if (answers.gender !== 'neutral' && !p.genderFit.includes(answers.gender) && !p.genderFit.includes('neutral')) return false
   if (!ignoreGiftType && answers.giftType !== 'both' && p.giftType !== answers.giftType) return false
