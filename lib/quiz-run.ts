@@ -69,7 +69,12 @@ export async function swapPick(resultId: string, productId: string): Promise<{ p
   ])
   const ranked = rankCandidates(answers, products, CANDIDATES)
   const shopCount = (shop: string) => kept.filter(k => k.sourceShop === shop).length
-  const pick = ranked.find(c => shopCount(c.p.sourceShop) < 2 && !tooSimilar(answers, c.p, kept)) || ranked[0]
+  const fits = (c: (typeof ranked)[number]) => shopCount(c.p.sourceShop) < 2 && !tooSimilar(answers, c.p, kept)
+  // Bez poradce se snadno sklouzne k obecnému dárku z široké oblasti (příroda je v katalogu pod sportem).
+  // Napřed proto dárek, který zálibu nebo slovo z popisu přímo zmiňuje.
+  const words = (answers.hobbyWords || []).map(w => w.trim()).filter(Boolean)
+  const mentions = (c: (typeof ranked)[number]) => words.length > 0 && words.some(w => `${c.p.name} ${c.p.giftReason || ''}`.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').includes(w))
+  const pick = ranked.find(c => fits(c) && mentions(c)) || ranked.find(fits) || ranked[0]
   if (!pick) return { error: 'Další dárky pro tyto odpovědi už nemáme', status: 404 }
 
   const advice = result.advice as unknown as { headline: string; picks: { id: string; role: string; reason: string }[]; model: string } | null
