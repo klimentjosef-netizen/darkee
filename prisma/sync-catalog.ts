@@ -25,7 +25,17 @@ const ONLY_SHOP = args.find(a => a.startsWith('--shop='))?.split('=').slice(1).j
 // aby jeden vadný feed nevyřadil celý obchod z doporučení.
 const MIN_COVERAGE = 0.5
 
+// Některé feedy mají entity zakódované dvakrát (&amp;amp;), dekóduje se, dokud se text mění
 function decodeEntities(text: string): string {
+  let prev = ''
+  while (prev !== text) {
+    prev = text
+    text = decodeOnce(text)
+  }
+  return text
+}
+
+function decodeOnce(text: string): string {
   return text
     .replace(/&#x([0-9a-f]+);/gi, (_, hex) => String.fromCodePoint(parseInt(hex, 16)))
     .replace(/&#(\d+);/g, (_, code) => String.fromCodePoint(Number(code)))

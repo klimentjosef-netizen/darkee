@@ -163,7 +163,17 @@ function mapInterests(category: string, giftTypes: string[], hobbies: string[], 
   return tags.size > 0 ? [...tags] : ['home']
 }
 
+// Dekóduje opakovaně, některé feedy mají entity zakódované dvakrát (&amp;amp;)
 function decodeEntities(text: string): string {
+  let prev = ''
+  while (prev !== text) {
+    prev = text
+    text = decodeEntitiesOnce(text)
+  }
+  return text
+}
+
+function decodeEntitiesOnce(text: string): string {
   return text
     .replace(/&#x([0-9a-f]+);/gi, (_, hex) => String.fromCodePoint(parseInt(hex, 16)))
     .replace(/&#(\d+);/g, (_, code) => String.fromCodePoint(Number(code)))
