@@ -88,7 +88,11 @@ async function main() {
 
     let prices: Map<string, number>
     try {
-      prices = await loadFeed(feed.url)
+      // Velké feedy občas spadnou na síti, druhý pokus po krátké pauze obvykle projde
+      prices = await loadFeed(feed.url).catch(async () => {
+        await new Promise(r => setTimeout(r, 10_000))
+        return loadFeed(feed.url)
+      })
     } catch (e) {
       failed.push(`${feed.shop} (${e instanceof Error ? e.message.slice(0, 80) : e})`)
       continue
