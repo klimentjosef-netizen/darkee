@@ -2,8 +2,10 @@ name: Obnova cen a skladu
 
 # Každý den brzy ráno stáhne feedy obchodů a opraví ceny a dostupnost dárků v databázi.
 on:
+  # GitHub naplánované běhy občas vynechá, proto dva termíny. Druhý běh je levný, jen znovu porovná ceny.
   schedule:
     - cron: '15 3 * * *'
+    - cron: '40 9 * * *'
   workflow_dispatch:
 
 jobs:
