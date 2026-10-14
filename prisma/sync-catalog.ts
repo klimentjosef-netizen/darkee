@@ -63,6 +63,20 @@ async function loadFeed(url: string): Promise<Map<string, number>> {
     }))
   }
 
+  // Atom (feed > entry)
+  if (items.length === 0 && parsed?.feed?.entry) {
+    const raw = parsed.feed.entry
+    items = (Array.isArray(raw) ? raw : [raw]).map((e: Record<string, unknown>) => {
+      const link = e['link'] as unknown
+      return { URL: e['g:link'] || (typeof link === 'string' ? link : (link as Record<string, unknown>)?.['@_href']), PRICE_VAT: e['g:sale_price'] || e['g:price'] }
+    })
+  }
+  // Formát eHUB: adresa obchodu je v parametru desturl odkazu přes eHub
+  items = items.map(it => {
+    const dest = String(it.URL || '').match(/[?&]desturl=([^&]+)/)
+    return dest ? { ...it, URL: decodeURIComponent(dest[1]) } : it
+  })
+
   const prices = new Map<string, number>()
   for (const it of items) {
     const itemUrl = decodeEntities(String(it.URL || ''))

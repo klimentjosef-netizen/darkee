@@ -26,6 +26,8 @@ const FORCE = args.includes('--force')
 const SHOPS = arg('shops') ? new Set(arg('shops')!.split(',')) : null
 // Zúžení podle obchodu nebo kategorie, regulární výraz nad textem "obchod kategorie"
 const MATCH = arg('match') ? new RegExp(arg('match')!, 'i') : null
+// Nejvýš tolik skupin z jednoho obchodu, rozprostřených po celém sortimentu (velké obchody po částech)
+const PER_SHOP = arg('per-shop') ? Number(arg('per-shop')) : null
 
 if (!OUT) {
   console.error('Usage: npx tsx prisma/curate-catalog.ts --out=<složka> [--chunk=250] [--dry-run] [--force]')
@@ -109,6 +111,14 @@ async function main() {
 
   const candidates = [...groups.values()].filter(g => !SHOPS || SHOPS.has(g[0].sourceShop))
     .filter(g => !MATCH || MATCH.test(`${g[0].sourceShop} ${g[0].categories.join(' ')}`))
+    .filter((g, _i, all) => {
+      if (!PER_SHOP) return true
+      const same = all.filter(x => x[0].sourceShop === g[0].sourceShop)
+      if (same.length <= PER_SHOP) return true
+      const step = same.length / PER_SHOP
+      const pos = same.indexOf(g)
+      return Math.floor(pos / step) !== Math.floor((pos - 1) / step)
+    })
   console.log(`Kandidátů k posouzení: ${candidates.length} skupin (${products.length - rejectedCount} položek)`)
   const byShop: Record<string, number> = {}
   for (const g of candidates) byShop[g[0].sourceShop] = (byShop[g[0].sourceShop] || 0) + 1

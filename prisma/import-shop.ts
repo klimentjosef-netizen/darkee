@@ -214,6 +214,33 @@ async function main() {
       PARAM: [],
     }))
   }
+  // Atom (feed > entry), používá ho část obchodů s exportem pro Google
+  if (items.length === 0 && parsed?.feed?.entry) {
+    const raw = parsed.feed.entry
+    items = (Array.isArray(raw) ? raw : [raw]).map((e: Record<string, unknown>) => {
+      const link = e['link'] as unknown
+      const href = typeof link === 'string' ? link : (link as Record<string, unknown>)?.['@_href'] || ''
+      return {
+        PRODUCTNAME: e['title'] || e['g:title'] || '',
+        PRICE_VAT: e['g:sale_price'] || e['g:price'] || '0',
+        URL: e['g:link'] || href,
+        IMGURL: e['g:image_link'] || '',
+        DESCRIPTION: e['g:description'] || e['description'] || '',
+        CATEGORYTEXT: e['g:product_type'] || '',
+        PARAM: [],
+      }
+    })
+    console.log('Atom format')
+  }
+  // Formát eHUB (NAME, IMAGE_MAIN, URL je už odkaz přes eHub): skutečná adresa obchodu je v parametru desturl
+  if (items.length > 0 && !items[0].PRODUCTNAME && items[0].NAME) {
+    items = items.map(it => {
+      const raw = String(it.URL || '')
+      const dest = raw.match(/[?&]desturl=([^&]+)/)
+      return { ...it, PRODUCTNAME: it.NAME, URL: dest ? decodeURIComponent(dest[1]) : raw, IMGURL: it.IMAGE_MAIN || it.IMGURL, CATEGORYTEXT: it.CATEGORY_FULL || it.CATEGORYTEXT }
+    })
+    console.log('eHUB format')
+  }
   console.log(`Found ${items.length} products${isGoogle ? ' (Google format)' : ''}`)
   if (LIMIT && items.length > LIMIT) {
     const step = items.length / LIMIT
@@ -240,6 +267,11 @@ async function main() {
     const url = decodeEntities(String(item.URL || ''))
     const imageUrl = decodeEntities(String(item.IMGURL || ''))
     const description = stripHtml(decodeEntities(String(item.DESCRIPTION || '')))
+    // Název jen ze značky a typového čísla ("Fieldmann FDV 10352-55AR"): druh výrobku se vezme ze začátku popisu ("Aku vrtačka, ...")
+    if (/^\p{L}[\p{L}&.\-]*(\s+[A-Z0-9][A-Z0-9\-\/+.]*)+$/u.test(name.trim()) && /\d/.test(name)) {
+      const kind = description.split(/[,.:;(]/)[0].trim()
+      if (kind.length >= 3 && kind.length <= 40 && !/\d/.test(kind)) name = `${kind} ${name}`
+    }
     // Některé feedy mají kategorií desítky, stačí první dvě konkrétní
     const rawCategory = Array.isArray(item.CATEGORYTEXT) ? (item.CATEGORYTEXT as unknown[]).map(String).filter(c => !/^(Všechny|Dárky do|Cena do)/.test(c)).slice(0, 2).join(' | ') : item.CATEGORYTEXT
     const category = decodeEntities(String(rawCategory || ''))

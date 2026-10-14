@@ -113,7 +113,7 @@ const HOBBY_DEFS: { key: string; slug: string; title: string; hint: string }[] =
 ]
 
 // Záliby, pro které má katalog zatím málo dárků. Stránka by byla skoro prázdná, vznikne po rozšíření katalogu.
-const THIN_HOBBIES = new Set(['kutil', 'pc_hry'])
+const THIN_HOBBIES = new Set(['pc_hry'])
 
 export const HOBBY_PAGES: GiftPage[] = HOBBY_DEFS.filter(h => !THIN_HOBBIES.has(h.key)).map(h => ({
   slug: h.slug,
