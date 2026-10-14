@@ -1,5 +1,6 @@
 import { QuizAnswers, ScoredProduct } from '@/types'
 import { regionFits } from './regions'
+import { HOBBIES } from './hobbies'
 
 // Motor doporučení. Vybírá jen z produktů, které prošly posouzením dárkovosti
 // (giftScore, role v pětici, komu se hodí, lidský důvod), viz lib/gift-assessor.ts.
@@ -317,7 +318,23 @@ export function rankCandidates(answers: QuizAnswers, products: EngineProduct[], 
   // Od jednoho druhu zboží jen pár kusů, jinak by třicítku kandidátů zabraly samé peněženky
   const typeCount: Record<string, number> = {}
 
-  for (const c of rankAll(answers, products)) {
+  const all = rankAll(answers, products)
+
+  // Víc zálib najednou: každá dostane mezi kandidáty své nejlepší dárky, aby jedna velká
+  // (káva s tisícovkou výrobků) nepřehlušila druhou (knihy). Pak se doplní podle celkové shody.
+  const chosen = (answers.hobbies || [])
+    .map(label => Object.values(HOBBIES).find(h => h.label === label))
+    .filter((h): h is (typeof HOBBIES)[string] => !!h)
+  const reserved: RankedProduct[] = []
+  if (chosen.length >= 2) {
+    const per = Math.max(3, Math.floor(limit / (chosen.length * 2)))
+    for (const h of chosen) {
+      const hits = all.filter(c => h.words.some(w => hasWordStart(normalize(`${c.p.name} ${c.p.giftReason || ''}`), w)))
+      for (const c of hits.slice(0, per)) if (!reserved.includes(c)) reserved.push(c)
+    }
+  }
+
+  for (const c of [...reserved, ...all.filter(c => !reserved.includes(c))]) {
     const key = nameKey(c.p.name)
     if (seenNames.has(key) || (shopCount[c.p.sourceShop] || 0) >= perShop) continue
     if (isBottle(c.p) && ++bottles > bottleCap) continue

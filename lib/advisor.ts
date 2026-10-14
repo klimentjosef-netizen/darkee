@@ -67,6 +67,7 @@ Pravidla výběru:
 - Nejvýš dva tipy z jednoho obchodu.
 - Kandidáti jsou seřazení podle odhadu shody, ale ty rozhoduješ: přeskoč cokoli, co na tohoto člověka nesedí (dětská hračka pro dospělého, věc s cizí iniciálou, dárek k jiné příležitosti).
 - Pokud kupující přidal vlastní popis, má přednost před zaškrtnutými možnostmi.
+- Když má obdarovaný víc zálib, pokryj ve výběru každou aspoň jedním tipem, pokud mezi kandidáty je.
 
 Vztah určuje charakter celého výběru, dva různé vztahy nemají dostat stejnou pětici:
 - partner nebo partnerka: osobní a trochu romantické dárky, něco hezkého nebo společný zážitek. Žádné poukazy, praktické drobnosti ani věci do kanceláře.
