@@ -6,7 +6,7 @@ import { useParams } from 'next/navigation'
 import Image from 'next/image'
 import Link from 'next/link'
 import { MotionConfig, motion } from 'framer-motion'
-import { ArrowUpRight, RotateCcw, Share2, Check } from 'lucide-react'
+import { ArrowUpRight, RotateCcw, Share2, Check, X } from 'lucide-react'
 import { SiteFooter } from '@/components/SiteFooter'
 import { ReminderForm } from '@/components/ReminderForm'
 import { ROLE_LABELS } from '@/lib/roles'
@@ -91,6 +91,53 @@ export default function VysledkyPage() {
   const [status, setStatus] = useState<'loading' | 'ready' | 'error'>('loading')
   const [again, setAgain] = useState<{ busy: boolean; error: string | null }>({ busy: false, error: null })
   const [shared, setShared] = useState(false)
+  // Výměna jednoho tipu: id tipu, který se právě mění, a případná hláška
+  const [swapping, setSwapping] = useState<string | null>(null)
+  const [swapError, setSwapError] = useState<string | null>(null)
+
+  async function swap(productId: string) {
+    setSwapping(productId)
+    setSwapError(null)
+    try {
+      const res = await fetch(`/api/quiz/results/${quizResultId}/swap`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ productId }),
+      })
+      const data = await res.json()
+      if (!res.ok || !data.product) throw new Error(data.error || 'Tip se nepodařilo vyměnit.')
+      const next = products.map(p => (p.id === productId ? data.product : p))
+      setProducts(next)
+      try {
+        const key = `darkee-vysledek-${quizResultId}`
+        const cached = JSON.parse(window.sessionStorage.getItem(key) || 'null')
+        if (cached) window.sessionStorage.setItem(key, JSON.stringify({ ...cached, products: next }))
+      } catch {
+        // úložiště nemusí být dostupné
+      }
+    } catch (error) {
+      setSwapError(error instanceof Error ? error.message : 'Tip se nepodařilo vyměnit.')
+    } finally {
+      setSwapping(null)
+    }
+  }
+
+  // Tlačítko "Tenhle ne" v rohu karty
+  function SwapButton({ id }: { id: string }) {
+    const busy = swapping === id
+    return (
+      <button
+        type="button"
+        onClick={() => swap(id)}
+        disabled={!!swapping}
+        aria-label="Tenhle ne, ukázat jiný tip"
+        className="inline-flex shrink-0 cursor-pointer items-center gap-1.5 rounded-full border border-[var(--border-subtle)] bg-[rgba(8,8,6,0.7)] px-3 py-1.5 text-xs text-[var(--text-secondary)] backdrop-blur-sm transition-colors hover:border-[var(--border-strong)] hover:text-[var(--text-primary)] disabled:cursor-wait disabled:opacity-60"
+      >
+        {busy ? <RotateCcw size={13} strokeWidth={2} className="animate-spin" aria-hidden /> : <X size={13} strokeWidth={2} aria-hidden />}
+        {busy ? 'Hledáme jiný' : 'Tenhle ne'}
+      </button>
+    )
+  }
 
   // Odkaz na tyto tipy: v telefonu nabídne sdílení, jinde se zkopíruje do schránky
   async function share() {
@@ -225,8 +272,9 @@ export default function VysledkyPage() {
               transition={{ duration: 0.7, delay: 0.1, ease: EASE }}
               className="mt-8 rounded-[20px] border border-[var(--gold-dark)] bg-[var(--bg-elevated)] p-3 sm:p-4"
             >
-              <div className="aspect-[4/3] sm:aspect-[16/9]">
+              <div className="relative aspect-[4/3] sm:aspect-[16/9]">
                 <GiftPhoto product={main} sizes="(min-width: 768px) 720px, 100vw" priority />
+                <div className="absolute top-3 right-3 z-10"><SwapButton id={main.id} /></div>
               </div>
               <div className="px-1 pt-5 pb-2 sm:px-2">
                 <RoleLabel role={main.role} fallback="Nejlepší shoda" />
@@ -257,7 +305,10 @@ export default function VysledkyPage() {
                         <GiftPhoto product={p} sizes="128px" />
                       </div>
                       <div className="flex min-w-0 flex-1 flex-col py-0.5">
-                        <RoleLabel role={p.role} />
+                        <div className="flex items-start justify-between gap-2">
+                          <RoleLabel role={p.role} fallback="Další tip" />
+                          <SwapButton id={p.id} />
+                        </div>
                         <h3 className="mt-0.5 line-clamp-2 text-base font-semibold leading-snug">{p.name}</h3>
                         {p.reasons[0] && <p className="mt-1.5 text-sm leading-relaxed text-[var(--text-secondary)]">{p.reasons[0]}</p>}
                         <div className="mt-auto flex flex-wrap items-center justify-between gap-x-4 gap-y-2 pt-3">
@@ -271,6 +322,7 @@ export default function VysledkyPage() {
                     </motion.li>
                   ))}
                 </ul>
+                {swapError && <p className="mt-3 text-sm text-[var(--text-secondary)]" role="status">{swapError}</p>}
               </section>
             )}
 
