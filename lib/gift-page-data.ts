@@ -1,5 +1,5 @@
 import { prisma } from './prisma'
-import { rankCandidates, toScoredProduct, productType } from './scoring'
+import { rankCandidates, toScoredProduct, productType, hasWordStart } from './scoring'
 import { GiftPage } from './gift-pages'
 import { ScoredProduct } from '@/types'
 
@@ -31,7 +31,7 @@ export async function getPageGifts(page: GiftPage, count = 12): Promise<ScoredPr
       // Stránka záliby: slovo záliby musí být přímo v názvu nebo popisu dárku
       if (page.hobby) {
         const text = `${c.p.name} ${c.p.giftReason || ''}`.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '')
-        return (page.answers.hobbyWords || []).some(w => text.includes(w.trim()))
+        return (page.answers.hobbyWords || []).some(w => hasWordStart(text, w))
       }
       // Na stránku patří jen dárky, které posouzení určilo právě tomuto obdarovanému
       return c.p.recipients.includes(page.answers.relationship)

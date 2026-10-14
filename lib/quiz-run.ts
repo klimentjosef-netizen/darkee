@@ -1,5 +1,5 @@
 import { prisma } from './prisma'
-import { rankCandidates, scoreProducts, toScoredProduct, tooSimilar, nameKey, type EngineProduct } from './scoring'
+import { rankCandidates, scoreProducts, toScoredProduct, tooSimilar, nameKey, hasWordStart, type EngineProduct } from './scoring'
 import { advise } from './advisor'
 import { QuizAnswers, BUDGET_MAP, ScoredProduct } from '@/types'
 
@@ -73,7 +73,8 @@ export async function swapPick(resultId: string, productId: string): Promise<{ p
   // Bez poradce se snadno sklouzne k obecnému dárku z široké oblasti (příroda je v katalogu pod sportem).
   // Napřed proto dárek, který zálibu nebo slovo z popisu přímo zmiňuje.
   const words = (answers.hobbyWords || []).map(w => w.trim()).filter(Boolean)
-  const mentions = (c: (typeof ranked)[number]) => words.length > 0 && words.some(w => `${c.p.name} ${c.p.giftReason || ''}`.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').includes(w))
+  const plain = (t: string) => t.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '')
+  const mentions = (c: (typeof ranked)[number]) => words.some(w => hasWordStart(plain(`${c.p.name} ${c.p.giftReason || ''}`), w))
   const pick = ranked.find(c => fits(c) && mentions(c)) || ranked.find(fits) || ranked[0]
   if (!pick) return { error: 'Další dárky pro tyto odpovědi už nemáme', status: 404 }
 

@@ -104,6 +104,18 @@ const NOT_BOTTLE = /(sklenic|sklenk|pohar|karaf|drzak|stojan|mydlo|\bgel\b|ponoz
 // Údaj o obsahu alkoholu ("12,5%") je jistý znak lahve
 const ABV = /\d{1,2}([.,]\d)?\s?%/
 
+// Kořen slova se musí najít na začátku slova: "turist" nemá najít "kulturistiku"
+export function hasWordStart(text: string, stem: string): boolean {
+  const s = stem.trim()
+  if (!s) return false
+  let i = text.indexOf(s)
+  while (i >= 0) {
+    if (i === 0 || !/[a-z0-9]/.test(text[i - 1])) return true
+    i = text.indexOf(s, i + 1)
+  }
+  return false
+}
+
 export function isBottle(p: Pick<EngineProduct, 'name' | 'sourceShop'>): boolean {
   const name = normalize(p.name)
   if (/cokolad|kakao/.test(name)) return false
@@ -264,7 +276,7 @@ function matchScore(p: EngineProduct, answers: QuizAnswers, stems: string[]): { 
 
   if (stems.length > 0) {
     const haystack = normalize(`${p.name} ${p.giftReason || ''}`)
-    const hits = stems.filter(s => haystack.includes(s)).length
+    const hits = stems.filter(s => hasWordStart(haystack, s)).length
     score += Math.min(ABOUT_MATCH_MAX, hits * ABOUT_MATCH_BONUS)
   }
 
