@@ -2,7 +2,7 @@ import { ImageResponse } from 'next/og'
 import { readFile } from 'fs/promises'
 import { join } from 'path'
 import { getGiftPage, pageTitle } from '@/lib/gift-pages'
-import { getPageGifts } from '@/lib/gift-page-data'
+import { carouselGifts, keepTogether } from '@/lib/carousel'
 import { MARK_PATHS } from '@/components/Logo'
 import type { ScoredProduct } from '@/types'
 
@@ -45,20 +45,6 @@ function price(p: ScoredProduct) {
   return `${p.giftType === 'experience' ? 'od ' : ''}${Math.round(p.price).toLocaleString('cs-CZ')} Kč`
 }
 
-// Generátor obrázků umí jen JPEG a PNG, fotky ve WebP se přeskočí
-async function photo(url: string): Promise<string | null> {
-  try {
-    const res = await fetch(url, { headers: { 'User-Agent': 'Mozilla/5.0 (compatible; DarkeeBot/1.0)' } })
-    const type = res.headers.get('content-type') || ''
-    if (!res.ok || !/image\/(jpe?g|png)/.test(type)) return null
-    const buf = Buffer.from(await res.arrayBuffer())
-    if (buf.length > 4_000_000) return null
-    return `data:${type.split(';')[0]};base64,${buf.toString('base64')}`
-  } catch {
-    return null
-  }
-}
-
 function Frame({ children, step }: { children: React.ReactNode; step?: string }) {
   return (
     <div style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column', background: BG, padding: 72, backgroundImage: 'radial-gradient(circle at 85% 8%, rgba(201,168,76,0.14), rgba(8,8,6,0) 50%)' }}>
@@ -79,7 +65,7 @@ export async function GET(_req: Request, { params }: { params: Promise<{ slug: s
   const page = getGiftPage(slug)
   const index = Number(n)
   if (!page || !Number.isInteger(index) || index < 0 || index > 6) return new Response('Nenalezeno', { status: 404 })
-  const title = pageTitle(page)
+  const title = keepTogether(pageTitle(page))
   const options = { width: W, height: H, fonts: await fonts() }
 
   if (index === 0) {
@@ -89,7 +75,7 @@ export async function GET(_req: Request, { params }: { params: Promise<{ slug: s
           <div style={{ display: 'flex', flexDirection: 'column', marginTop: 'auto' }}>
             <div style={{ color: GOLD, fontFamily: 'Jakarta', fontSize: 34, marginBottom: 24 }}>Pět tipů, které bychom koupili</div>
             <div style={{ color: TEXT, fontFamily: 'Playfair', fontSize: title.length > 30 ? 104 : 124, lineHeight: 1.04, letterSpacing: -2 }}>{title}</div>
-            <div style={{ marginTop: 40, color: MUTED, fontFamily: 'Jakarta', fontSize: 34, lineHeight: 1.45, maxWidth: 900 }}>{page.hint}</div>
+            <div style={{ marginTop: 40, color: MUTED, fontFamily: 'Jakarta', fontSize: 34, lineHeight: 1.45, maxWidth: 900 }}>{keepTogether(page.hint)}</div>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', marginTop: 72, color: TEXT, fontFamily: 'Jakarta', fontSize: 32 }}>
             Posuňte doprava
@@ -121,15 +107,8 @@ export async function GET(_req: Request, { params }: { params: Promise<{ slug: s
     )
   }
 
-  // Dárek: bere se n-tý z tipů na stránce, které mají fotku v podporovaném formátu
-  const gifts = await getPageGifts(page, 12)
-  const usable: { g: ScoredProduct; img: string }[] = []
-  for (const g of gifts) {
-    const img = await photo(g.imageUrl)
-    if (img) usable.push({ g, img })
-    if (usable.length >= index) break
-  }
-  const pick = usable[index - 1]
+  // Dárek: n-tý z tipů na stránce, které mají fotku v podporovaném formátu
+  const pick = (await carouselGifts(page, index))[index - 1]
   if (!pick) return new Response('Málo dárků s fotkou', { status: 404 })
   const { g, img } = pick
   const experience = g.giftType === 'experience'
