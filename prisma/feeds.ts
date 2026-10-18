@@ -2,7 +2,7 @@
 // Používá je denní obnova cen a skladu (prisma/sync-catalog.ts).
 export const FEEDS: { shop: string; url: string }[] = [
   { shop: 'Dárkoviny.cz', url: 'https://www.darkoviny.cz/heureka/export/products.xml?hash=T8rdriZhMtQ7LrVLzW5k8x7s' },
-  { shop: 'Kabelka.cz', url: 'https://feeds.mergado.com/kabelka-cz-heureka-cz-produktovy-cz-4c021c4c529a9422a3b52f2b46b48890.xml' },
+  { shop: 'Kabelka.cz', url: 'https://feeds.mergado.com/kabelka-cz-0-sa-ehub-cz-produktovy-feed-21-9-2026-6e85d858b40ae6cefc27be3c69bff094.xml' },
   { shop: 'OK-Hračky.cz', url: 'https://feeds.mergado.com/ok-hracky-cz-heureka-cz-71192e613c724f98808998e7d8ba5cc3.xml' },
   { shop: 'Kidero.cz', url: 'https://kidero.cz/feeds/ehub-s5kxyh82r6eotgy-products.xml' },
   { shop: 'Brilianty.cz', url: 'https://www.brilianty.cz/heureka.xml' },
