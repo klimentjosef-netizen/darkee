@@ -1,7 +1,11 @@
 import { SiteHeader } from '@/components/SiteHeader'
 import { SiteFooter } from '@/components/SiteFooter'
 
-export const metadata = { title: 'Kontakt | Dárkee' }
+export const metadata = {
+  title: 'Kontakt | Dárkee',
+  description: 'Jak se spojit s provozovatelem Dárkee, dárkového poradce s tipy z českých e-shopů.',
+  alternates: { canonical: '/kontakt' },
+}
 
 export default function KontaktPage() {
   return (

@@ -2,7 +2,11 @@ import Link from 'next/link'
 import { SiteHeader } from '@/components/SiteHeader'
 import { SiteFooter } from '@/components/SiteFooter'
 
-export const metadata = { title: 'Ochrana osobních údajů | Dárkee' }
+export const metadata = {
+  title: 'Ochrana osobních údajů | Dárkee',
+  description: 'Jaké údaje Dárkee zpracovává, proč a jak dlouho. Kvíz funguje bez registrace a bez sledovacích cookies.',
+  alternates: { canonical: '/gdpr' },
+}
 
 export default function GdprPage() {
   return (

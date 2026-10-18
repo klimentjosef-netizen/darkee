@@ -2,7 +2,11 @@ import Link from 'next/link'
 import { SiteHeader } from '@/components/SiteHeader'
 import { SiteFooter } from '@/components/SiteFooter'
 
-export const metadata = { title: 'Obchodní podmínky | Dárkee' }
+export const metadata = {
+  title: 'Obchodní podmínky | Dárkee',
+  description: 'Podmínky používání dárkového poradce Dárkee: jak vznikají tipy, odkazy do e-shopů a odpovědnost za nákup.',
+  alternates: { canonical: '/obchodni-podminky' },
+}
 
 export default function ObchodniPodminkyPage() {
   return (

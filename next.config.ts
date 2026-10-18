@@ -7,7 +7,7 @@ const nextConfig: NextConfig = {
     return ['/ucet', '/ucet/:path*', '/merchant', '/merchant/:path*', '/blog', '/blog/:path*', '/pro-eshopy'].map(source => ({
       source,
       destination: '/',
-      permanent: false,
+      permanent: true,
     }))
   },
   images: {

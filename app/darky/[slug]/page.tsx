@@ -26,7 +26,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const page = getGiftPage(slug)
   if (!page) return {}
   return {
-    title: `${pageTitle(page)}: tipy s cenou a odkazem ke koupi | Dárkee`,
+    title: `${pageTitle(page)} | Dárkee`,
     description: `${pageTitle(page)}: výběr z českých e-shopů. U každého cena, obchod a důvod, proč se hodí. ${page.hint}`.slice(0, 158),
     alternates: { canonical: `/darky/${page.slug}` },
   }

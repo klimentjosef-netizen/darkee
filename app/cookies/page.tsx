@@ -2,7 +2,11 @@ import Link from 'next/link'
 import { SiteHeader } from '@/components/SiteHeader'
 import { SiteFooter } from '@/components/SiteFooter'
 
-export const metadata = { title: 'Cookies | Dárkee' }
+export const metadata = {
+  title: 'Cookies | Dárkee',
+  description: 'Dárkee nepoužívá sledovací ani reklamní cookies. Přehled toho, co web ukládá ve vašem prohlížeči a proč.',
+  alternates: { canonical: '/cookies' },
+}
 
 const h2 = 'text-xl font-semibold tracking-[-0.01em] text-[var(--text-primary)] mb-3'
 const link = 'text-[var(--gold-primary)] no-underline hover:underline'
