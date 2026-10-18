@@ -1,5 +1,7 @@
 import Link from 'next/link'
 
+export const metadata = { title: 'Stránka nenalezena | Dárkee' }
+
 export default function NotFound() {
   return (
     <div className="min-h-screen bg-[var(--bg-primary)] flex flex-col items-center justify-center px-6 text-center">
