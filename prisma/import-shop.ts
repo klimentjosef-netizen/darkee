@@ -74,7 +74,10 @@ function getParams(item: Record<string, unknown>): Record<string, string[]> {
 
 function parsePrice(priceStr: string | number): number {
   if (typeof priceStr === 'number') return priceStr
-  return parseFloat(String(priceStr).replace(/\s/g, '').replace(',', '.')) || 0
+  let s = String(priceStr).replace(/\s/g, '')
+  // "1.834,00": tečka odděluje tisíce, čárka desetiny
+  if (/,\d{1,2}$/.test(s)) s = s.replace(/\./g, '')
+  return parseFloat(s.replace(',', '.')) || 0
 }
 
 function stripHtml(html: string): string {
@@ -200,7 +203,7 @@ async function main() {
   const parsed = parser.parse(xml)
 
   // Support both Heureka (SHOP > SHOPITEM) and Google Merchant (rss > channel > item)
-  let items: Record<string, unknown>[] = parsed?.SHOP?.SHOPITEM || []
+  let items: Record<string, unknown>[] = parsed?.SHOP?.SHOPITEM || parsed?.shop?.shopitem || []
   const isGoogle = items.length === 0 && parsed?.rss?.channel?.item
   if (isGoogle) {
     const raw = parsed.rss.channel.item

@@ -43,7 +43,10 @@ function decodeOnce(text: string): string {
 }
 
 function parsePrice(raw: unknown): number {
-  const value = parseFloat(String(raw ?? '').replace(/\s/g, '').replace(',', '.').replace(/[^0-9.]/g, ''))
+  let s = String(raw ?? '').replace(/\s/g, '')
+  // "1.834,00": tečka odděluje tisíce, čárka desetiny
+  if (/,\d{1,2}$/.test(s)) s = s.replace(/\./g, '')
+  const value = parseFloat(s.replace(',', '.').replace(/[^0-9.]/g, ''))
   return Number.isFinite(value) ? value : 0
 }
 
@@ -53,7 +56,7 @@ async function loadFeed(url: string): Promise<Map<string, number>> {
   const xml = await res.text()
   const parsed = new XMLParser({ ignoreAttributes: false, parseTagValue: false, processEntities: false }).parse(xml)
 
-  let items: Record<string, unknown>[] = parsed?.SHOP?.SHOPITEM || []
+  let items: Record<string, unknown>[] = parsed?.SHOP?.SHOPITEM || parsed?.shop?.shopitem || []
   if (!Array.isArray(items)) items = [items]
   if (items.length === 0 && parsed?.rss?.channel?.item) {
     const raw = parsed.rss.channel.item
