@@ -14,6 +14,8 @@ import { regionLabel } from './regions'
 // levnější a rychlejší, ale česky píše znatelně hůř; přepíná se proměnnou prostředí.
 const MODEL = process.env.DARKEE_ADVISOR_MODEL || 'claude-sonnet-5-5'
 const TIMEOUT_MS = 12_000
+// Když AI do této doby neodpoví, pustí se souběžně druhý dotaz a použije se rychlejší odpověď
+const HEDGE_MS = 5_000
 
 // Výběrčí píše vlastní zdůvodnění jen k hlavnímu tipu. Ostatní tipy ukazují důvod z katalogu,
 // který prošel kontrolou. Psaní šesti vět trvalo 4 až 6 sekund, takhle je odpověď zhruba poloviční.
@@ -110,7 +112,7 @@ function describe(answers: QuizAnswers): string {
 export async function advise(answers: QuizAnswers, candidates: RankedProduct[]): Promise<Advice | null> {
   if (!process.env.ANTHROPIC_API_KEY || candidates.length < 5) return null
 
-  const client = new Anthropic({ timeout: TIMEOUT_MS, maxRetries: 1 })
+  const client = new Anthropic({ timeout: TIMEOUT_MS, maxRetries: 0 })
   const list = candidates.map((c, i) => ({
     ref: i,
     nazev: decodeEntities(c.p.name).slice(0, 110),
@@ -121,7 +123,7 @@ export async function advise(answers: QuizAnswers, candidates: RankedProduct[]):
   }))
 
   try {
-    const response = await client.messages.parse({
+    const request = (signal: AbortSignal) => client.messages.parse({
       model: MODEL,
       max_tokens: 600,
       system: SYSTEM,
@@ -131,7 +133,19 @@ export async function advise(answers: QuizAnswers, candidates: RankedProduct[]):
         ...(MODEL.includes('haiku') ? {} : { effort: 'low' as const }),
         format: zodOutputFormat(AdviceSchema),
       },
-    })
+    }, { signal })
+
+    // Občas jeden dotaz na AI trvá mnohem déle než obvykle nebo selže. Po HEDGE_MS (nebo hned po chybě)
+    // se pošle druhý a použije se ta odpověď, která přijde dřív; druhá se zruší.
+    const mainCall = new AbortController()
+    const backupCall = new AbortController()
+    let startBackup = () => {}
+    const backupGate = new Promise<void>(resolve => { startBackup = resolve })
+    const hedgeTimer = setTimeout(() => startBackup(), HEDGE_MS)
+    const response = await Promise.any([
+      request(mainCall.signal).then(r => { backupCall.abort(); return r }, e => { startBackup(); throw e }),
+      backupGate.then(() => request(backupCall.signal)).then(r => { mainCall.abort(); return r }),
+    ]).finally(() => clearTimeout(hedgeTimer))
 
     const parsed = response.parsed_output
     if (!parsed) return null

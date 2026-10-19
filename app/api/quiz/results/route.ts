@@ -41,6 +41,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(await createQuizResult(answers))
   } catch (error) {
+    if (error instanceof z.ZodError) return NextResponse.json({ error: 'Neúplné odpovědi' }, { status: 400 })
     console.error('Quiz results error:', error)
     return NextResponse.json({ error: 'Nepodařilo se zpracovat kvíz' }, { status: 500 })
   }
