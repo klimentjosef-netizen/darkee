@@ -12,7 +12,7 @@ const NAMED_FOR: [RegExp, string, string | null][] = [
   [/\b(dedeck|dedov|ded[aeu]\b|dedo\b)/, 'grandparent', 'male'],
   [/\b(manzelk)/, 'partner', 'female'],
   [/\b(manzel\b|manzel[aeu]\b|manzelov)/, 'partner', 'male'],
-  [/\b(pritelkyn|holk[uay]\b)/, 'partner', 'female'],
+  [/\b(pritelkyn)/, 'partner', 'female'],
   [/\b(kamaradk)/, 'friend', 'female'],
   [/\b(kamarad\b|kamarad[aeu]\b)/, 'friend', 'male'],
   [/\b(kolegyn)/, 'colleague', 'female'],
