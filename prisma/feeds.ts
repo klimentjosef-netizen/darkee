@@ -84,6 +84,8 @@ export const FEEDS: { shop: string; url: string }[] = [
   { shop: 'ItalyShop.cz', url: 'https://www.italyshop.cz/heureka/export/products.xml' },
   { shop: 'OLIVIE.cz', url: 'https://www.olivie.cz/heureka/export/products.xml' },
   { shop: 'Ocelovesperky1.cz', url: 'https://www.ocelovesperky1.cz/heureka/export/products.xml' },
+  { shop: 'super-hracky.cz', url: 'https://www.super-hracky.cz/google.xml' },
+  { shop: 'Kosmas.cz', url: 'https://feeds.mergado.com/kosmas-cz-affilate-313f3710c779f9978a5a9887f4ae19a7.xml' },
   { shop: 'Mikov.cz', url: 'https://www.mikov.cz/feed/3/b24a6f19c81c435645089b6b6527afe26180e750' },
   { shop: 'Nářadí-Simon.cz', url: 'https://www.naradi-simon.cz/rss/heureka-zbozi-2342296.php' },
   { shop: 'DronPro.cz', url: 'https://feeds.mergado.com/dronpro-www5-superkoderi-cz-heureka-cz-f3a6350d4000723c182059807175d61f.xml' },

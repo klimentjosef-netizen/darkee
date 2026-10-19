@@ -92,6 +92,8 @@ const EHUB_CAMPAIGNS: Record<string, string> = {
   'KrásnéVůně.cz': 'a6d1bfdf',
   'BeautyOnline.cz': '99271766',
   'Mikov.cz': '580c33bf',
+  'Kosmas.cz': 'ea8bad44',
+  'super-hracky.cz': 'd7f16430',
   'Knihy.cz': '5101b902',
   'NATU.cz': '7e17f97c',
   'Nejoutdoor.cz': '24141138',
