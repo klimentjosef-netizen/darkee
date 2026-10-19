@@ -98,12 +98,16 @@ function noAlcohol(answers: QuizAnswers): boolean {
 }
 
 // Lahev alkoholu. Katalog je jimi přesycený, takže se bez zájmu o pití derou do každé pětice.
-const BOTTLE_SHOPS = /Světnápojů|Topalkohol|OceněnáVína/i
-const BOTTLE_WORDS = /\b(vino|vina|vin\b|vinny|sekt|sampansk|champagne|prosecco|whisk|rum\b|gin\b|vodka|liker|konak|cognac|brandy|porto|portske|tequila|slivovice|palenka|bourbon|vermut|alkohol|chardonnay|sauvignon|ryzlink|merlot|cabernet|frankovka|rulandsk|veltlin|mionetto)/
+const BOTTLE_SHOPS = /Světnápojů|Topalkohol|OceněnáVína|Vínokrál|1er.cz|Destilerka|OsobníVinotéka|Lihovárek/i
+const BOTTLE_WORDS = /\b(vino|vina|vin\b|vinny|sekt|sampansk|champagne|prosecco|whisk|rum\b|gin\b|vodka|liker|konak|cognac|brandy|porto|portske|tequila|slivovice|palenk|palenek|bourbon|port\b|armagnac|calvados|grappa|absint|medovin|mandlovk|vermut|alkohol|chardonnay|riesling|pinot|primitivo|sauvignon|ryzlink|merlot|cabernet|frankovka|rulandsk|veltlin|mionetto)/
 // Příslušenství a věci, které mají alkohol jen v názvu (barva Cognac, gel s vůní whisky)
-const NOT_BOTTLE = /(sklenic|sklenk|pohar|karaf|drzak|stojan|mydlo|\bgel\b|ponozk|kviz|tack|set na vino|otvirak|vyvrtk|pumpa|cokolad|\bkav[aoy]|coffee|\bcaj|kniha|hrnek|sirup|penezenk|kabelk|destnik|\bjbl\b)/
+const NOT_BOTTLE = /(sklenic|sklenk|pohar|karaf|drzak|stojan|mydlo|\bgel\b|ponozk|kviz|tack|set na vino|otvirak|vyvrtk|pumpa|cokolad|\bkav[aoy]|coffee|\bcaj|kniha|hrnek|sirup|penezenk|kabelk|destnik|\bjbl\b|poukaz|prohlidk)/
 // Údaj o obsahu alkoholu ("12,5%") je jistý znak lahve
 const ABV = /\d{1,2}([.,]\d)?\s?%/
+// Objem ("0,75l", "2*0,5L") nebo přibalené skleničky u alkoholu znamenají lahev, i když název zmiňuje sklo nebo kávu
+const VOLUME_OR_SET = /\d([.,]\d{1,2})?\s?l\b|\+\s?\d?\s?sklen/
+// Samotné příslušenství k pití: "Sklenice na whisky", "Karafa na víno"
+const ACCESSORY = /^(sklenic|sklenk|pohar|karaf|dekant)|\b(sklenic|sklenk|pohar|karaf)\w* na\b|\bna (\w+ )?(vino|whisk|rum|gin|sampan|prosecco|pivo|koktejl)/
 
 // Kořen slova se musí najít na začátku slova: "turist" nemá najít "kulturistiku"
 export function hasWordStart(text: string, stem: string): boolean {
@@ -119,8 +123,11 @@ export function hasWordStart(text: string, stem: string): boolean {
 
 export function isBottle(p: Pick<EngineProduct, 'name' | 'sourceShop'>): boolean {
   const name = normalize(p.name)
-  if (/cokolad|kakao/.test(name)) return false
+  // Čokoláda má v názvu procenta kakaa, lahví je jen čokoládový likér nebo bitter
+  if (/cokolad|kakao/.test(name) && !/liker|bitter|\d\s?l\b/.test(name)) return false
   if (ABV.test(name)) return true
+  if (ACCESSORY.test(name)) return false
+  if ((BOTTLE_WORDS.test(name) || BOTTLE_SHOPS.test(p.sourceShop)) && VOLUME_OR_SET.test(name)) return true
   if (NOT_BOTTLE.test(name)) return false
   return BOTTLE_WORDS.test(name) || BOTTLE_SHOPS.test(p.sourceShop)
 }
