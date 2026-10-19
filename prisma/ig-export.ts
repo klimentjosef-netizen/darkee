@@ -77,8 +77,6 @@ async function main() {
       '',
       'Odkazy na všechny dárky najdete na webu, odkaz je v profilu. Kdo chce tip přesně na míru, odpoví na pár otázek a za pár vteřin má pět dárků podle toho, co obdarovaného baví.',
       '',
-      'Odkazy jsou provizní, cenu to nemění.',
-      '',
       ['#darky #tipnadarek #darkee', christmas ? '#vanoce #vanocnidarky' : '#narozeniny', tagKey ? HASHTAGS[tagKey] : ''].filter(Boolean).join(' '),
       '',
       `Odkaz pro tento příspěvek: ${SITE}/darky/${slug}`,
