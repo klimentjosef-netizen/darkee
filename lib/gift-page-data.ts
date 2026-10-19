@@ -4,6 +4,26 @@ import { GiftPage } from './gift-pages'
 import { ScoredProduct } from '@/types'
 
 // Dárky na stránku "dárky pro…": stejný motor jako kvíz, bez výběrčího, takže nic nestojí.
+// Dárek, který v názvu oslovuje konkrétního obdarovaného ("Polštář Nejlepší maminka"), patří jen na jeho stránku
+const NAMED_FOR: [RegExp, string, string | null][] = [
+  [/\b(maminc|mamink|mamk|mam[aeu]\b|mami\b)/, 'parent', 'female'],
+  [/\b(tatin|tatink|tatk|tat[aeu]\b|tati\b)/, 'parent', 'male'],
+  [/\b(babick|babi\b|babicc)/, 'grandparent', 'female'],
+  [/\b(dedeck|dedov|ded[aeu]\b|dedo\b)/, 'grandparent', 'male'],
+  [/\b(manzelk)/, 'partner', 'female'],
+  [/\b(manzel\b|manzel[aeu]\b|manzelov)/, 'partner', 'male'],
+  [/\b(pritelkyn|holk[uay]\b)/, 'partner', 'female'],
+  [/\b(kamaradk)/, 'friend', 'female'],
+  [/\b(kamarad\b|kamarad[aeu]\b)/, 'friend', 'male'],
+  [/\b(kolegyn)/, 'colleague', 'female'],
+  [/\b(kolega\b|kolegu\b|kolegov)/, 'colleague', 'male'],
+  [/\b(ucitel)/, 'colleague', null],
+]
+function namedForOther(name: string, relationship: string, gender: string): boolean {
+  const text = name.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '')
+  return NAMED_FOR.some(([re, rel, g]) => re.test(text) && (rel !== relationship || (g !== null && gender !== 'neutral' && g !== gender)))
+}
+
 export async function getPageGifts(page: GiftPage, count = 12): Promise<ScoredProduct[]> {
   const products = await prisma.product.findMany({
     where: {
@@ -33,6 +53,12 @@ export async function getPageGifts(page: GiftPage, count = 12): Promise<ScoredPr
         const text = `${c.p.name} ${c.p.giftReason || ''}`.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '')
         return (page.answers.hobbyWords || []).some(w => hasWordStart(text, w))
       }
+      // Dárek pojmenovaný pro jiného obdarovaného sem nepatří
+      if (namedForOther(c.p.name, page.answers.relationship, page.answers.gender)) return false
+      // Stránka pro muže nebo ženu: bez dárků, které posouzení určilo hlavně opačnému pohlaví
+      const g = page.answers.gender
+      if (g === 'male' && c.p.genderFit.includes('female') && !c.p.genderFit.includes('male')) return false
+      if (g === 'female' && c.p.genderFit.includes('male') && !c.p.genderFit.includes('female')) return false
       // Na stránku patří jen dárky, které posouzení určilo právě tomuto obdarovanému
       return c.p.recipients.includes(page.answers.relationship)
     })
