@@ -113,7 +113,6 @@ const EHUB_CAMPAIGNS: Record<string, string> = {
   'Kocosbeauty.cz': '316fbecc',
   'Cool-coffee.cz': 'a7aff96f',
   'Rájponožek.cz': '9c0d95bf',
-  'Gigaprint.cz': 'cf2fd75d',
   'Laicaitaly.cz': 'afb9372b',
   'Pidilidi.cz': '1f76de4d',
   'Maluna.cz': '3e250a73',

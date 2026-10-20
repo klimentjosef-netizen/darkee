@@ -110,7 +110,6 @@ export const FEEDS: { shop: string; url: string }[] = [
   { shop: 'Kocosbeauty.cz', url: 'https://www.kocosbeauty.cz/heureka/export/products.xml' },
   { shop: 'Cool-coffee.cz', url: 'https://www.cool-coffee.cz/feed-heureka-gz7d4mj8h6.xml' },
   { shop: 'Rájponožek.cz', url: 'https://www.rajponozek.cz/xml/heureka.xml' },
-  { shop: 'Gigaprint.cz', url: 'https://www.gigaprint.cz/exports/giga/gome.xml' },
   { shop: 'Laicaitaly.cz', url: 'https://www.laicaitaly.cz/gmerchant-LAICA-cz.xml' },
   { shop: 'Pidilidi.cz', url: 'https://www.pidilidi.cz/feed/heureka-deyvoyfawi88.xml' },
   { shop: 'Maluna.cz', url: 'https://www.maluna.cz/xml/heureka_maluna.xml' },
