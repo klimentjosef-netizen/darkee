@@ -18,6 +18,8 @@ const NAMED_FOR: [RegExp, string, string | null][] = [
   [/\b(kolegyn)/, 'colleague', 'female'],
   [/\b(kolega\b|kolegu\b|kolegov)/, 'colleague', 'male'],
   [/\b(ucitel)/, 'colleague', null],
+  // Svatební dárky ("Dárkáč Nevěsta") na stránky podle obdarovaného nepatří
+  [/\b(nevest|zenich)/, 'wedding', null],
 ]
 function namedForOther(name: string, relationship: string, gender: string): boolean {
   const text = name.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '')
@@ -45,7 +47,7 @@ export async function getPageGifts(page: GiftPage, count = 12): Promise<ScoredPr
     },
   })
 
-  const ranked = rankCandidates(page.answers, products, count * 5, { anyType: !!page.experienceRegion })
+  const ranked = rankCandidates(page.answers, products, count * (page.answers.gender === "neutral" ? 5 : 12), { anyType: !!page.experienceRegion })
     .filter(c => {
       if (page.experienceRegion) return true
       // Stránka záliby: slovo záliby musí být přímo v názvu nebo popisu dárku
@@ -60,8 +62,19 @@ export async function getPageGifts(page: GiftPage, count = 12): Promise<ScoredPr
       if (g === 'male' && c.p.genderFit.includes('female') && !c.p.genderFit.includes('male')) return false
       if (g === 'female' && c.p.genderFit.includes('male') && !c.p.genderFit.includes('female')) return false
       // Na stránku patří jen dárky, které posouzení určilo právě tomuto obdarovanému
+      // Pro sourozence se hodí i dárky určené kamarádům, sourozence posouzení označuje méně často
+      if (page.answers.relationship === 'sibling') return c.p.recipients.includes('sibling') || c.p.recipients.includes('friend')
       return c.p.recipients.includes(page.answers.relationship)
     })
+
+  // Stránka pro ženu nebo muže: dárky výslovně určené tomuto pohlaví jdou dopředu,
+  // jinak by stránky pro sestru a bratra byly skoro stejné
+  const g = page.answers.gender
+  if (g === 'male' || g === 'female') {
+    const bonus = 0.3 * (ranked[0]?.score || 0)
+    const val = (c: (typeof ranked)[number]) => c.score + (c.p.genderFit.includes(g) ? bonus : 0)
+    ranked.sort((x, y) => val(y) - val(x))
+  }
 
   // Pestrost: stránka nemá být samé lahve ani samé zboží z jednoho obchodu
   const maxPerShop = Math.ceil(count / 4)

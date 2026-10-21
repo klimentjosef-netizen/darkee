@@ -29,6 +29,12 @@ const RECIPIENTS: Recipient[] = [
   { slug: 'pro-kolegyni', title: 'pro kolegyni', hint: 'Do práce se hodí dárek, který neurazí a potěší každého: dobrota, káva nebo drobnost na stůl.', answers: { relationship: 'colleague', ageGroup: 'adult', gender: 'female' } },
   { slug: 'pro-kolegu', title: 'pro kolegu', hint: 'Kolegovi stačí pozornost bez osobních narážek: dobré pití, káva nebo něco k zakousnutí.', answers: { relationship: 'colleague', ageGroup: 'adult', gender: 'male' } },
   { slug: 'pro-kluka', title: 'pro kluka', hint: 'Kluci ve školním věku chtějí stavět, soutěžit a objevovat. Vybíráme hračky a hry, které vydrží déle než jedno odpoledne.', answers: { relationship: 'child', ageGroup: 'school', gender: 'male' } },
+  { slug: 'pro-sestru', title: 'pro sestru', hint: 'Sestra pozná, jestli jste dárek vybírali, nebo jen koupili. Míříme na věci, které ji pobaví nebo hýčkají.', answers: { relationship: 'sibling', ageGroup: 'young_adult', gender: 'female' } },
+  { slug: 'pro-bratra', title: 'pro bratra', hint: 'Bráchovi udělá radost něco ke koníčku, dobré pití nebo hra, u které se sejdete.', answers: { relationship: 'sibling', ageGroup: 'young_adult', gender: 'male' } },
+  { slug: 'pro-miminko', title: 'pro miminko', hint: 'Pro miminko vybíráme bezpečné hračky a věci, které rodiče opravdu využijí, ne další oblečení podle velikosti.', answers: { relationship: 'child', ageGroup: 'baby', gender: 'neutral' } },
+  { slug: 'pro-deti-od-3-do-5-let', title: 'pro děti od 3 do 5 let', hint: 'Předškoláci chtějí skládat, hrát si na něco a poslouchat příběhy. Vybíráme hračky přiměřené věku, bez malých dílů pro menší.', answers: { relationship: 'child', ageGroup: 'preschool', gender: 'neutral' } },
+  { slug: 'pro-dospivajici-kluky', title: 'pro dospívající kluky', hint: 'Teenagerovi se trefíte stavebnicí, technikou nebo hrou, ne dětskou hračkou. Vybíráme věci pro věk od 13 do 17 let.', answers: { relationship: 'child', ageGroup: 'teen', gender: 'male' } },
+  { slug: 'pro-dospivajici-holky', title: 'pro dospívající holky', hint: 'Dospívající holka ocení dárek, za který se před kamarádkami nestydí: kosmetiku, tvoření, šperk nebo hru.', answers: { relationship: 'child', ageGroup: 'teen', gender: 'female' } },
   { slug: 'pro-holku', title: 'pro holku', hint: 'Holky ve školním věku rády tvoří, skládají a hrají si s kamarádkami. Podle toho vybíráme.', answers: { relationship: 'child', ageGroup: 'school', gender: 'female' } },
 ]
 
@@ -152,10 +158,22 @@ export const EXPERIENCE_PAGES: GiftPage[] = REGIONS.map(r => ({
   price: { min: 300, max: 6000 },
 }))
 
-export const RECIPIENT_PAGES = GIFT_PAGES.filter(p => p.slug === p.recipientSlug)
+// Záliby s rozpočtem: "dárky pro milovníky kávy do 500 Kč"
+// Kombinace, pro které má katalog méně než šest dárků
+const THIN_HOBBY_BUDGETS = new Set(['pro-kutily-do-500-kc', 'pro-fanousky-techniky-do-500-kc'])
+const HOBBY_BUDGET_KEYS =['kava', 'vino', 'sladke', 'kutil', 'deskovky', 'krasa', 'moda', 'technika', 'tvoreni', 'bydleni']
+export const HOBBY_BUDGET_PAGES: GiftPage[] = HOBBY_PAGES.filter(p => HOBBY_BUDGET_KEYS.includes(p.hobby!)).flatMap(p =>
+  BUDGETS.slice(0, 2).map(b => ({ ...p, slug: `${p.slug}-${b.slug}`, label: `${p.label} ${b.title}`, price: { min: b.min, max: b.max } })))
+  .filter(p => !THIN_HOBBY_BUDGETS.has(p.slug))
+
+// Učitelka: dárek na konec roku a k Vánocům, rozpočet za celou třídu bývá do 500 Kč
+const TEACHER: Recipient = { slug: 'pro-ucitelku', title: 'pro paní učitelku', hint: 'Učitelka dostane od dětí desítky drobností. Vybíráme takové, které se spotřebují nebo opravdu použijí, a ne další hrnek.', answers: { relationship: 'colleague', ageGroup: 'adult', gender: 'female' } }
+export const TEACHER_PAGES: GiftPage[] = [buildPage(TEACHER), buildPage(TEACHER, BUDGETS[0])]
+
+export const RECIPIENT_PAGES = [...GIFT_PAGES, ...TEACHER_PAGES].filter(p => p.slug === p.recipientSlug)
 
 // Všechny stránky dohromady: podle obdarovaného, podle záliby a zážitky podle kraje
-export const ALL_GIFT_PAGES: GiftPage[] = [...GIFT_PAGES, ...HOBBY_PAGES, ...EXPERIENCE_PAGES]
+export const ALL_GIFT_PAGES: GiftPage[] = [...GIFT_PAGES, ...TEACHER_PAGES, ...HOBBY_PAGES, ...HOBBY_BUDGET_PAGES, ...EXPERIENCE_PAGES]
 
 export function getGiftPage(slug: string): GiftPage | undefined {
   return ALL_GIFT_PAGES.find(p => p.slug === slug)
@@ -163,7 +181,7 @@ export function getGiftPage(slug: string): GiftPage | undefined {
 
 export function relatedPages(page: GiftPage): GiftPage[] {
   // U zálib a zážitků se nabízejí ostatní stránky téhož druhu
-  if (page.hobby) return HOBBY_PAGES.filter(p => p.slug !== page.slug)
+  if (page.hobby) return [...HOBBY_BUDGET_PAGES.filter(p => p.hobby === page.hobby), ...HOBBY_PAGES].filter(p => p.slug !== page.slug)
   if (page.experienceRegion) return EXPERIENCE_PAGES.filter(p => p.slug !== page.slug)
-  return GIFT_PAGES.filter(p => p.recipientSlug === page.recipientSlug && p.slug !== page.slug)
+  return [...GIFT_PAGES, ...TEACHER_PAGES].filter(p => p.recipientSlug === page.recipientSlug && p.slug !== page.slug)
 }

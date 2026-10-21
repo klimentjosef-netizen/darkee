@@ -5,20 +5,22 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { ArrowRight } from 'lucide-react'
 import { SiteFooter } from '@/components/SiteFooter'
-import { ALL_GIFT_PAGES, getGiftPage, relatedPages, pageTitle } from '@/lib/gift-pages'
+import { getGiftPage, relatedPages, pageTitle } from '@/lib/gift-pages'
 import { getPageGifts } from '@/lib/gift-page-data'
 
 // Tvary: tlačítka jsou pilulky, karty 20px, obrázky uvnitř karet 14px.
 
 // Obsah se bere z katalogu a obnovuje jednou denně
 export const revalidate = 86400
-export const dynamicParams = false
+// Stránky se nevytvářejí při buildu (stovky dotazů do databáze najednou překročí limit spojení),
+// ale při první návštěvě a pak se den drží v mezipaměti. Neznámá adresa skončí na 404 přes getGiftPage.
+export const dynamicParams = true
 
 // Stránka s méně dárky nemá čtenáři co nabídnout
 const MIN_GIFTS = 6
 
 export function generateStaticParams() {
-  return ALL_GIFT_PAGES.map(p => ({ slug: p.slug }))
+  return []
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
